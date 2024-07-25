@@ -1,8 +1,10 @@
-import './styles/App.css';
-import Home from './renderer/pages/Home';
+import AuctionPage from './renderer/pages/AuctionPage';
+import './styles/tailwind.css';
+import './styles/custom.css';
+import './styles/swiper.css';
 
 function App() {
-    return <Home />;
+    return <AuctionPage />;
 }
 
 export default App;

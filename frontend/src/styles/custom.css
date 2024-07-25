@@ -1,0 +1,8 @@
+.w-604 {
+    width: 604px;
+}
+
+.default-height {
+    min-height: 0px !important;
+    height: auto !important;
+}
