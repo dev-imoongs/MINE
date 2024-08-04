@@ -3,6 +3,7 @@ import logo from "../../../assets/mine.png"
 
 const HeaderContainer = () => {
     return (
+      
         <header
           id="siteHeader"
           className="headerThree relative z-20 w-full h-16 sm:h-20 lg:h-36 xl:h-40 max-[480px]:mt-[73px] lg:mt-[60px]"
@@ -226,10 +227,13 @@ const HeaderContainer = () => {
                             d="M8.864 12.2a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Z"
                           ></path>
                         </svg>
+                        <div className="absolute text-xs leading-[18px] -top-2 -right-1 w-[18px] h-[18px] font-semibold rounded-[50%] bg-jngreen text-center" id="채팅하기">0</div>
                       </div>
+                      
                       <p id="채팅하기" className="ml-1">
                         채팅하기
                       </p>
+                      
                     </button>
                   </li>
                   <li className='after:contents-[""] after:absolute after:w-[1px] after:h-4 after:bg-jnGray-300 after:right-0 before:contents-[""] before:absolute before:w-[1px] before:h-4 before:bg-jnGray-300 before:left-0 ga4_main_top_menu relative flex items-center justify-center px-3'>
