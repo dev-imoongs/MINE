@@ -1,0 +1,13 @@
+@media (min-width: 1280px) {
+    .xl\:ps-5 {
+        -webkit-padding-start: 1.25rem;
+        padding-inline-start: 1.25rem;
+    }
+    .xl\:text-base {
+        font-weight: 600;
+        line-height: 1.5rem;
+    }
+    .xl\:px-4 {
+        font-size: 1.07rem;
+    }
+}
