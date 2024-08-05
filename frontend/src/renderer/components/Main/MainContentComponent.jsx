@@ -1,104 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MainProductListComponent from "./MainProductListComponent"
-import tempImg from "../../../assets/temp_product.png";
+import LoadingSpinner from "../Common/LoadingSpinner"
+import { productListAtom } from "../../../recoil/atoms/productListAtom";
+import { useSetRecoilState } from "recoil";
+import { useQuery } from "react-query";
+import { mainProducts } from "../../../services/mainApiService"
 
-const mockData = [
-  {
-    id: 1,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 2,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 3,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 4,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 5,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 6,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 7,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 8,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 9,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 10,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 11,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-  {
-    id: 12,
-    title: "product 임시 데이터 입니다.",
-    price: 10000,
-    img: tempImg,
-    address: "사당동",
-  },
-];
 const recommendTile = ["당신을 위한 추천 경매!", "방금 등록된 상품! ", "실시간 인기상품!"]
 const MainContentComponent = () => {
+  const setProductList = useSetRecoilState(productListAtom);
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey: "productList",
+    queryFn: mainProducts
+  })
+
+  useEffect(() => {
+    if (data) {
+      setProductList(data);
+    }
+  }, [data, setProductList]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError) {
+    console.error(error);
+    return <div>Error occurred, showing mock data.</div>;
+  }
   return (
     <>
       <div
         className="mx-auto px-4 md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px]"
         style={{ height: "auto" }}
       >
-         <MainProductListComponent product={mockData} recommendTile={recommendTile[0]}/>
-         <MainProductListComponent product={mockData} recommendTile={recommendTile[1]}/>
-         <MainProductListComponent product={mockData} recommendTile={recommendTile[2]}/>
+         <MainProductListComponent product={data} recommendTile={recommendTile[0]}/>
+         <MainProductListComponent product={data} recommendTile={recommendTile[1]}/>
+         <MainProductListComponent product={data} recommendTile={recommendTile[2]}/>
         <section className="relative aspect-[375/590] min-[761px]:aspect-[2560/680] bg-no-repeat bg-cover bg-center bg-app-down-main-mobile min-[761px]:bg-app-down-main-pc mb-12 md:mb-14 xl:mb-16 max-w-[1024px] min-[1600px]:max-w-[1280px] -mx-4 md:mx-auto">
           <div className="justify-start flex absolute space-x-2 w-[81.5%] aspect-[311/48] top-[27.63%] left-[8.5%] min-[761px]:w-[31.5%] min-[761px]:aspect-[392/52] min-[761px]:top-[58%] min-[761px]:left-[15.625%]">
             <a
