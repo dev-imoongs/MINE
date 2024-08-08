@@ -133,33 +133,25 @@ const ProductInfoContainer = ({ StImg }) => {
             </div>
             <ul className="box-border flex text-center border border-gray-300 rounded items-center py-6 mb-6">
                 <li className="flex flex-col flex-1 basis-[25%] px-3 sm:px-4 relative after:absolute [&amp;:not(:first-child)]:after:content-[''] after:bg-gray-300 after:h-[20px] [&amp;:not(:first-child)]:after:w-[1px] after:left-0 justify-center items-center">
-                    <span className="text-xs font-normal text-jnGray-600 break-keep">제품상태</span>
+                    <span className="text-xs font-normal text-jnGray-600 break-keep">입찰건수</span>
                     <button disabled="" className="block text-sm font-semibold text-jnblack mt-1">
-                        새상품
+                        0회
                     </button>
                 </li>
                 <li className="flex flex-col flex-1 basis-[25%] px-3 sm:px-4 relative after:absolute [&amp;:not(:first-child)]:after:content-[''] after:bg-gray-300 after:h-[20px] [&amp;:not(:first-child)]:after:w-[1px] after:left-0 justify-center items-center">
-                    <span className="text-xs font-normal text-jnGray-600 break-keep">거래방식</span>
+                    <span className="text-xs font-normal text-jnGray-600 break-keep">남은시간</span>
                     <button disabled="" className="block text-sm font-semibold text-jnblack mt-1">
-                        직거래,택배
+                        6일 7시간 20분 42초
                     </button>
                 </li>
                 <li className="flex flex-col flex-1 basis-[25%] px-3 sm:px-4 relative after:absolute [&amp;:not(:first-child)]:after:content-[''] after:bg-gray-300 after:h-[20px] [&amp;:not(:first-child)]:after:w-[1px] after:left-0 justify-center items-center">
-                    <span className="text-xs font-normal text-jnGray-600 break-keep">배송비</span>
+                    <span className="text-xs font-normal text-jnGray-600 break-keep">종료시간</span>
                     <button disabled="" className="block text-sm font-semibold text-jnblack mt-1">
-                        별도
-                    </button>
-                </li>
-                <li className="flex flex-col flex-1 basis-[25%] px-3 sm:px-4 relative after:absolute [&amp;:not(:first-child)]:after:content-[''] after:bg-gray-300 after:h-[20px] [&amp;:not(:first-child)]:after:w-[1px] after:left-0 justify-center items-center">
-                    <span className="text-xs font-normal text-jnGray-600 break-keep">안전거래</span>
-                    <button disabled="" className="block text-sm font-semibold text-jnblack mt-1">
-                        미사용
+                        2024.08.10 04:43:58
                     </button>
                 </li>
             </ul>
             <ul>
-                <li className="hidden"></li>
-                <li className="hidden"></li>
                 <li className="">
                     <div className="sm:mb-5 sm:flex block mb-4 items-start justify-start">
                         <div className="flex items-center mr-5 min-w-[95px]">
@@ -172,29 +164,12 @@ const ProductInfoContainer = ({ StImg }) => {
                             >
                                 <rect x="4.5" y="4.5" width="3" height="3" fill="#141313"></rect>
                             </svg>
-                            <span className="text-xs text-jnGray-700 ml-[6px]">결제혜택</span>
+                            <span className="text-xs text-jnGray-700 ml-[6px]">제품상태</span>
                         </div>
                         <div className="">
                             <ul className="pt-1 pl-[18px] sm:items-start sm:flex-col sm:flex sm:p-0">
                                 <li>
-                                    <p className="text-xs font-medium text-jnblack tracking-[0.2px]">
-                                        토스페이 최대 1만원 즉시할인
-                                    </p>
-                                </li>
-                                <li>
-                                    <p className="text-xs font-medium text-jnblack tracking-[0.2px]">
-                                        KB국민카드 18개월 6% 특별 할부 수수료
-                                    </p>
-                                </li>
-                                <li>
-                                    <p className="text-xs font-medium text-jnblack tracking-[0.2px]">
-                                        하나카드 최대 10만원 즉시할인
-                                    </p>
-                                </li>
-                                <li>
-                                    <p className="text-xs font-medium text-jnblack tracking-[0.2px]">
-                                        택배 최대 1천원 할인
-                                    </p>
+                                    <p className="text-xs font-medium text-jnblack tracking-[0.2px]">새상품</p>
                                 </li>
                             </ul>
                         </div>
@@ -212,7 +187,7 @@ const ProductInfoContainer = ({ StImg }) => {
                             >
                                 <rect x="4.5" y="4.5" width="3" height="3" fill="#141313"></rect>
                             </svg>
-                            <span className="text-xs text-jnGray-700 ml-[6px]">무이자혜택</span>
+                            <span className="text-xs text-jnGray-700 ml-[6px]">거래방식</span>
                         </div>
                         <div className="">
                             <ul className="pt-1 pl-[18px] sm:items-start sm:flex-col sm:flex sm:p-0">
@@ -222,7 +197,36 @@ const ProductInfoContainer = ({ StImg }) => {
                                         className="block text-xs font-medium text-jnblack tracking-[0.2px]"
                                         href="https://web.joongna.com/event/detail/1261"
                                     >
-                                        1만원 이상 무이자 할부
+                                        안전거래
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li className="">
+                    <div className="sm:mb-5 sm:flex block mb-4 items-start justify-start">
+                        <div className="flex items-center mr-5 min-w-[95px]">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="12"
+                                height="12"
+                                viewBox="0 0 12 12"
+                                fill="none"
+                            >
+                                <rect x="4.5" y="4.5" width="3" height="3" fill="#141313"></rect>
+                            </svg>
+                            <span className="text-xs text-jnGray-700 ml-[6px]">배송비</span>
+                        </div>
+                        <div className="">
+                            <ul className="pt-1 pl-[18px] sm:items-start sm:flex-col sm:flex sm:p-0">
+                                <li>
+                                    <a
+                                        target="_blank"
+                                        className="block text-xs font-medium text-jnblack tracking-[0.2px]"
+                                        href="https://web.joongna.com/event/detail/1261"
+                                    >
+                                        별도
                                     </a>
                                 </li>
                             </ul>
@@ -261,7 +265,7 @@ const ProductInfoContainer = ({ StImg }) => {
                     data-variant="slim"
                     className="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 text-white py-2 transform-none normal-case hover:text-white hover:shadow-cart w-full ga4_product_detail_bottom bg-jnblack hover:bg-jnblack/90"
                 >
-                    안전거래
+                    입찰하기
                 </button>
             </div>
         </div>
