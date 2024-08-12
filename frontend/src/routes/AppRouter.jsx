@@ -4,8 +4,8 @@ import MainPage from "../renderer/pages/MainPage";
 import Mypage from "../renderer/pages/Mypage.jsx";
 import { Outlet } from "react-router-dom";
 
-import HeaderContainer from "../renderer/containers/Common/HeaderContainer.jsx"
-import FooterContainer from "../renderer//containers/Common/FooterContainer"
+import HeaderComponent from "../renderer/components/Common/HeaderComponent"
+import FooterComponent from "../renderer//components/Common/FooterComponent"
 const AppRouter = () => {
     return(
         <Routes>
@@ -20,11 +20,11 @@ const AppRouter = () => {
 function Layout() {
     return (
         <>
-            <HeaderContainer/>
+            <HeaderComponent/>
                 <main className="relative flex-grow border-b-2" style={{ minHeight: "0px", height: "auto" }}>
                     <Outlet/>
                 </main>
-            <FooterContainer/>
+            <FooterComponent/>
         </>
     )
 }

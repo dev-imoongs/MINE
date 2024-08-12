@@ -1,5 +1,4 @@
 import React from "react";
-import HeaderContainer from "../containers/Common/HeaderContainer.jsx";
 const MyPage = () => {
   return (
     <div className="mx-auto px-4 md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px] justify-between lg:gap-10 flex">
