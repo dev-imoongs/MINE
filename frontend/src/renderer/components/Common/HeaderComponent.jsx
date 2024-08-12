@@ -315,170 +315,38 @@ const HeaderComponent = () => {
               </div>
             </div>
             <div className="md:px-8 2xl:px-16 lg:flex lg:h-16 items-center min-[1600px]:max-w-[1280px] max-w-[1024px] hidden headerBottom mx-auto box-content">
-              <div className="relative flex-shrink-0 categoryMenu hidden lg:block">
-                <div className="flex items-center justify-center gap-2 px-3.5 xl:px-4 text-sm relative before:absolute before:-bottom-2.5 before:h-2.5 before:w-full before:z-10 font-semibold text-white transition-colors rounded-md cursor-pointer h-11 bg-heading hover:bg-black">
-                  <svg
-                    stroke="currentColor"
-                    fill="currentColor"
-                    strokeWidth="0"
-                    viewBox="0 0 20 20"
-                    className="text-xl"
-                    height="1em"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                  카테고리
-                </div>
-                <div className="absolute invisible bg-white opacity-0 subMenu shadow-header start-0">
-                  <ul className="py-5 text-sm text-body max-h-[480px] overflow-y-scroll">
-                    <li className="">
-                      <a
-                        className="flex items-center py-2 ps-5 xl:ps-7 pe-3 xl:pe-3.5 hover:text-heading hover:bg-gray-300"
+                
+                <CategoryComponent />
+                
+                <nav className="headerMenu flex w-full relative hidden lg:flex ps-3.5 xl:ps-5 headerMenuStyle">
+                    <div className="menuItem group cursor-pointer">
+                    <a
+                        target="_self"
+                        className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
                         href=""
-                      >
-                        수입명품
-                      </a>
-                      <div className="absolute flex bg-white categoryMegaMenu shadow-header w-[630px] xl:w-[1000px] 2xl:w-[1200px] start-full">
-                        <div className="flex-shrink-0">
-                          <div className="scrollbar-show absolute h-[480px] overflow-y-scroll bg-gray-200 megaMenu shadow-header -start-28 xl:start-0">
-                            <div className="grid grid-cols-5 h-full">
-                              <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7">
-                                <li className="mb-1.5">
-                                  <a
-                                    className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                    href=""
-                                  >
-                                    여성신발
-                                  </a>
-                                </li>
-                                <li className="">
-                                  <a
-                                    className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                    href=""
-                                  >
-                                    구두/로퍼
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="">
-                      <a
-                        className="flex items-center py-2 ps-5 xl:ps-7 pe-3 xl:pe-3.5 hover:text-heading hover:bg-gray-300"
+                    >
+                        동 네 거 래
+                    </a>
+                    </div>
+                    <div className="menuItem group cursor-pointer">
+                    <a
+                        target="_blank"
+                        className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
                         href=""
-                      >
-                        패션의류
-                      </a>
-                      <div className="absolute flex bg-white categoryMegaMenu shadow-header w-[630px] xl:w-[1000px] 2xl:w-[1200px] start-full">
-                        <div className="flex-shrink-0">
-                          <div className="scrollbar-show absolute h-[480px] overflow-y-scroll bg-gray-200 megaMenu shadow-header -start-28 xl:start-0">
-                            <div className="grid grid-cols-5 h-full">
-                              <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7">
-                                <li className="mb-1.5">
-                                  <a
-                                    className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                    href=""
-                                  >
-                                    여성의류
-                                  </a>
-                                </li>
-                                <li className="">
-                                  <a
-                                    className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                    href=""
-                                  >
-                                    티셔츠/캐쥬얼의류
-                                  </a>
-                                </li>
-                                <li className="">
-                                  <a
-                                    className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                    href=""
-                                  >
-                                    니트/스웨터/가디건
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li className="">
-                      <a
-                        className="flex items-center py-2 ps-5 xl:ps-7 pe-3 xl:pe-3.5 hover:text-heading hover:bg-gray-300"
+                    >
+                        동 네 경 매
+                    </a>
+                    </div>
+                    <div className="menuItem group cursor-pointer">
+                    <a
+                        target="_self"
+                        className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
                         href=""
-                      >
-                        패션잡화
-                      </a>
-                      <div className="absolute flex bg-white categoryMegaMenu shadow-header w-[630px] xl:w-[1000px] 2xl:w-[1200px] start-full">
-                        <div className="flex-shrink-0">
-                          <div className="scrollbar-show absolute h-[480px] overflow-y-scroll bg-gray-200 megaMenu shadow-header -start-28 xl:start-0">
-                            <div className="grid grid-cols-5 h-full">
-                              <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7">
-                                <li className="mb-1.5">
-                                  <a
-                                    className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                    href=""
-                                  >
-                                    운동화
-                                  </a>
-                                </li>
-                                <li className="">
-                                  <a
-                                    className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                    href="/search?category=1073"
-                                  >
-                                    런닝화/워킹화
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <nav className="headerMenu flex w-full relative hidden lg:flex ps-3.5 xl:ps-5 headerMenuStyle">
-                <div className="menuItem group cursor-pointer">
-                  <a
-                    target="_self"
-                    className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                    href=""
-                  >
-                    동 네 거 래
-                  </a>
-                </div>
-                <div className="menuItem group cursor-pointer">
-                  <a
-                    target="_blank"
-                    className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                    href=""
-                  >
-                    동 네 경 매
-                  </a>
-                </div>
-                <div className="menuItem group cursor-pointer">
-                  <a
-                    target="_self"
-                    className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                    href=""
-                  >
-                    상 품 등 록
-                  </a>
-                </div>
-              </nav>
+                    >
+                        상 품 등 록
+                    </a>
+                    </div>
+                </nav>
             </div>
             <div
               id="progress_bar"
@@ -488,5 +356,278 @@ const HeaderComponent = () => {
         </header>
     );
 };
+const CategoryComponent = () => {
+    return (
+        <>
+            <div className="relative flex-shrink-0 categoryMenu hidden lg:block">
+                    <div className="flex items-center justify-center gap-2 px-3.5 xl:px-4 text-sm relative before:absolute before:-bottom-2.5 before:h-2.5 before:w-full before:z-10 font-semibold text-white transition-colors rounded-md cursor-pointer h-11 bg-heading hover:bg-black">
+                        <svg
+                            stroke="currentColor"
+                            fill="currentColor"
+                            strokeWidth="0"
+                            viewBox="0 0 20 20"
+                            className="text-xl"
+                            height="1em"
+                            width="1em"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                            fillRule="evenodd"
+                            d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                            clipRule="evenodd"
+                            ></path>
+                        </svg>
+                        카테고리
+                    </div>
+                    <div className="absolute invisible bg-white opacity-0 subMenu shadow-header start-0 bg-heading hover:bg-black">
+                        <div className="grid grid-cols-5 h-full bg-gray-200 w-[630px] xl:w-[1000px] 2xl:w-[1200px] start-full " style={{'boxShadow': '5px 3px 5px rgba(0, 0, 0, 0.1)'}}>
+                            <ul className="mb-1.5 pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7" style={{backgroundColor : '#f6ffff'}}>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        디지털 기기
+                                    </a>
+                                </li>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        생활 가전
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7" style={{backgroundColor : 'rgb(243 248 249)'}}>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        가구/인테리어
+                                    </a>
+                                </li>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        생활/주방
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7" style={{backgroundColor : '#f6ffff'}}>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        도서
+                                    </a>
+                                </li>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        의류
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7" style={{backgroundColor : 'rgb(243 248 249)'}}>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        뷰티/미용
+                                    </a>
+                                </li>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        스포츠/레저
+                                    </a>
+                                </li>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        식물
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7" style={{backgroundColor : '#f6ffff'}}>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        취미/게임/음반
+                                    </a>
+                                </li>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        상품권/모바일티켓
+                                    </a>
+                                </li>
+                                <li className="">
+                                    <a
+                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                        href=""
+                                    >
+                                        식품
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+             {/* <div className="relative flex-shrink-0 categoryMenu hidden lg:block">
+                    <div className="flex items-center justify-center gap-2 px-3.5 xl:px-4 text-sm relative before:absolute before:-bottom-2.5 before:h-2.5 before:w-full before:z-10 font-semibold text-white transition-colors rounded-md cursor-pointer h-11 bg-heading hover:bg-black">
+                    <svg
+                        stroke="currentColor"
+                        fill="currentColor"
+                        strokeWidth="0"
+                        viewBox="0 0 20 20"
+                        className="text-xl"
+                        height="1em"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                        fillRule="evenodd"
+                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clipRule="evenodd"
+                        ></path>
+                    </svg>
+                    카테고리
+                    </div>
+                    <div className="absolute invisible bg-white opacity-0 subMenu shadow-header start-0">
+                        <ul className="py-5 text-sm text-body max-h-[480px] overflow-y-scroll">
+                            <li className="">
+                            <a
+                                className="flex items-center py-2 ps-5 xl:ps-7 pe-3 xl:pe-3.5 hover:text-heading hover:bg-gray-300"
+                                href=""
+                            >
+                                수입명품
+                            </a>
+                            <div className="absolute flex bg-white categoryMegaMenu shadow-header w-[630px] xl:w-[1000px] 2xl:w-[1200px] start-full">
+                                <div className="flex-shrink-0">
+                                <div className="scrollbar-show absolute h-[480px] overflow-y-scroll bg-gray-200 megaMenu shadow-header -start-28 xl:start-0">
+                                    <div className="grid grid-cols-5 h-full">
+                                    <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7">
+                                        <li className="mb-1.5">
+                                        <a
+                                            className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                            href=""
+                                        >
+                                            여성신발
+                                        </a>
+                                        </li>
+                                        <li className="">
+                                        <a
+                                            className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                            href=""
+                                        >
+                                            구두/로퍼
+                                        </a>
+                                        </li>
+                                    </ul>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </li>
+                            <li className="">
+                            <a
+                                className="flex items-center py-2 ps-5 xl:ps-7 pe-3 xl:pe-3.5 hover:text-heading hover:bg-gray-300"
+                                href=""
+                            >
+                                패션의류
+                            </a>
+                            <div className="absolute flex bg-white categoryMegaMenu shadow-header w-[630px] xl:w-[1000px] 2xl:w-[1200px] start-full">
+                                <div className="flex-shrink-0">
+                                <div className="scrollbar-show absolute h-[480px] overflow-y-scroll bg-gray-200 megaMenu shadow-header -start-28 xl:start-0">
+                                    <div className="grid grid-cols-5 h-full">
+                                    <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7">
+                                        <li className="mb-1.5">
+                                        <a
+                                            className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                            href=""
+                                        >
+                                            여성의류
+                                        </a>
+                                        </li>
+                                        <li className="">
+                                        <a
+                                            className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                            href=""
+                                        >
+                                            티셔츠/캐쥬얼의류
+                                        </a>
+                                        </li>
+                                        <li className="">
+                                        <a
+                                            className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                            href=""
+                                        >
+                                            니트/스웨터/가디건
+                                        </a>
+                                        </li>
+                                    </ul>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </li>
+                            <li className="">
+                            <a
+                                className="flex items-center py-2 ps-5 xl:ps-7 pe-3 xl:pe-3.5 hover:text-heading hover:bg-gray-300"
+                                href=""
+                            >
+                                패션잡화
+                            </a>
+                            <div className="absolute flex bg-white categoryMegaMenu shadow-header w-[630px] xl:w-[1000px] 2xl:w-[1200px] start-full">
+                                <div className="flex-shrink-0">
+                                <div className="scrollbar-show absolute h-[480px] overflow-y-scroll bg-gray-200 megaMenu shadow-header -start-28 xl:start-0">
+                                    <div className="grid grid-cols-5 h-full">
+                                    <ul className="pt-6 even:bg-gray-150 pb-7 2xl:pb-8 2xl:pt-7">
+                                        <li className="mb-1.5">
+                                        <a
+                                            className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                            href=""
+                                        >
+                                            운동화
+                                        </a>
+                                        </li>
+                                        <li className="">
+                                        <a
+                                            className="text-body text-sm block py-1.5 px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
+                                            href="/search?category=1073"
+                                        >
+                                            런닝화/워킹화
+                                        </a>
+                                        </li>
+                                    </ul>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div> */}
+        </>
+    )
+}
 
 export default HeaderComponent;
