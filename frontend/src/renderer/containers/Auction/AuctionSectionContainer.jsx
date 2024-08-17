@@ -1,6 +1,7 @@
 import React from 'react';
 import SwipeImgComponent from '../../components/Auction/SwipeImgComponent';
 import ProductInfoContainer from './ProductInfoContainer';
+import ProductDetailContainer from './ProductDetailContainer';
 
 const AuctionSectionContainer = () => {
     const StImg = {
@@ -18,7 +19,7 @@ const AuctionSectionContainer = () => {
                     <SwipeImgComponent StImg={StImg} />
                     <ProductInfoContainer StImg={StImg} />
                 </div>
-                // 다음내용이 이 위치부터 들어가야함
+                <ProductDetailContainer />
             </div>
         </main>
     );

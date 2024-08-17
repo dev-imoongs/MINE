@@ -1,6 +1,31 @@
 import React from 'react';
 
 const ProductDetailContainer = () => {
+    const StProfileImg = {
+        color: 'transparent',
+    };
+
+    const StWidth = {
+        width: '41.9%',
+    };
+
+    const StSwiperWrap = {
+        transform: 'translate3d(0px, 0px, 0px)',
+    };
+
+    const StSwiper = {
+        width: '132px',
+        marginRight: '12px',
+    };
+
+    const StImg = {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        inset: '0px',
+        color: 'transparent',
+    };
+
     return (
         <div className="block lg:flex lg:min-h-[591px] space-y-12 lg:space-y-0 mb-12">
             <div name="product-description" className="w-full lg:mr-[72px] lg:w-[680px] flex flex-col flex-auto false">
@@ -61,7 +86,7 @@ const ProductDetailContainer = () => {
                         <svg
                             stroke="currentColor"
                             fill="currentColor"
-                            stroke-width="0"
+                            strokeWidth="0"
                             viewBox="0 0 512 512"
                             height="24"
                             width="24"
@@ -88,7 +113,7 @@ const ProductDetailContainer = () => {
                                             data-nimg="1"
                                             className="rounded-full max-w-none h-[60px] box-content border-4 border-white -translate-x-4"
                                             loading="lazy"
-                                            style="color: transparent"
+                                            style={StProfileImg}
                                         />
                                     </div>
                                 </a>
@@ -101,7 +126,7 @@ const ProductDetailContainer = () => {
                                     <span className="text-sm text-jnGray-500">1,000</span>
                                 </div>
                                 <div className="w-full h-2 bg-[#F1F4F6] rounded overflow-hidden">
-                                    <div className="h-full" style="width: 41.9%">
+                                    <div className="h-full" style={StWidth}>
                                         <div className="rounded bg-gradient-to-r from-[#0DCC5A] from-0% to-[#019FB1] to-107.5% w-full h-full animate-width"></div>
                                     </div>
                                 </div>
@@ -133,11 +158,8 @@ const ProductDetailContainer = () => {
                                     className="swiper swiper-initialized swiper-horizontal swiper-pointer-events"
                                     dir="ltr"
                                 >
-                                    <div className="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px)">
-                                        <div
-                                            className="swiper-slide swiper-slide-active"
-                                            style="width: 132px; margin-right: 12px"
-                                        >
+                                    <div className="swiper-wrapper" style={StSwiperWrap}>
+                                        <div className="swiper-slide swiper-slide-active" style={StSwiper}>
                                             <div className="relative">
                                                 <a
                                                     className="group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
@@ -147,19 +169,13 @@ const ProductDetailContainer = () => {
                                                     <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3">
                                                         <img
                                                             alt="다이얼 잠금 가죽 서류가방 (새제품)"
-                                                            referrerpolicy="no-referrer"
+                                                            referrerPolicy="no-referrer"
                                                             src="https://img2.joongna.com/media/original/2024/06/09/1717875091603vnP_IIrhQ.jpg"
                                                             decoding="async"
                                                             data-nimg="fill"
                                                             className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
                                                             loading="lazy"
-                                                            style="
-                                                        position: absolute;
-                                                        height: 100%;
-                                                        width: 100%;
-                                                        inset: 0px;
-                                                        color: transparent;
-                                                    "
+                                                            style={StImg}
                                                         />
                                                     </div>
                                                     <div className="w-full overflow-hidden md:px-2.5 [&>h2]:text-sm [&>h2]:font-normal [&>h2]:text-jnGray-900 text-start p-0 xl:px-0 [&:first-of-type>div]:text-base">
@@ -179,10 +195,7 @@ const ProductDetailContainer = () => {
                                                 </a>
                                             </div>
                                         </div>
-                                        <div
-                                            className="swiper-slide swiper-slide-next"
-                                            style="width: 132px; margin-right: 12px"
-                                        >
+                                        <div className="swiper-slide swiper-slide-next" style={StSwiper}>
                                             <div className="relative">
                                                 <a
                                                     className="group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
@@ -192,19 +205,13 @@ const ProductDetailContainer = () => {
                                                     <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3">
                                                         <img
                                                             alt="코바트블루정장구두 힐구두 킬구두 (새상품)"
-                                                            referrerpolicy="no-referrer"
+                                                            referrerPolicy="no-referrer"
                                                             src="https://img2.joongna.com/media/original/2024/06/09/171787370138655D_NOLvE.jpg"
                                                             decoding="async"
                                                             data-nimg="fill"
                                                             className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
                                                             loading="lazy"
-                                                            style="
-                                                        position: absolute;
-                                                        height: 100%;
-                                                        width: 100%;
-                                                        inset: 0px;
-                                                        color: transparent;
-                                                    "
+                                                            style={StImg}
                                                         />
                                                     </div>
                                                     <div className="w-full overflow-hidden md:px-2.5 [&>h2]:text-sm [&>h2]:font-normal [&>h2]:text-jnGray-900 text-start p-0 xl:px-0 [&:first-of-type>div]:text-base">
@@ -252,7 +259,7 @@ const ProductDetailContainer = () => {
                                                 </a>
                                             </div>
                                         </div>
-                                        <div className="swiper-slide" style="width: 132px; margin-right: 12px">
+                                        <div className="swiper-slide" style={StSwiper}>
                                             <div className="relative">
                                                 <a
                                                     className="group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
@@ -262,19 +269,13 @@ const ProductDetailContainer = () => {
                                                     <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3">
                                                         <img
                                                             alt="얇은 시원한소재 집업자켓 골프자켓 여름자켓"
-                                                            referrerpolicy="no-referrer"
+                                                            referrerPolicy="no-referrer"
                                                             src="https://img2.joongna.com/media/original/2024/06/09/1717872461737g1L_oD82C.jpg"
                                                             decoding="async"
                                                             data-nimg="fill"
                                                             className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
                                                             loading="lazy"
-                                                            style="
-                                                        position: absolute;
-                                                        height: 100%;
-                                                        width: 100%;
-                                                        inset: 0px;
-                                                        color: transparent;
-                                                    "
+                                                            style={StImg}
                                                         />
                                                     </div>
                                                     <div className="w-full overflow-hidden md:px-2.5 [&>h2]:text-sm [&>h2]:font-normal [&>h2]:text-jnGray-900 text-start p-0 xl:px-0 [&:first-of-type>div]:text-base">
@@ -294,7 +295,7 @@ const ProductDetailContainer = () => {
                                                 </a>
                                             </div>
                                         </div>
-                                        <div className="swiper-slide" style="width: 132px; margin-right: 12px">
+                                        <div className="swiper-slide" style={StSwiper}>
                                             <div className="relative">
                                                 <a
                                                     className="group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
@@ -304,19 +305,13 @@ const ProductDetailContainer = () => {
                                                     <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3">
                                                         <img
                                                             alt="잠금 장치 손가방 남성핸드백 (새상품)"
-                                                            referrerpolicy="no-referrer"
+                                                            referrerPolicy="no-referrer"
                                                             src="https://img2.joongna.com/media/original/2024/06/09/1717873118253Xd1_TxvTh.jpg"
                                                             decoding="async"
                                                             data-nimg="fill"
                                                             className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
                                                             loading="lazy"
-                                                            style="
-                                                        position: absolute;
-                                                        height: 100%;
-                                                        width: 100%;
-                                                        inset: 0px;
-                                                        color: transparent;
-                                                    "
+                                                            style={StImg}
                                                         />
                                                     </div>
                                                     <div className="w-full overflow-hidden md:px-2.5 [&>h2]:text-sm [&>h2]:font-normal [&>h2]:text-jnGray-900 text-start p-0 xl:px-0 [&:first-of-type>div]:text-base">
@@ -336,7 +331,7 @@ const ProductDetailContainer = () => {
                                                 </a>
                                             </div>
                                         </div>
-                                        <div className="swiper-slide" style="width: 132px; margin-right: 12px">
+                                        <div className="swiper-slide" style={StSwiper}>
                                             <div className="relative">
                                                 <a
                                                     className="group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
@@ -346,19 +341,13 @@ const ProductDetailContainer = () => {
                                                     <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3">
                                                         <img
                                                             alt="잠금 장치 손가방 남성핸드백 (새상품)"
-                                                            referrerpolicy="no-referrer"
+                                                            referrerPolicy="no-referrer"
                                                             src="https://img2.joongna.com/media/original/2024/06/09/1717871634734N1g_VRF4z.jpg"
                                                             decoding="async"
                                                             data-nimg="fill"
                                                             className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
                                                             loading="lazy"
-                                                            style="
-                                                        position: absolute;
-                                                        height: 100%;
-                                                        width: 100%;
-                                                        inset: 0px;
-                                                        color: transparent;
-                                                    "
+                                                            style={StImg}
                                                         />
                                                     </div>
                                                     <div className="w-full overflow-hidden md:px-2.5 [&>h2]:text-sm [&>h2]:font-normal [&>h2]:text-jnGray-900 text-start p-0 xl:px-0 [&:first-of-type>div]:text-base">

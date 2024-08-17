@@ -1,8 +1,8 @@
 import React from 'react';
 
 const FooterComponent = () => {
-    return (
-        {/* <footer className="bg-jnGray-100">
+    return {
+        /* <footer className="bg-jnGray-100">
             <div className="text-xs leading-[14.32px] text-jnGray-600 px-5 xl:px-0 mx-auto mt-8 mb-10 xl:mt-10 xl:mb-11 max-w-[1024px] min-[1600px]:max-w-[1280px]">
                 <section className="flex flex-col justify-between md:flex-row">
                     <div className="mb-6 md:mb-0">
@@ -308,8 +308,8 @@ const FooterComponent = () => {
                     </div>
                 </section>
             </div>
-        </footer> */}
-    );
+        </footer> */
+    };
 };
 
 export default FooterComponent;
