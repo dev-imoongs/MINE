@@ -1,11 +1,6 @@
 import React from 'react';
 
 const HeaderComponent = () => {
-    const tempST = {
-        padding: '1.75rem',
-        fontSize: '2rem',
-    };
-
     return (
         <header
             id="siteHeader"

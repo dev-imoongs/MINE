@@ -1,0 +1,86 @@
+@media (min-width: 1280px) {
+    .xl\:ps-5 {
+        -webkit-padding-start: 1.25rem;
+        padding-inline-start: 1.25rem;
+    }
+    .xl\:text-base {
+        font-weight: 600;
+        line-height: 1.5rem;
+    }
+    .xl\:px-4 {
+        font-size: 1.07rem;
+    }
+}
+.main-banner-carousel .swiper-slide {
+    display: none;
+    width: 760px;
+}
+
+@media (min-width: 500px) {
+    .main-banner-carousel .swiper-slide {
+        display: block;
+        width: 420px;
+    }
+    .text-\[32px\] {
+        font-size: 16px;
+    }
+    .leading-\[40px\] {
+        line-height: 20px;
+    }
+    .leading-\[24px\] {
+        line-height: 8px;
+    }
+    .text-\[18px\] {
+        font-size: 9px;
+    }
+}
+@media (min-width: 768px) {
+    .main-banner-carousel .swiper-slide {
+        display: block;
+        width: 740px;
+    }
+}
+
+
+@media (min-width: 1024px) {
+    .main-banner-carousel .swiper-slide {
+        display: block;
+        width: 950px;
+    }
+    .text-\[32px\] {
+        font-size: 32px;
+    }
+    .leading-\[40px\] {
+        line-height: 40px;
+    }
+    .leading-\[24px\] {
+        line-height: 24px;
+    }
+    .text-\[18px\] {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .min-\[1600px\]\:max-w-\[1280px\] {
+        max-width: 1300px;
+    }
+}
+@media (min-width: 1600px) {
+    .main-banner-carousel .swiper-slide {
+        display: block;
+        width: 1230px;
+    }
+    .text-\[32px\] {
+        font-size: 32px;
+    }
+    .leading-\[40px\] {
+        line-height: 40px;
+    }
+    .leading-\[24px\] {
+        line-height: 24px;
+    }
+    .text-\[18px\] {
+        font-size: 18px;
+    }
+}
