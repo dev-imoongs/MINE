@@ -6,3 +6,8 @@
     min-height: 0px !important;
     height: auto !important;
 }
+@media (min-width: 1280px) {
+    .xl\:top-\[220px\] {
+        top: 160px;
+    }
+}
