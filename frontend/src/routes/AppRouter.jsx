@@ -8,11 +8,13 @@ import HeaderComponent from '../renderer/components/Common/HeaderComponent';
 import FooterComponent from '../renderer//components/Common/FooterComponent';
 import AuctionDetailPage from '../renderer/pages/AuctionDetailPage.jsx';
 import AuctionListPage from '../renderer/pages/AuctionListPage.jsx';
+import TradeDetailPage from '../renderer/pages/TradeDetailPage.jsx';
 const AppRouter = () => {
     return (
         <Routes>
             <Route element={<Layout />}>
                 <Route path="/" element={<MainPage />} />
+                <Route path="/tradeDetail" element={<TradeDetailPage />} />
                 <Route path="/mypage" element={<Mypage />} />
                 <Route path="/auction">
                     <Route index element={<AuctionListPage />} />
