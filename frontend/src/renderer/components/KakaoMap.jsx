@@ -65,16 +65,23 @@ const KakaoMap = () => {
     }, []);
 
     return (
-        <div
-            style={{
-                width: '100%',
-                display: 'inline-block',
-                marginLeft: '5px',
-                marginRight: '5px',
-            }}
-        >
-            <div id="map" style={{ width: '100%', height: '340px' }}></div>
-        </div>
+        <>
+            <div name="product-description" className="w-full lg:mr-[72px] lg:w-[680px] flex flex-col flex-auto false">
+                <h3 className="md:text-[22px] lg:pb-5 w-full border-b border-gray-300 basis-[48px] font-bold pb-3 text-jnblack text-lg">
+                    여기서 거래해요!
+                </h3>
+            </div>
+                <div
+                style={{
+                    width: '100%',
+                    display: 'inline-block',
+                    marginLeft: '5px',
+                    marginRight: '5px',
+                }}
+            >
+                <div id="map" style={{ width: '100%', height: '340px' }}></div>
+            </div>
+        </>
     );
 };
 
