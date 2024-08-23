@@ -13,6 +13,13 @@ const MainContentComponent = () => {
     queryKey: "productList",
     queryFn: mainProducts
   })
+  const StImg = {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    inset: '0px',
+    color: 'transparent',
+  };
 
   useEffect(() => {
     if (data) {
@@ -50,13 +57,7 @@ const MainContentComponent = () => {
                 data-nimg="fill"
                 className="max-[760px]:hidden"
                 loading="lazy"
-                style={{
-                  position: "absolute",
-                  height: "100%",
-                  width: "100%",
-                  inset: "0px",
-                  color: "transparent",
-                }}
+                style={StImg}
               />
               <img
                 alt="구글 플레이스토어"
@@ -85,13 +86,7 @@ const MainContentComponent = () => {
                 data-nimg="fill"
                 className="max-[760px]:hidden"
                 loading="lazy"
-                style={{
-                  position: "absolute",
-                  height: "100%",
-                  width: "100%",
-                  inset: "0px",
-                  color: "transparent",
-                }}
+                style={StImg}
               />
               <img
                 alt="앱 스토어"
@@ -100,13 +95,7 @@ const MainContentComponent = () => {
                 data-nimg="fill"
                 className="min-[761px]:hidden"
                 loading="lazy"
-                style={{
-                  position: "absolute",
-                  height: "100%",
-                  width: "100%",
-                  inset: "0px",
-                  color: "transparent",
-                }}
+                style={StImg}
               />
             </a>
             <img

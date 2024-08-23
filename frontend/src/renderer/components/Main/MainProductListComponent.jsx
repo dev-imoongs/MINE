@@ -1,6 +1,7 @@
 import React from "react";
 import tempImg from "../../../assets/temp_product.png";
 
+
 const MainProductListComponent = ({product, recommendTile}) => {
   return (
     <>
@@ -46,6 +47,13 @@ const ItemProductTitle = ({recommendTile}) => {
 };
 
 const ProductList = ({product}) => {
+  const StImg = {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    inset: '0px',
+    color: 'transparent',
+  };
   return (
     <>
       <div className="carouselWrapper relative jn-carousel recommend">
@@ -75,13 +83,7 @@ const ProductList = ({product}) => {
                                 data-nimg="fill"
                                 className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
                                 loading="lazy"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  inset: "0px",
-                                  color: "transparent",
-                                }}
+                                style={StImg}
                               />
                             </div>
                             <div className="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
