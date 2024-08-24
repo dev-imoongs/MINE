@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import markerImg1 from '../../assets/hyunjinMarker1.png';
-import markerImg2 from '../../assets/hyunjinMarker2.png';
-import markerImg3 from '../../assets/hyunjinMarker3.png';
-import markerImg4 from '../../assets/hyunjinMarker4.png';
+import markerImg1 from '../../../assets/hyunjinMarker1.png';
+import markerImg2 from '../../../assets/hyunjinMarker2.png';
+import markerImg3 from '../../../assets/hyunjinMarker3.png';
+import markerImg4 from '../../../assets/hyunjinMarker4.png';
 
 const KakaoMap = () => {
     const [map, setMap] = useState(null);
@@ -46,7 +46,7 @@ const KakaoMap = () => {
             });
 
             // 지도 클릭 이벤트 추가
-            kakao.maps.event.addListener(kakaoMap, 'click', function(mouseEvent) {
+            kakao.maps.event.addListener(kakaoMap, 'click', (mouseEvent) => {
                 // 클릭한 위치의 좌표
                 const latlng = mouseEvent.latLng;
 
