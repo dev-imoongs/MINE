@@ -11,3 +11,19 @@
         top: 160px;
     }
 }
+
+.flex-nowrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem; /* 각 검색어 항목 사이의 간격을 조절 */
+}
+
+.text-ellipsis {
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+.recent-search{
+    max-height: 480px; /* 최대 높이를 설정하여 이 이상 초과하면 스크롤 */
+    overflow-y: auto; /* 세로 스크롤이 가능하도록 설정 */
+}

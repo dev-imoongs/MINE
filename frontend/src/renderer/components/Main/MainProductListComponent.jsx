@@ -2,13 +2,13 @@ import React from "react";
 import tempImg from "../../../assets/temp_product.png";
 
 
-const MainProductListComponent = ({product, recommendTile}) => {
+const MainProductListComponent = ({product}) => {
   return (
     <>
       <div className="max-w-[1024px] min-[1600px]:max-w-[1280px] m-auto">
         <div className="heightFull relative mb-10 xl:mb-20">
-          <ItemProductTitle recommendTile={recommendTile}/>
-          <ProductList product={product}/>
+          <ItemProductTitle recommendTile={titleCheck(product.type)}/>
+          <ProductList product={product.data}/>
         </div>
       </div>
     </>
@@ -149,6 +149,16 @@ const ProductList = ({product}) => {
   );
 };
 
-
+const titleCheck = (type) => {
+  console.log("type ::: ", type)
+  const recommendTile = ["당신을 위한 추천 경매!", "방금 등록된 상품! ", "실시간 인기상품!"]
+  if(type == "recommend"){
+    return recommendTile[0]
+  }else if(type == "recent"){
+    return recommendTile[1]
+  }else{
+    return recommendTile[2]
+  }
+}
 
 export default MainProductListComponent;

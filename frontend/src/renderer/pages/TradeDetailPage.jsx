@@ -2,8 +2,7 @@ import React, {useEffect} from 'react';
 import SwipeImgComponent from '../components/Auction/SwipeImgComponent';
 import ProductInfoContainer from '../containers/Auction/ProductInfoContainer';
 import ProductDetailContainer from '../containers/Auction/ProductDetailContainer';
-import KakaoMap from '../components/KakaoMap'
-import temp from '../../assets/banner2.png';
+import KakaoMap from '../components/Trade/KakaoMap'
 
 const TradeDetailPage = () => {
     const StImg = {
