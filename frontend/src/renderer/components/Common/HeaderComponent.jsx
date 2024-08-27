@@ -9,6 +9,9 @@ import { recentSearchesAtom } from '../../../recoil/atoms/recentSearchAtom';
  */
 
 const HeaderComponent = () => {
+    useEffect(()=>{
+        console.log('HeaderComponent mounted');
+    },[])
     return (
         <header
             id="siteHeader"
@@ -446,7 +449,7 @@ const CategoryComponent = () => {
                         <a
                             target="_self"
                             className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                            href=""
+                            href="/search?category="
                         >
                             동 네 거 래
                         </a>
@@ -455,7 +458,7 @@ const CategoryComponent = () => {
                         <a
                             target="_blank"
                             className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                            href=""
+                            href="/auction"
                         >
                             동 네 경 매
                         </a>
@@ -534,4 +537,5 @@ const MainLogo = () => {
     )
 }
 
-export default HeaderComponent;
+// eslint-disable-next-line react-refresh/only-export-components
+export default React.memo(HeaderComponent);
