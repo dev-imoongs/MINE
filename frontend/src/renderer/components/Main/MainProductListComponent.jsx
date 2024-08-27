@@ -23,7 +23,7 @@ const ItemProductTitle = ({recommendTile}) => {
         </h3>
         <a
           className="flex items-center text-xs lg:text-sm xl:text-base text-jnGray-700 mt-0.5 lg:mt-1"
-          href="/product/list?type=recommend"
+          href="/product/list"
         >
           바로가기
           <svg
@@ -72,7 +72,7 @@ const ProductList = ({product}) => {
                           <a
                             className="ga4_main_recommend_product group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
                             title={item.title}
-                            href=""
+                            href={`/product/${item.id}`}
                           >
                             <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
                               <img
