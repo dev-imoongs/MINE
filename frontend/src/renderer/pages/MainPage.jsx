@@ -29,6 +29,7 @@ const MainPage = () => {
     console.error(error);
     return <div>Error occurred</div>;
   }
+
   if (!data || data.length === 0) {
     return <div>No products found</div>;
   }
