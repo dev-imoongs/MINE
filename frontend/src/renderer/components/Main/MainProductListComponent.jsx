@@ -1,13 +1,14 @@
 import React from "react";
 import tempImg from "../../../assets/temp_product.png";
 
-const MainProductListComponent = ({product, recommendTile}) => {
+
+const MainProductListComponent = ({product}) => {
   return (
     <>
       <div className="max-w-[1024px] min-[1600px]:max-w-[1280px] m-auto">
         <div className="heightFull relative mb-10 xl:mb-20">
-          <ItemProductTitle recommendTile={recommendTile}/>
-          <ProductList product={product}/>
+          <ItemProductTitle recommendTile={titleCheck(product.type)}/>
+          <ProductList product={product.data}/>
         </div>
       </div>
     </>
@@ -22,7 +23,7 @@ const ItemProductTitle = ({recommendTile}) => {
         </h3>
         <a
           className="flex items-center text-xs lg:text-sm xl:text-base text-jnGray-700 mt-0.5 lg:mt-1"
-          href="/product/list?type=recommend"
+          href="/product/list"
         >
           바로가기
           <svg
@@ -46,6 +47,13 @@ const ItemProductTitle = ({recommendTile}) => {
 };
 
 const ProductList = ({product}) => {
+  const StImg = {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    inset: '0px',
+    color: 'transparent',
+  };
   return (
     <>
       <div className="carouselWrapper relative jn-carousel recommend">
@@ -64,7 +72,7 @@ const ProductList = ({product}) => {
                           <a
                             className="ga4_main_recommend_product group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
                             title={item.title}
-                            href=""
+                            href={`/product/${item.id}`}
                           >
                             <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
                               <img
@@ -75,13 +83,7 @@ const ProductList = ({product}) => {
                                 data-nimg="fill"
                                 className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
                                 loading="lazy"
-                                style={{
-                                  position: "absolute",
-                                  height: "100%",
-                                  width: "100%",
-                                  inset: "0px",
-                                  color: "transparent",
-                                }}
+                                style={StImg}
                               />
                             </div>
                             <div className="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
@@ -147,6 +149,16 @@ const ProductList = ({product}) => {
   );
 };
 
-
+const titleCheck = (type) => {
+  console.log("type ::: ", type)
+  const recommendTile = ["당신을 위한 추천 경매!", "방금 등록된 상품! ", "실시간 인기상품!"]
+  if(type == "recommend"){
+    return recommendTile[0]
+  }else if(type == "recent"){
+    return recommendTile[1]
+  }else{
+    return recommendTile[2]
+  }
+}
 
 export default MainProductListComponent;

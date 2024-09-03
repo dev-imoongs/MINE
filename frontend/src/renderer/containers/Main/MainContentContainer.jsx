@@ -17,9 +17,9 @@ const MainContentContainer = () => {
         className="mx-auto px-4 md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px]"
         style={{ height: "auto" }}
       >
-         <MainProductListComponent product={productList[0].data} recommendTile={titleCheck[productList[0].type]}/>
-         <MainProductListComponent product={productList[0].data} recommendTile={titleCheck[productList[1].type]}/>
-         <MainProductListComponent product={productList[0].data} recommendTile={titleCheck[productList[2].type]}/>
+         <MainProductListComponent product={productList[0]}/>
+         <MainProductListComponent product={productList[1]}/>
+         <MainProductListComponent product={productList[2]}/>
 
         <section className="relative aspect-[375/590] min-[761px]:aspect-[2560/680] bg-no-repeat bg-cover bg-center bg-app-down-main-mobile min-[761px]:bg-app-down-main-pc mb-12 md:mb-14 xl:mb-16 max-w-[1024px] min-[1600px]:max-w-[1280px] -mx-4 md:mx-auto">
           <div className="justify-start flex absolute space-x-2 w-[81.5%] aspect-[311/48] top-[27.63%] left-[8.5%] min-[761px]:w-[31.5%] min-[761px]:aspect-[392/52] min-[761px]:top-[58%] min-[761px]:left-[15.625%]">
@@ -112,15 +112,3 @@ const MainContentContainer = () => {
 };
 
 export default MainContentContainer;
-
-
-const titleCheck = (type) => {
-  const recommendTile = ["당신을 위한 추천 경매!", "방금 등록된 상품! ", "실시간 인기상품!"]
-  if(type == "recommend"){
-    return recommendTile[0]
-  }else if(type == "recent"){
-    return recommendTile[1]
-  }else{
-    return recommendTile[2]
-  }
-}

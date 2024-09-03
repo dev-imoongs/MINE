@@ -1,6 +1,8 @@
 import React from 'react';
+import { useToggle } from '../../../hooks/useToggle';
 
 const ProductInfoContainer = ({ StImg }) => {
+    const [isLike, toggleLike] = useToggle();
     return (
         <div>
             <div className="flex items-center w-full chawkbazarBreadcrumb pt-5 lg:py-2 pb-[10px]">
@@ -232,7 +234,7 @@ const ProductInfoContainer = ({ StImg }) => {
             </ul>
             <div className="flex items-center space-s-4 pt-4 max-[479px]:fixed max-[479px]:bottom-0 max-[479px]:left-0 max-[479px]:z-20 max-[479px]:w-full max-[479px]:px-4 max-[479px]:pb-4 max-[479px]:bg-white">
                 <div className="w-8 h-8">
-                    <label htmlFor=":r0:" className="relative">
+                    <label htmlFor=":r0:" className="relative cursor-pointer" onClick={toggleLike}>
                         <svg
                             width="32"
                             height="32"
@@ -244,8 +246,8 @@ const ProductInfoContainer = ({ StImg }) => {
                             <path
                                 d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
                                 strokeWidth="1.5"
-                                stroke="#9CA3AF"
-                                fill="transparent"
+                                stroke={isLike ? '#dc2626' : '#9CA3AF'}
+                                fill={isLike ? '#dc2626' : 'transparent'}
                             ></path>
                         </svg>
                     </label>

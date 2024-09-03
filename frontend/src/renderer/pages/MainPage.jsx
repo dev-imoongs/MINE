@@ -17,6 +17,7 @@ const MainPage = () => {
 
   useEffect(() => {
     if (data) {
+      console.log("test"+data)
       setProductList(data); // 다른 컴포넌트에서 사용할 수 있도록 상태 업데이트
     }
   }, [data, setProductList]);
