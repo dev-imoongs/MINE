@@ -449,7 +449,7 @@ const CategoryComponent = () => {
                         <a
                             target="_self"
                             className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                            href="/search?category="
+                            href="/product"
                         >
                             동 네 거 래
                         </a>

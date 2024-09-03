@@ -44,11 +44,11 @@ const AppRouter = () => {
                     <Route path=":auctionId" element={<AuctionDetailPage />} />
                 </Route>
                 <Route path="/product">
+                    <Route index element={<TradeListPage />} />
                     <Route path="list" element={<ProductListPage />} />
                     <Route path=":productId" element={<TradeDetailPage />} />
                 </Route>
                 <Route path="/search" element={<SearchListPage />} /> {/* 검색바 */}
-                <Route path="/search?category=" element={<TradeListPage />} /> {/* 카테고리 */}
             </Route>
         </Routes>
     );
