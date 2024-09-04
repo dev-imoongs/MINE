@@ -1,29 +1,40 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { useLocation,Link } from "react-router-dom"
+import {titleCheck} from '../../services/commonService'
+import {recommendProduct} from "../../services/productApiService"
 const ProductListPage = () => {
+    const location = useLocation();
+    const [productList, setProductList] = useState([]);
+    const query = new URLSearchParams(location.search);
+    const type = query.get('type');
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await recommendProduct(); // 비동기 함수로 데이터 가져오기
+                setProductList(response.data); // 가져온 데이터 상태로 설정
+            } catch (error) {
+                console.error("데이터를 가져오는 중 오류 발생:", error);
+            }
+        };
+
+        fetchData(); // 데이터 가져오는 함수 호출
+    }, []); // 컴포넌트가 마운트될 때 한 번만 실행
     return (
+        
         <>
             <div className="border-t-1 border-borderBottom">
                 <div className="mx-auto px-4 md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px]">
                     <div className="bg-gray-200 rounded-md relative flex flex-row mb-7">
                         <div className="relative h-auto md:h-full w-full flex flex-col justify-center items-center py-2 sm:py-3.5" >
                             <h2 className="capitalize text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-heading p-7 text-center w-full" >
-                                세븐일레븐 편의점 픽업
+                                {titleCheck(type)}
                             </h2>
-                            <h3>편의점 픽업 상품 모아보기</h3>
+                            <h3>{titleCheck(type).split('!')[0]} 모아보기</h3>
                         </div>
                     </div>
                     <div className="pb-16 lg:pb-20 flex flex-col justify-center">
                         <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 min-[1600px]:grid-cols-5 gap-x-3 lg:gap-x-5 xl:gap-x-7 gap-y-3 xl:gap-y-5 2xl:gap-y-8">
-                            <ProductList />
-                            <ProductList />
-                            <ProductList />
-                            <ProductList />
-                            <ProductList />
-                            <ProductList />
-                            <ProductList />
-                            <ProductList />
-                            <ProductList />
-                            <ProductList />
+                            <ProductList productList={productList} />
                         </div>
                         <button
                             data-variant="slim"
@@ -38,16 +49,21 @@ const ProductListPage = () => {
     )
 }
 
-const ProductList = () => {
+const ProductList = ({productList}) => {
+    if (!productList || productList.length === 0) {
+        return <div>Loading...</div>; // productList가 비어 있을 때
+    }
     return (
         <>
-                <a className="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
-                    href="/product/182541754">
+        {console.log(productList)}
+          {productList.map((item, i) => (
+                <Link key={i} className="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
+                    to="/product/182541754">
                     <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5" >
                         <img
-                            alt="버즈2 프로 오른쪽유닛, 택배비포함"
+                            alt={item.title}
                             referrerPolicy="no-referrer"
-                            src="https://img2.joongna.com/media/original/2024/08/27/1724768256798ZNv_ctlZW.jpg?impolicy=thumb&amp;size=150"
+                            src={'/'+item.img}
                             decoding="async"
                             data-nimg="fill"
                             className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
@@ -83,15 +99,16 @@ const ProductList = () => {
                     </div>
                     <div className="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
                         <h2 className="line-clamp-2 min-h-[2lh] text-sm md:text-base">
-                            버즈2 프로 오른쪽유닛, 택배비포함
+                            {item.title}
                         </h2>
                         <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5" >
-                            40,000원
+                            {item.price}
                         </div>
                         <div className="my-1 h-6">
-                            <span className="text-sm text-gray-400">대림제1동</span>
+                            <span className="text-sm text-gray-400">{item.address}</span>
                             <span className="mx-1 text-sm text-gray-400">|</span>
                             <span className="text-sm text-gray-400">5분 전</span>
+                            {/* {item.time} */}
                         </div>
                         <div className="flex items-center [&amp;>*:not(:last-child)]:mr-1.5">
                             <svg
@@ -148,7 +165,8 @@ const ProductList = () => {
                             </svg>
                         </div>
                     </div>
-                </a>
+                </Link>
+          ))}
         </>
     )
 }

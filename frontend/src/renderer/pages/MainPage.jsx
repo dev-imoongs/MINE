@@ -17,7 +17,6 @@ const MainPage = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("test"+data)
       setProductList(data); // 다른 컴포넌트에서 사용할 수 있도록 상태 업데이트
     }
   }, [data, setProductList]);
@@ -30,7 +29,6 @@ const MainPage = () => {
     console.error(error);
     return <div>Error occurred</div>;
   }
-
   if (!data || data.length === 0) {
     return <div>No products found</div>;
   }

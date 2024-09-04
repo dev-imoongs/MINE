@@ -4,7 +4,7 @@ const TradeListFilterContainer = () => {
     return (
         <div className="relative">
             <h1 className="a11yHidden">수입명품 중고거래 | 중고나라 카페에서 운영하는 공식 사이트</h1>
-            <h2 className="text-[28px] font-normal mb-[10px]">검색 결과</h2>
+            <h2 className="text-[28px] font-normal mb-[10px]"><strong>"사당동"</strong> 검색 결과</h2>
             <button className="absolute right-1 top-2 lg:hidden">
                 <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <line
