@@ -125,19 +125,47 @@ const ProductRegister = () => {
                     </div>
                 </div>
                 <div className="form-group">
+                    <label>상품명</label>
                     <input type="text" placeholder="상품명 입력"/>
                 </div>
 
                 <div className="form-group">
-                    <input type="text" placeholder="수입업체명 입력"/>
-                </div>
-
-                <div className="form-group price-group">
-                    <input type="text" placeholder="판매가격 입력"/>
-                    <span>무료나눔</span>
+                    <label>가격</label>
+                    <div className='price-group'>
+                        <input type="text" placeholder="판매가격 입력"/>
+                        <div className='price-free'>
+                            <input type="checkbox" className='hidden' placeholder="판매가격 입력"/>
+                            <div class="svg-1">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                    <path class="path1"
+                                            d="M23.5 12C23.5 18.3513 18.3513 23.5 12 23.5C5.64873 23.5 0.5 18.3513 0.5 12C0.5 5.64873 5.64873 0.5 12 0.5C18.3513 0.5 23.5 5.64873 23.5 12Z"
+                                            stroke="#ddd" fill="#fff">
+                                    </path>
+                                    <path class="path2" d="M7 12.6667L10.3846 16L18 8.5" stroke="#ddd" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span>무료나눔</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="form-group">
+                    <label>카테고리</label>
+                    <select id='category'>
+                        <option value="">카테고리</option>
+                        <option value="1">머리</option>
+                        <option value="2">어깨</option>
+                        <option value="3">무릎</option>
+                        <option value="4">발</option>
+                        <option value="5">스웩</option>
+                    </select>
+                </div>
+                
+                <div className="form-group">
+                    <label>상품 설명</label>
                     <textarea placeholder="상품 설명 입력"></textarea>
                 </div>
 
@@ -149,15 +177,127 @@ const ProductRegister = () => {
 
                 <div className="form-group">
                     <label>거래방법</label>
-                    <input type="radio" id="direct" name="deal-method" checked/>
-                    <label for="direct">직거래</label>
+                    <div className='trade-type-container'>
+                        <div className='trade-type'>
+                            <input type="checkbox" className='hidden' id="direct" name="deal-method"/>
+                            <div class="svg-1">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                    <path class="path1"
+                                            d="M23.5 12C23.5 18.3513 18.3513 23.5 12 23.5C5.64873 23.5 0.5 18.3513 0.5 12C0.5 5.64873 5.64873 0.5 12 0.5C18.3513 0.5 23.5 5.64873 23.5 12Z"
+                                            stroke="#ddd" fill="#fff">
+                                    </path>
+                                    <path class="path2" d="M7 12.6667L10.3846 16L18 8.5" stroke="#ddd" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span>택배거래</span>
+                        </div>
+                        <div className='trade-type'>
+                            <input type="checkbox" className='hidden' id="direct" name="deal-method"/>
+                            <div class="svg-1">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                    <path class="path1"
+                                            d="M23.5 12C23.5 18.3513 18.3513 23.5 12 23.5C5.64873 23.5 0.5 18.3513 0.5 12C0.5 5.64873 5.64873 0.5 12 0.5C18.3513 0.5 23.5 5.64873 23.5 12Z"
+                                            stroke="#ddd" fill="#fff">
+                                    </path>
+                                    <path class="path2" d="M7 12.6667L10.3846 16L18 8.5" stroke="#ddd" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span>직거래</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="form-group">
                     <label>희망 지역</label>
-                    <input type="text" placeholder="지역 입력"/>
-                    <button className="btn">+ 추가하기</button>
-                    <span>선택된 지역: 신촌동</span>
+                    <div className='place-container'>
+                        <button className="btn btn-place">+ 추가하기</button>
+                        <div className='select-place'>
+                            <span>상도 제1동</span>
+                            <button type="button">
+                                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="">
+                                    <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                    <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
+                                    <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className='select-place'>
+                            <span>상도 제1동</span>
+                            <button type="button">
+                                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="">
+                                    <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                    <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
+                                    <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className='select-place'>
+                            <span>상도 제1동</span>
+                            <button type="button">
+                                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="">
+                                    <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                    <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
+                                    <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className='select-place'>
+                            <span>상도 제1동</span>
+                            <button type="button">
+                                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="">
+                                    <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                    <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
+                                    <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className='select-place'>
+                            <span>상도 제1동</span>
+                            <button type="button">
+                                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="">
+                                    <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                    <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
+                                    <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className='select-place'>
+                            <span>상도 제1동</span>
+                            <button type="button">
+                                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="">
+                                    <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                    <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
+                                    <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className='select-place'>
+                            <span>상도 제1동</span>
+                            <button type="button">
+                                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="">
+                                    <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                    <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
+                                    <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className='select-place'>
+                            <span>상도 제1동</span>
+                            <button type="button">
+                                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="">
+                                    <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                    <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path>
+                                    <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" stroke-linecap="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="form-group">

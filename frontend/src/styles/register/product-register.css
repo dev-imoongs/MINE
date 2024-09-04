@@ -73,8 +73,16 @@ textarea {
     border-radius: .375rem;
 }
 
+select {
+    width: 50%;
+    height: 50px;
+    padding: 8px;
+    border: 1px solid rgb(230, 230, 230);
+    border-radius: .375rem;
+}
+
 textarea {
-    height: 80px;
+    height: 200px;
     resize: none;
 }
 
@@ -82,14 +90,40 @@ textarea {
     display: flex;
 }
 
+.price-free {
+    display: flex;
+    width: 10%;
+    align-items: center;
+    cursor: pointer;
+}
+
+.price-free span {
+    font-size: 15px;
+}
+
 span {
     font-size: 12px;
     color: #666;
-    display: block;
+    /* display: block; */
     margin-top: 5px;
 }
 
-.btn {
+.trade-type-container {
+    display: flex;
+}
+
+.trade-type {
+    display: flex;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.trade-type-container span {
+    font-size: 15px;
+    margin: 0;
+}
+
+.btn, .select-place {
     width: 80px;
     padding: 8px 15px;
     border: none;
@@ -99,6 +133,48 @@ span {
     font-weight: 600;
     font-size: 15px;
     line-height: 1.5rem;
+}
+
+.btn-place {
+    padding: 5px;
+    margin: 10px 10px 10px 0px;
+    background-color: rgb(13, 204, 90);
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+}
+
+.place-container {
+    display: flex;
+}
+
+.select-place {
+    width: 100px;
+    padding: 5px;
+    margin: 10px 10px 10px 0px;
+    background-color: rgb(241 244 246);;
+    border: 1px solid black;
+    position: relative;
+    text-align: center;
+}
+
+.select-place:last-child {
+    margin: 10px 0px;
+}
+
+.select-place span {
+    font-size: 12px;
+    color: black;    
+}
+
+.select-place button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
 }
 
 .old {
@@ -122,7 +198,6 @@ span {
     font-size: 16px;
 }
 
-.submit-btn:hover,
-.btn:hover {
+.submit-btn:hover {
     background-color: #333;
 }
