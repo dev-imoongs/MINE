@@ -329,7 +329,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         디지털 기기
                                     </a>
@@ -337,7 +337,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         생활 가전
                                     </a>
@@ -350,7 +350,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         가구/인테리어
                                     </a>
@@ -358,7 +358,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         생활/주방
                                     </a>
@@ -371,7 +371,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         도서
                                     </a>
@@ -379,7 +379,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         의류
                                     </a>
@@ -392,7 +392,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         뷰티/미용
                                     </a>
@@ -400,7 +400,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         스포츠/레저
                                     </a>
@@ -408,7 +408,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         식물
                                     </a>
@@ -421,7 +421,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         취미/게임/음반
                                     </a>
@@ -429,7 +429,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         상품권/모바일티켓
                                     </a>
@@ -437,7 +437,7 @@ const CategoryComponent = () => {
                                 <li className="">
                                     <a
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href=""
+                                        href="/search"
                                     >
                                         식품
                                     </a>
