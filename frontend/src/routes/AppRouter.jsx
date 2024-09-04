@@ -27,12 +27,16 @@ const AppRouter = () => {
             easing: "ease",
          });
         NProgress.start();
+        return () => {
+            console.log('NProgress done called');
+            NProgress.done();
+        }
 
     },[location.pathname])
 
-    useEffect(() => {
-        NProgress.done();
-    }, []); 
+    // useEffect(() => {
+    //     NProgress.done();
+    // }, []); 
 
     return (
         <Routes>

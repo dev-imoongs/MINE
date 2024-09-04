@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom'
 import logo from '../../../assets/mine.png';
 import { useDropdown } from '../../../hooks/useToggle';
 import { useRecoilState } from 'recoil';
@@ -292,6 +293,7 @@ const SearchForm = () => {
     )
 }
 const CategoryComponent = () => {
+
     return (
         <>
             <div className="md:px-8 2xl:px-16 lg:flex lg:h-16 items-center min-[1600px]:max-w-[1280px] max-w-[1024px] hidden headerBottom mx-auto box-content">
@@ -446,13 +448,12 @@ const CategoryComponent = () => {
                 </div>
                 <nav className="headerMenu flex w-full relative hidden lg:flex ps-3.5 xl:ps-5 headerMenuStyle">
                     <div className="menuItem group cursor-pointer">
-                        <a
-                            target="_self"
+                        <Link
                             className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                            href="/product"
+                            to="/product"
                         >
                             동 네 거 래
-                        </a>
+                        </Link>
                     </div>
                     <div className="menuItem group cursor-pointer">
                         <a
