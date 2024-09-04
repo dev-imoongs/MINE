@@ -1,8 +1,8 @@
 import React from 'react';
-import AuctionListFilterContainer from '../containers/Auction/AuctionListFilterContainer';
-import AuctionListSortContainer from '../containers/Auction/AuctionListSortContainer';
-import AuctionListItemContainer from '../containers/Auction/AuctionListItemContainer';
-import AuctionListPaginationContainer from '../containers/Auction/AuctionListPaginationContainer';
+import TradeListFilterContainer from '../containers/Trade/TradeListFilterContainer';
+import TradeListSortContainer from '../containers/Trade/TradeListSortContainer';
+import TradeListItemContainer from '../containers/Trade/TradeListItemContainer';
+import TradeListPaginationContainer from '../containers/Trade/TradeListPaginationContainer';
 
 const TradeListPage = () => {
     return (
@@ -15,7 +15,7 @@ const TradeListPage = () => {
                 style={{ height: 'auto !important' }}
             >
                 <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important' }}>
-                    <AuctionListFilterContainer />
+                    <TradeListFilterContainer />
                     <div tabIndex="0" aria-labelledby="product-list-price-title">
                         <h4 className="mb-2 text-lg font-semibold lg:mt-[52px] lg:mb-4">
                             <span className="relative">
@@ -81,9 +81,9 @@ const TradeListPage = () => {
                             </div>
                         </div>
                     </div>
-                    <AuctionListSortContainer />
-                    <AuctionListItemContainer />
-                    <AuctionListPaginationContainer />
+                    <TradeListSortContainer />
+                    <TradeListItemContainer />
+                    <TradeListPaginationContainer />
                     <div className="flex justify-end">
                         <button
                             className="rounded-[30px] bg-white/90 border border-jnGray-300 fixed z-10 bottom-10 2xl:translate-x-20"

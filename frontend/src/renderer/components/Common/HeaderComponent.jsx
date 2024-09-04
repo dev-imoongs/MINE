@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom'
 import logo from '../../../assets/mine.png';
 import { useDropdown } from '../../../hooks/useToggle';
 import { useRecoilState } from 'recoil';
@@ -292,6 +293,7 @@ const SearchForm = () => {
     )
 }
 const CategoryComponent = () => {
+
     return (
         <>
             <div className="md:px-8 2xl:px-16 lg:flex lg:h-16 items-center min-[1600px]:max-w-[1280px] max-w-[1024px] hidden headerBottom mx-auto box-content">
@@ -446,17 +448,15 @@ const CategoryComponent = () => {
                 </div>
                 <nav className="headerMenu flex w-full relative hidden lg:flex ps-3.5 xl:ps-5 headerMenuStyle">
                     <div className="menuItem group cursor-pointer">
-                        <a
-                            target="_self"
+                        <Link
                             className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                            href="/search?category="
+                            to="/product"
                         >
                             동 네 거 래
-                        </a>
+                        </Link>
                     </div>
                     <div className="menuItem group cursor-pointer">
                         <a
-                            target="_blank"
                             className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
                             href="/auction"
                         >
@@ -482,10 +482,10 @@ const MainLogo = () => {
     return (
         <>
             <div className="flex flex-1 ml-3 lg:ml-0 lg:max-w-[200px]">
-                <a
+                <Link
                     style={{ width: '100px', height: '50px' }}
                     className="ga4_main_top_logo max-[1023px]:!w-[97px] max-[1023px]:!h-[16px] lg:w-full lg:flex-1 inline-flex focus:outline-none relative"
-                    href="/"
+                    to="/"
                 >
                     <span
                         style={{
@@ -531,11 +531,11 @@ const MainLogo = () => {
                             }}
                         />
                     </span>
-                </a>
+                </Link>
             </div>
         </>
     )
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default React.memo(HeaderComponent);
+export default HeaderComponent;

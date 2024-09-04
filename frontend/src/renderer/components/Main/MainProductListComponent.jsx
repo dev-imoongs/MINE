@@ -1,29 +1,35 @@
 import React from "react";
+import { Link } from 'react-router-dom'
+import { titleCheck } from "../../../services/commonService";
 import tempImg from "../../../assets/temp_product.png";
 
 
 const MainProductListComponent = ({product}) => {
   return (
     <>
+    {console.log("tetettetete"+product)}
       <div className="max-w-[1024px] min-[1600px]:max-w-[1280px] m-auto">
         <div className="heightFull relative mb-10 xl:mb-20">
-          <ItemProductTitle recommendTile={titleCheck(product.type)}/>
+          <ItemProductTitle type={product.type} />
           <ProductList product={product.data}/>
         </div>
       </div>
     </>
   );
 };
-const ItemProductTitle = ({recommendTile}) => {
+const ItemProductTitle = ({recommendTile, type}) => {
   return (
     <>
       <div className="flex items-center justify-between mt-2 pb-0.5 mb-4 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">
         <h3 className="text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-bold text-heading">
-          {recommendTile}
+          {titleCheck(type)}
         </h3>
-        <a
+        <Link
           className="flex items-center text-xs lg:text-sm xl:text-base text-jnGray-700 mt-0.5 lg:mt-1"
-          href="/product/list"
+          to={{
+            pathname :'/product/list',
+            search : '?type=' + type,
+          }}
         >
           바로가기
           <svg
@@ -40,7 +46,7 @@ const ItemProductTitle = ({recommendTile}) => {
               d="M6 1 1 5l5 4"
             ></path>
           </svg>
-        </a>
+        </Link>
       </div>
     </>
   );
@@ -69,10 +75,10 @@ const ProductList = ({product}) => {
                     {product.map((item, i) => {
                       return (
                         <div className="relative" key={i}>
-                          <a
+                          <Link
                             className="ga4_main_recommend_product group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
                             title={item.title}
-                            href={`/product/${item.id}`}
+                            to={`/product/${item.id}`}
                           >
                             <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
                               <img
@@ -134,7 +140,7 @@ const ProductList = ({product}) => {
                                 </svg>
                               </div>
                             </div>
-                          </a>
+                          </Link>
                         </div>
                       );
                     })}
@@ -149,16 +155,16 @@ const ProductList = ({product}) => {
   );
 };
 
-const titleCheck = (type) => {
-  console.log("type ::: ", type)
-  const recommendTile = ["당신을 위한 추천 경매!", "방금 등록된 상품! ", "실시간 인기상품!"]
-  if(type == "recommend"){
-    return recommendTile[0]
-  }else if(type == "recent"){
-    return recommendTile[1]
-  }else{
-    return recommendTile[2]
-  }
-}
+// const titleCheck = (type) => {
+//   console.log("type ::: ", type)
+//   const recommendTile = ["당신을 위한 추천 경매!", "방금 등록된 상품! ", "실시간 인기상품!"]
+//   if(type == "recommend"){
+//     return recommendTile[0]
+//   }else if(type == "recent"){
+//     return recommendTile[1]
+//   }else{
+//     return recommendTile[2]
+//   }
+// }
 
 export default MainProductListComponent;
