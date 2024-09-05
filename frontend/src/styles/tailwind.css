@@ -8095,7 +8095,7 @@ input::placeholder {
 }
 
 .bg-jnGray-100 {
-    --tw-bg-opacity: 1;
+    /* --tw-bg-opacity: 1; */
     background-color: rgb(247 249 250 / var(--tw-bg-opacity));
 }
 

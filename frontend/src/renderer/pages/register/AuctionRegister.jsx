@@ -1,6 +1,7 @@
 import React from 'react';
 import plusIcon from '../../../assets/plus.png';
 import minusIcon from '../../../assets/minus.png';
+import "../../../styles/register/product-register.css"
 
 const AuctionRegister = () => {
     return (

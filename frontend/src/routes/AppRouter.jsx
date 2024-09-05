@@ -13,6 +13,8 @@ import TradeDetailPage from '../renderer/pages/TradeDetailPage.jsx';
 import TradeListPage from '../renderer/pages/TradeListPage.jsx';
 import SearchListPage from '../renderer/pages/SearchListPage.jsx';
 import ProductListPage from '../renderer/pages/ProductListPage.jsx';
+import AuctionRegister from '../renderer/pages/register/AuctionRegister.jsx';
+import ProductRegister from '../renderer/pages/register/ProductRegister.jsx';
 const AppRouter = () => {
     // const location = useLocation();
     // useEffect(() => {
@@ -52,6 +54,8 @@ const AppRouter = () => {
                     <Route path=":productId" element={<TradeDetailPage />} />
                 </Route>
                 <Route path="/search" element={<SearchListPage />} /> {/* 검색바 */}
+                <Route path="/auctionRegister" element={<AuctionRegister />} /> {/* 검색바 */}
+                <Route path="/productRegister" element={<ProductRegister />} /> {/* 검색바 */}
             </Route>
         </Routes>
     );
