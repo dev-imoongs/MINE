@@ -4,7 +4,9 @@ import styled from "styled-components";
 
 import CountBox from "../../components/Layout/CountBox.jsx"
 import TrustRating from "../../components/Layout/TrustRating.jsx"
-const MypageMyInfo = () => {
+const MypageMyInfo = ({data}) => {
+
+    console.log("data", data);
   return (
       <div className="block mt-8 lg:mt-[72px] mb-5 lg:mb-0">
           <div className="relative w-full h-full col-span-2 text-black grid grid-cols-1 gap-y-4 gap-x-0 lg:grid-cols-2 lg:gap-x-8 lg:gap-y-6 lg:min-w-[800px]">

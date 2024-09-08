@@ -1,32 +1,69 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useRecoilState } from "recoil";
+import {useQuery} from "react-query";
 
 import styled from "styled-components";
-const MypageNavigation = () => {
-  return (
-      <NaviContainer>
-        <NaviTitle>마이 페이지</NaviTitle>
-        <h3>거래 정보</h3>
-        <ul>
-          <li>판매내역</li>
-          <li>구매내역</li>
-          <li>택배</li>
-          <li>찜한 상품</li>
-        </ul>
-        <h3>내 정보</h3>
-        <ul>
-          <li>계좌 관리</li>
-          <li>배송지 관리</li>
-          <li>거래 후기</li>
-          <li>탈퇴하기</li>
-        </ul>
+
+import { myProductListAtom } from "../../../recoil/atoms/productListAtom.js"
+import { myAuctionListAtom } from "../../../recoil/atoms/auctionListAtom.js"
+import {myProduct} from "../../../services/productApiService.js";
+import {myAuctionProduct} from "../../../services/auctionApiService.js";
+
+const MypageNavigation = ({onItemClick}) => {
+
+    const [myProductList, setMyProductList] = useRecoilState(myProductListAtom);
+    const [myAuctionList, setMyAuctionList] = useRecoilState(myAuctionListAtom);
+
+    const myProductData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
+        queryKey: "myProductData", // 캐싱, 식별 고유값
+        queryFn: myProduct // 서버에서 데이터 가져오는 함수
+    })
+
+    const myAuctionData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
+        queryKey: "myAuctionData", // 캐싱, 식별 고유값
+        queryFn: myAuctionProduct // 서버에서 데이터 가져오는 함수
+    })
+
+    const handleClick = (data) => {
+        onItemClick(data);
+    }
+
+    useEffect(() => {
+        if (myProductData) {
+            setMyProductList(myProductData.data);
+        }
+    }, [myProductData, setMyProductList]);
+
+    useEffect(() => {
+        if (myAuctionData) {
+            setMyAuctionList(myAuctionData.data);
+        }
+    }, [myAuctionData, setMyAuctionList]);
+
+    return (
+        <NaviContainer>
+            <NaviTitle>마이 페이지</NaviTitle>
+            <h3>거래</h3>
+            <ul>
+              <li onClick={() => handleClick(myProductList)}>거래상품</li>
+            </ul>
+            <h3>경매</h3>
+            <ul>
+              <li onClick={() => handleClick(myAuctionList)}>경매상품</li>
+            </ul>
+            <h3>내 정보</h3>
+            <ul>
+              <li>회원수정</li>
+              <li>탈퇴하기</li>
+            </ul>
       </NaviContainer>
-  );
+    );
 };
 
 const NaviContainer = styled.div`
-  display: block;
-  flex: 1 1 auto;
-  flex-shrink: 1;
+    display: block;
+    flex: 1 1 auto;
+    flex-shrink: 1;
   flex-grow: 0;
   margin-top: 72px;
   line-height: 1.75rem;

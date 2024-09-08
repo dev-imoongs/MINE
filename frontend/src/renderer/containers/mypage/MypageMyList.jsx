@@ -6,21 +6,21 @@ const MypageMyList = () => {
       <MyListCon>
           <MyListTitleWrap>
               <MyListTitle>
-                  내 상품
+                  거래상품
               </MyListTitle>
               <MyListSubTitle>
                   <ul className="colors flex flex-nowrap justify-between lg:justify-start -me-3 border-b border-[#DADEE5]">
                       <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-black border-b-[2px] border-black">
-                          전체
-                      </li>
-                      <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">
-                          판매중
-                      </li>
-                      <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">
-                          예약중
+                          판매내역
                       </li>
                       <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">
                           판매완료
+                      </li>
+                      <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">
+                          구매내역
+                      </li>
+                      <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">
+                          찜한 상품
                       </li>
                   </ul>
               </MyListSubTitle>
