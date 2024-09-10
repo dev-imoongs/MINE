@@ -1,102 +1,100 @@
 
-{
-    "data": [
-        {
-            "AUCTION_ITEM_ID": 1,
-            "USER_ID": "juyeon",
-            "AUCTION_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "AUCTION_ITEM_EXPLAIN": "새거입니다.",
-            "AUCTION_ITEM_START_PRICE": 10000,
-            "AUCTION_ITEM_HIGHEST_PRICE": 47000,
-            "AUCTION_ITEM_END_TIME": "2024-09-08",
-            "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
-            "CATEGORY_ID": "0001",
-            "AUCTION_ITEM_STATUS": "진행중"
-        },
-        {
-            "AUCTION_ITEM_ID": 2,
-            "USER_ID": "juyeon",
-            "AUCTION_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "AUCTION_ITEM_EXPLAIN": "새거입니다.",
-            "AUCTION_ITEM_START_PRICE": 10000,
-            "AUCTION_ITEM_HIGHEST_PRICE": 47000,
-            "AUCTION_ITEM_END_TIME": "2024-09-08",
-            "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
-            "CATEGORY_ID": "0001",
-            "AUCTION_ITEM_STATUS": "진행중"
-        },
-        {
-            "AUCTION_ITEM_ID": 3,
-            "USER_ID": "juyeon",
-            "AUCTION_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "AUCTION_ITEM_EXPLAIN": "새거입니다.",
-            "AUCTION_ITEM_START_PRICE": 10000,
-            "AUCTION_ITEM_HIGHEST_PRICE": 47000,
-            "AUCTION_ITEM_END_TIME": "2024-09-08",
-            "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
-            "CATEGORY_ID": "0001",
-            "AUCTION_ITEM_STATUS": "진행중"
-        },
-        {
-            "AUCTION_ITEM_ID": 4,
-            "USER_ID": "juyeon",
-            "AUCTION_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "AUCTION_ITEM_EXPLAIN": "새거입니다.",
-            "AUCTION_ITEM_START_PRICE": 10000,
-            "AUCTION_ITEM_HIGHEST_PRICE": 47000,
-            "AUCTION_ITEM_END_TIME": "2024-09-08",
-            "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
-            "CATEGORY_ID": "0001",
-            "AUCTION_ITEM_STATUS": "진행중"
-        },
-        {
-            "AUCTION_ITEM_ID": 5,
-            "USER_ID": "juyeon",
-            "AUCTION_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "AUCTION_ITEM_EXPLAIN": "새거입니다.",
-            "AUCTION_ITEM_START_PRICE": 10000,
-            "AUCTION_ITEM_HIGHEST_PRICE": 47000,
-            "AUCTION_ITEM_END_TIME": "2024-09-08",
-            "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
-            "CATEGORY_ID": "0001",
-            "AUCTION_ITEM_STATUS": "진행중"
-        },
-        {
-            "AUCTION_ITEM_ID": 6,
-            "USER_ID": "juyeon",
-            "AUCTION_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "AUCTION_ITEM_EXPLAIN": "새거입니다.",
-            "AUCTION_ITEM_START_PRICE": 10000,
-            "AUCTION_ITEM_HIGHEST_PRICE": 47000,
-            "AUCTION_ITEM_END_TIME": "2024-09-08",
-            "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
-            "CATEGORY_ID": "0001",
-            "AUCTION_ITEM_STATUS": "진행중"
-        },
-        {
-            "AUCTION_ITEM_ID": 7,
-            "USER_ID": "juyeon",
-            "AUCTION_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "AUCTION_ITEM_EXPLAIN": "새거입니다.",
-            "AUCTION_ITEM_START_PRICE": 10000,
-            "AUCTION_ITEM_HIGHEST_PRICE": 47000,
-            "AUCTION_ITEM_END_TIME": "2024-09-08",
-            "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
-            "CATEGORY_ID": "0001",
-            "AUCTION_ITEM_STATUS": "진행중"
-        },
-        {
-            "AUCTION_ITEM_ID": 8,
-            "USER_ID": "juyeon",
-            "AUCTION_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "AUCTION_ITEM_EXPLAIN": "새거입니다.",
-            "AUCTION_ITEM_START_PRICE": 10000,
-            "AUCTION_ITEM_HIGHEST_PRICE": 47000,
-            "AUCTION_ITEM_END_TIME": "2024-09-08",
-            "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
-            "CATEGORY_ID": "0001",
-            "AUCTION_ITEM_STATUS": "진행중"
-        }
-    ]
-}
+[
+    {
+        "AUCTION_ITEM_ID": 1,
+        "USER_ID": "juyeon",
+        "AUCTION_ITEM_NAME": "노트북 팝니다.",
+        "AUCTION_ITEM_EXPLAIN": "새거입니다.",
+        "AUCTION_ITEM_START_PRICE": 10000,
+        "AUCTION_ITEM_HIGHEST_PRICE": 47000,
+        "AUCTION_ITEM_END_TIME": "2024-09-08",
+        "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
+        "CATEGORY_ID": "0001",
+        "AUCTION_ITEM_STATUS": "진행중"
+    },
+    {
+        "AUCTION_ITEM_ID": 2,
+        "USER_ID": "juyeon",
+        "AUCTION_ITEM_NAME": "노트북 팝니다.",
+        "AUCTION_ITEM_EXPLAIN": "새거입니다.",
+        "AUCTION_ITEM_START_PRICE": 10000,
+        "AUCTION_ITEM_HIGHEST_PRICE": 47000,
+        "AUCTION_ITEM_END_TIME": "2024-09-08",
+        "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
+        "CATEGORY_ID": "0001",
+        "AUCTION_ITEM_STATUS": "진행중"
+    },
+    {
+        "AUCTION_ITEM_ID": 3,
+        "USER_ID": "juyeon",
+        "AUCTION_ITEM_NAME": "노트북 팝니다.",
+        "AUCTION_ITEM_EXPLAIN": "새거입니다.",
+        "AUCTION_ITEM_START_PRICE": 10000,
+        "AUCTION_ITEM_HIGHEST_PRICE": 47000,
+        "AUCTION_ITEM_END_TIME": "2024-09-08",
+        "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
+        "CATEGORY_ID": "0001",
+        "AUCTION_ITEM_STATUS": "진행중"
+    },
+    {
+        "AUCTION_ITEM_ID": 4,
+        "USER_ID": "juyeon",
+        "AUCTION_ITEM_NAME": "노트북 팝니다.",
+        "AUCTION_ITEM_EXPLAIN": "새거입니다.",
+        "AUCTION_ITEM_START_PRICE": 10000,
+        "AUCTION_ITEM_HIGHEST_PRICE": 47000,
+        "AUCTION_ITEM_END_TIME": "2024-09-08",
+        "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
+        "CATEGORY_ID": "0001",
+        "AUCTION_ITEM_STATUS": "진행중"
+    },
+    {
+        "AUCTION_ITEM_ID": 5,
+        "USER_ID": "juyeon",
+        "AUCTION_ITEM_NAME": "노트북 팝니다.",
+        "AUCTION_ITEM_EXPLAIN": "새거입니다.",
+        "AUCTION_ITEM_START_PRICE": 10000,
+        "AUCTION_ITEM_HIGHEST_PRICE": 47000,
+        "AUCTION_ITEM_END_TIME": "2024-09-08",
+        "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
+        "CATEGORY_ID": "0001",
+        "AUCTION_ITEM_STATUS": "진행중"
+    },
+    {
+        "AUCTION_ITEM_ID": 6,
+        "USER_ID": "juyeon",
+        "AUCTION_ITEM_NAME": "노트북 팝니다.",
+        "AUCTION_ITEM_EXPLAIN": "새거입니다.",
+        "AUCTION_ITEM_START_PRICE": 10000,
+        "AUCTION_ITEM_HIGHEST_PRICE": 47000,
+        "AUCTION_ITEM_END_TIME": "2024-09-08",
+        "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
+        "CATEGORY_ID": "0001",
+        "AUCTION_ITEM_STATUS": "진행중"
+    },
+    {
+        "AUCTION_ITEM_ID": 7,
+        "USER_ID": "juyeon",
+        "AUCTION_ITEM_NAME": "노트북 팝니다.",
+        "AUCTION_ITEM_EXPLAIN": "새거입니다.",
+        "AUCTION_ITEM_START_PRICE": 10000,
+        "AUCTION_ITEM_HIGHEST_PRICE": 47000,
+        "AUCTION_ITEM_END_TIME": "2024-09-08",
+        "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
+        "CATEGORY_ID": "0001",
+        "AUCTION_ITEM_STATUS": "진행중"
+    },
+    {
+        "AUCTION_ITEM_ID": 8,
+        "USER_ID": "juyeon",
+        "AUCTION_ITEM_NAME": "노트북 팝니다.",
+        "AUCTION_ITEM_EXPLAIN": "새거입니다.",
+        "AUCTION_ITEM_START_PRICE": 10000,
+        "AUCTION_ITEM_HIGHEST_PRICE": 47000,
+        "AUCTION_ITEM_END_TIME": "2024-09-08",
+        "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
+        "CATEGORY_ID": "0001",
+        "AUCTION_ITEM_STATUS": "진행중"
+    }
+]
 

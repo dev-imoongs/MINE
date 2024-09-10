@@ -1,83 +1,88 @@
 
-{
-    "data": [
-        {
-            "USED_ITEM_ID": 1,
-            "USER_ID": "juyeon",
-            "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "USED_ITEM_EXPLAIN": "새거입니다.",
-            "USED_ITEM_PRICE": 10000,
-            "USED_ITEM_REGISTER_TIME": "2024-09-07",
-            "USED_ITEM_UPDATE_TIME": "2024-09-08",
-            "CATEGORY_ID": "0001",
-            "USED_ITEM_PLACE": "사당동"
-        },
-        {
-            "USED_ITEM_ID": 2,
-            "USER_ID": "juyeon",
-            "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "USED_ITEM_EXPLAIN": "새거입니다.",
-            "USED_ITEM_PRICE": 10000,
-            "USED_ITEM_REGISTER_TIME": "2024-09-07",
-            "USED_ITEM_UPDATE_TIME": "2024-09-08",
-            "CATEGORY_ID": "0001",
-            "USED_ITEM_PLACE": "사당동"
-        },
-        {
-            "USED_ITEM_ID": 3,
-            "USER_ID": "juyeon",
-            "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "USED_ITEM_EXPLAIN": "새거입니다.",
-            "USED_ITEM_PRICE": 10000,
-            "USED_ITEM_REGISTER_TIME": "2024-09-07",
-            "USED_ITEM_UPDATE_TIME": "2024-09-08",
-            "CATEGORY_ID": "0001",
-            "USED_ITEM_PLACE": "사당동"
-        },
-        {
-            "USED_ITEM_ID": 4,
-            "USER_ID": "juyeon",
-            "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "USED_ITEM_EXPLAIN": "새거입니다.",
-            "USED_ITEM_PRICE": 10000,
-            "USED_ITEM_REGISTER_TIME": "2024-09-07",
-            "USED_ITEM_UPDATE_TIME": "2024-09-08",
-            "CATEGORY_ID": "0001",
-            "USED_ITEM_PLACE": "사당동"
-        },
-        {
-            "USED_ITEM_ID": 5,
-            "USER_ID": "juyeon",
-            "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "USED_ITEM_EXPLAIN": "새거입니다.",
-            "USED_ITEM_PRICE": 10000,
-            "USED_ITEM_REGISTER_TIME": "2024-09-07",
-            "USED_ITEM_UPDATE_TIME": "2024-09-08",
-            "CATEGORY_ID": "0001",
-            "USED_ITEM_PLACE": "사당동"
-        },
-        {
-            "USED_ITEM_ID": 6,
-            "USER_ID": "juyeon",
-            "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "USED_ITEM_EXPLAIN": "새거입니다.",
-            "USED_ITEM_PRICE": 10000,
-            "USED_ITEM_REGISTER_TIME": "2024-09-07",
-            "USED_ITEM_UPDATE_TIME": "2024-09-08",
-            "CATEGORY_ID": "0001",
-            "USED_ITEM_PLACE": "사당동"
-        },
-        {
-            "USED_ITEM_ID": 7,
-            "USER_ID": "juyeon",
-            "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
-            "USED_ITEM_EXPLAIN": "새거입니다.",
-            "USED_ITEM_PRICE": 10000,
-            "USED_ITEM_REGISTER_TIME": "2024-09-07",
-            "USED_ITEM_UPDATE_TIME": "2024-09-08",
-            "CATEGORY_ID": "0001",
-            "USED_ITEM_PLACE": "사당동"
-        }
-    ]
-}
+[
+    {
+        "USED_ITEM_ID": 1,
+        "USER_ID": "juyeon",
+        "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
+        "USED_ITEM_EXPLAIN": "새거입니다.",
+        "USED_ITEM_PRICE": 10000,
+        "USED_ITEM_REGISTER_TIME": "2024-09-07 10:18:00",
+        "USED_ITEM_UPDATE_TIME": "2024-09-08 10:18:00",
+        "CATEGORY_ID": "0001",
+        "USED_ITEM_PLACE": "사당동",
+        "IMG": "src/assets/temp_product.png"
+    },
+    {
+        "USED_ITEM_ID": 2,
+        "USER_ID": "juyeon",
+        "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
+        "USED_ITEM_EXPLAIN": "새거입니다.",
+        "USED_ITEM_PRICE": 10000,
+        "USED_ITEM_REGISTER_TIME": "2024-09-07 10:18:00",
+        "USED_ITEM_UPDATE_TIME": "2024-09-08 10:18:00",
+        "CATEGORY_ID": "0001",
+        "USED_ITEM_PLACE": "사당동",
+        "IMG": "src/assets/temp_product.png"
+    },
+    {
+        "USED_ITEM_ID": 3,
+        "USER_ID": "juyeon",
+        "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
+        "USED_ITEM_EXPLAIN": "새거입니다.",
+        "USED_ITEM_PRICE": 10000,
+        "USED_ITEM_REGISTER_TIME": "2024-09-07 10:18:00",
+        "USED_ITEM_UPDATE_TIME": "2024-09-08 10:18:00",
+        "CATEGORY_ID": "0001",
+        "USED_ITEM_PLACE": "사당동",
+        "IMG": "src/assets/temp_product.png"
+    },
+    {
+        "USED_ITEM_ID": 4,
+        "USER_ID": "juyeon",
+        "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
+        "USED_ITEM_EXPLAIN": "새거입니다.",
+        "USED_ITEM_PRICE": 10000,
+        "USED_ITEM_REGISTER_TIME": "2024-09-07 10:18:00",
+        "USED_ITEM_UPDATE_TIME": "2024-09-08 10:18:00",
+        "CATEGORY_ID": "0001",
+        "USED_ITEM_PLACE": "사당동",
+        "IMG": "src/assets/temp_product.png"
+    },
+    {
+        "USED_ITEM_ID": 5,
+        "USER_ID": "juyeon",
+        "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
+        "USED_ITEM_EXPLAIN": "새거입니다.",
+        "USED_ITEM_PRICE": 10000,
+        "USED_ITEM_REGISTER_TIME": "2024-09-07 10:18:00",
+        "USED_ITEM_UPDATE_TIME": "2024-09-08 10:18:00",
+        "CATEGORY_ID": "0001",
+        "USED_ITEM_PLACE": "사당동",
+        "IMG": "src/assets/temp_product.png"
+    },
+    {
+        "USED_ITEM_ID": 6,
+        "USER_ID": "juyeon",
+        "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
+        "USED_ITEM_EXPLAIN": "새거입니다.",
+        "USED_ITEM_PRICE": 10000,
+        "USED_ITEM_REGISTER_TIME": "2024-09-07 10:18:00",
+        "USED_ITEM_UPDATE_TIME": "2024-09-08 10:18:00",
+        "CATEGORY_ID": "0001",
+        "USED_ITEM_PLACE": "사당동",
+        "IMG": "src/assets/temp_product.png"
+    },
+    {
+        "USED_ITEM_ID": 7,
+        "USER_ID": "juyeon",
+        "USED_ITEM_NAME": "번잉/DIOR/블루종자켓/항공점퍼/남성/50",
+        "USED_ITEM_EXPLAIN": "새거입니다.",
+        "USED_ITEM_PRICE": 10000,
+        "USED_ITEM_REGISTER_TIME": "2024-09-07 10:18:00",
+        "USED_ITEM_UPDATE_TIME": "2024-09-08 10:18:00",
+        "CATEGORY_ID": "0001",
+        "USED_ITEM_PLACE": "사당동",
+        "IMG": "src/assets/temp_product.png"
+    }
+]
 
