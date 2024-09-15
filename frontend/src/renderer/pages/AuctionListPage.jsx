@@ -5,6 +5,38 @@ import AuctionListItemContainer from '../containers/Auction/AuctionListItemConta
 import AuctionListPaginationContainer from '../containers/Auction/AuctionListPaginationContainer';
 
 const AuctionListPage = () => {
+    const destinationType = 2;
+
+    const itemInfo = [
+        {
+            id: '1',
+            image: 'tempimgurl',
+            title: '(정품) 프라다 버킷백',
+            price: '500,000원',
+            elapsedTime: '49분 전',
+            likes: '3',
+            chats: '0',
+        },
+        {
+            id: '2',
+            image: 'tempimgurl',
+            title: '(정품) 프라다 버킷백2',
+            price: '200,000원',
+            elapsedTime: '1시간 전',
+            likes: '7',
+            chats: '2',
+        },
+        {
+            id: '3',
+            image: 'tempimgurl',
+            title: '(정품) 프라다 버킷백3',
+            price: '75,000원',
+            elapsedTime: '2시간 전',
+            likes: '1',
+            chats: '5',
+        },
+    ];
+
     return (
         <main
             className="relative flex-grow border-b-2"
@@ -82,7 +114,7 @@ const AuctionListPage = () => {
                         </div>
                     </div>
                     <AuctionListSortContainer />
-                    <AuctionListItemContainer />
+                    <AuctionListItemContainer itemInfo={itemInfo} destinationType={destinationType} />
                     <AuctionListPaginationContainer />
                     <div className="flex justify-end">
                         <button

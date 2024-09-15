@@ -1,106 +1,144 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useToggle } from '../../../hooks/useToggle';
 
 const AuctionListFilterContainer = () => {
+    const [isOpen, toggleOpen] = useToggle();
+    const [isSearch, setIsSearch] = useState(true);
+
+    const [filters, setFilters] = useState({
+        category: '',
+        priceRange: { minPrice: '', maxPrice: '' },
+        searchQuery: '',
+    });
+
+    // 카테고리는 재검색을 해야하기 때문에 스테이트로 하기보다는
+    // Link에 쿼리스트링으로 넘기는게 좋기때문에 이후 수정해야합니다.
+    const setCategory = (category) => {
+        setFilters((prev) => ({
+            ...prev,
+            category,
+        }));
+    };
+
+    const setPriceRange = (minPrice, maxPrice) => {
+        setFilters((prev) => ({
+            ...prev,
+            priceRange: { minPrice, maxPrice },
+        }));
+    };
+
+    const setSearchQuery = (query) => {
+        setFilters((prev) => ({
+            ...prev,
+            searchQuery: query,
+        }));
+    };
+
     return (
         <div className="relative">
             <h1 className="a11yHidden">수입명품 중고거래 | 중고나라 카페에서 운영하는 공식 사이트</h1>
-            <h2 className="text-[28px] font-normal mb-[10px]">검색 결과</h2>
-            <button className="absolute right-1 top-2 lg:hidden">
-                <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line
-                        x1="0.7"
-                        y1="2.85664"
-                        x2="19.3"
-                        y2="2.85664"
-                        stroke="#141313"
-                        strokeWidth="1.4"
-                        strokeLinecap="round"
-                    ></line>
-                    <line
-                        x1="0.7"
-                        y1="9.99922"
-                        x2="19.3"
-                        y2="9.99922"
-                        stroke="#141313"
-                        strokeWidth="1.4"
-                        strokeLinecap="round"
-                    ></line>
-                    <line
-                        x1="0.7"
-                        y1="17.1438"
-                        x2="19.3"
-                        y2="17.1437"
-                        stroke="#141313"
-                        strokeWidth="1.4"
-                        strokeLinecap="round"
-                    ></line>
-                    <circle
-                        cx="13.2552"
-                        cy="2.83333"
-                        r="1.83333"
-                        fill="white"
-                        stroke="#141313"
-                        strokeWidth="1.4"
-                    ></circle>
-                    <circle
-                        cx="13.2552"
-                        cy="17.2335"
-                        r="1.83333"
-                        fill="white"
-                        stroke="#141313"
-                        strokeWidth="1.4"
-                    ></circle>
-                    <circle
-                        cx="6.11458"
-                        cy="10.0326"
-                        r="1.83333"
-                        fill="white"
-                        stroke="#141313"
-                        strokeWidth="1.4"
-                    ></circle>
-                </svg>
-            </button>
-            <table className="hidden lg:table filterTable w-full">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-[6px] items-start mb-[10px]">
+                <h1 className="a11yHidden">아이폰12미니 중고거래 | 중고나라 카페에서 운영하는 공식 사이트</h1>
+                <h2 className="text-2xl lg:text-[28px] font-normal w-[calc(100%-30px)] lg:w-auto text-jnBlack">
+                    {isSearch && <strong className="font-semibold">'아이폰12미니' </strong>}
+                    검색 결과
+                </h2>
+                {isSearch && <p className="text-jnGray-700">총 157,523개</p>}
+            </div>
+            <table className="filterTable hidden lg:table w-full">
                 <tbody>
                     <tr>
                         <td className="flex items-center justify-between">
                             <p>카테고리</p>
-                            <button>
+                            <button onClick={toggleOpen}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
                                     <path
                                         stroke="#9CA3AF"
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="1.2"
-                                        d="M8 2v12M2 8h12"
+                                        d={isOpen ? 'M8 8h12' : 'M8 2v12M2 8h12'}
                                     ></path>
                                 </svg>
                             </button>
                         </td>
                         <td>
-                            <div className="flex items-center w-full chawkbazarBreadcrumb">
+                            <div className="flex items-center w-full">
                                 <ol className="flex flex-wrap items-center w-full mt-0 lg:mt-0">
                                     <li className="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
-                                        <a
+                                        <Link
                                             className="text-base font-semibold text-jnBlack font-semibold text-base text-jnBlack"
-                                            href="/search"
+                                            to="/search"
                                         >
                                             전체
-                                        </a>
+                                        </Link>
                                     </li>
-                                    <li className="pl-0 mx-2 mt-0 text-sm leading-5 text-jnGray-500 lg:mt-0">&gt;</li>
-                                    <li className="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
-                                        <a
-                                            className="text-base font-semibold text-jnBlack font-semibold text-base text-jnBlack"
-                                            href="/search?category=1"
-                                        >
-                                            수입명품
-                                        </a>
-                                    </li>
+                                    {filters.category && (
+                                        <li className="pl-0 mx-2 mt-0 text-sm leading-5 text-jnGray-500 lg:mt-0">
+                                            &gt;
+                                        </li>
+                                    )}
+                                    {filters.category && (
+                                        <li className="flex-shrink-0 px-0 mt-0 text-sm break-all transition duration-200 ease-in text-body first:ps-0 last:pe-0 hover:text-heading">
+                                            <Link
+                                                className="text-base font-semibold text-jnBlack font-semibold text-base text-jnBlack"
+                                                to="/search?category=1"
+                                            >
+                                                수입명품
+                                            </Link>
+                                        </li>
+                                    )}
                                 </ol>
                             </div>
                         </td>
                     </tr>
+                    {isOpen && (
+                        <tr>
+                            <td className="no-border"></td>
+                            <td className="!py-2">
+                                <ul className="grid grid-cols-6 text-sm">
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">디지털 기기</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">가구/인테리어</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">도서</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">뷰티/미용</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">취미/게임/음반</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">생활 가전</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">생활주방</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">의류</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">스포츠/레저</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">상품권/모바일티켓</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">식물</Link>
+                                    </li>
+                                    <li className="flex justify-start items-center !mt-0 p-2 pl-0 w">
+                                        <Link to="#">식품</Link>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    )}
+
                     <tr>
                         <td>가격</td>
                         <td className="price-filter">
@@ -138,6 +176,27 @@ const AuctionListFilterContainer = () => {
                             </button>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td>결과 내 검색</td>
+                        <td className="price-filter">
+                            <input
+                                type="text"
+                                className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
+                                placeholder="검색 키워드"
+                                data-idx="0"
+                            />
+                            <button
+                                data-routerlink="true"
+                                className="w-full mt-3 lg:mt-0 lg:w-auto bg-jnBlack py-[10px] px-4 m-0 lg:mx-2 rounded text-sm font-medium text-white"
+                            >
+                                적용
+                            </button>
+                        </td>
+                    </tr>
+
+                    {/*
+                    // 
                     <tr>
                         <td>옵션</td>
                         <td>
@@ -217,6 +276,8 @@ const AuctionListFilterContainer = () => {
                             </ul>
                         </td>
                     </tr>
+                    
+                    */}
                     <tr>
                         <td>선택한 필터</td>
                         <td>
