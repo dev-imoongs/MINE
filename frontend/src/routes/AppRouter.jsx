@@ -15,6 +15,10 @@ import SearchListPage from '../renderer/pages/SearchListPage.jsx';
 import ProductListPage from '../renderer/pages/ProductListPage.jsx';
 import AuctionRegister from '../renderer/pages/register/AuctionRegister.jsx';
 import ProductRegister from '../renderer/pages/register/ProductRegister.jsx';
+import Index from '../renderer/pages/login/Index.jsx';
+import Join from '../renderer/pages/login/Join.jsx'
+import ChangePassword from '../renderer/pages/login/ChangePassword.jsx'
+import FindPassword from '../renderer/pages/login/FindPassword.jsx'
 const AppRouter = () => {
     // const location = useLocation();
     // useEffect(() => {
@@ -54,8 +58,12 @@ const AppRouter = () => {
                     <Route path=":productId" element={<TradeDetailPage />} />
                 </Route>
                 <Route path="/search" element={<SearchListPage />} /> {/* 검색바 */}
-                <Route path="/auctionRegister" element={<AuctionRegister />} /> {/* 검색바 */}
-                <Route path="/productRegister" element={<ProductRegister />} /> {/* 검색바 */}
+                <Route path="/auctionRegister" element={<AuctionRegister />} />
+                <Route path="/productRegister" element={<ProductRegister />} />
+                <Route path="/login" element={<Index />} />
+                <Route path="/join" element={<Join />} />
+                <Route path="/changePassword" element={<ChangePassword />} />
+                <Route path="/findPassword" element={<FindPassword />} />
             </Route>
         </Routes>
     );
