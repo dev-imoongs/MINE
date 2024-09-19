@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import styles from '../../../styles/login/join.module.css'; // 올바른 경로로 CSS 모듈 임포트
-import InputForm from "../../components/login/LoginComponent"; // InputForm 컴포넌트 확인
-import InputForm2 from "../../components/login/LoginComponent"; // 임포트 오류 없는지 확인
+import styles from '../../../styles/login/join.module.css';
+import InputForm from "../../components/login/LoginComponent";
+import InputForm2 from "../../components/login/LoginComponent";
 
 const Join = () => {
     const [input, setInput] = useState({
@@ -81,43 +81,93 @@ const Join = () => {
     }
 
     return (
-        <div className={styles['login-container']}>
-            <div className={styles['signup-form']}>
-                <h2>이메일로 회원가입</h2>
-                <form>
-                    <div className={styles['form-group']}>
-                        <InputForm type={'email'} input={input} onChange={onChange} />
-                        {error.emailError && <span className={styles['error-message']}>{error.emailError}</span>}
-                    </div>
-                    <div className={styles['form-group']}>
-                        <InputForm type={'password'} input={input} onChange={onChange} />
-                        {error.passwordError && <span className={styles['error-message']}>{error.passwordError}</span>}
-                    </div>
-                    <div className={styles['form-group']}>
-                        <InputForm type={'passwordCheck'} input={input} onChange={onChange} />
-                        {error.passwordCheckError && <span className={styles['error-message']}>{error.passwordCheckError}</span>}
-                    </div>
-                    <div className={styles['form-group']}>
-                        <InputForm type={'nickname'} input={input} onChange={onChange} />
-                        {error.nicknameError && <span className={styles['error-message']}>{error.nicknameError}</span>}
-                    </div>
-                    <div className={styles['form-group']}>
-                        <label>주소</label>
-                        <div className={styles['address-container']}>
-                            <input type="text" name='address' placeholder="주소를 찾아주세요" onChange={onChange} value={input.address} readOnly />
-                            <button type='button' className={styles['find-address']}>찾기</button>
+        <div className={styles['join']}>
+            <div className={styles['join-container']}>
+                <div className={styles['signup-form']}>
+                    <h2>이메일로 회원가입</h2>
+                    <form>
+                        <div className={styles['form-group']}>
+                            <InputForm
+                                type={'email'}
+                                input={input}
+                                onChange={onChange}
+                                className={error.emailError ? styles['error-border'] : ''}
+                            />
+                            {error.emailError && <span className={styles['error-message']}>{error.emailError}</span>}
                         </div>
-                        <input type="text" name='addressDetail' placeholder="상세주소 입력" onChange={onChange} value={input.addressDetail} readOnly />
-                        {error.addressError && <span className={styles['error-message']}>{error.addressError}</span>}
-                    </div>
-                    <div className={styles['form-group']}>
-                        <label>관심 카테고리</label>
-                        <Category onChange={onChange} input={input.category1} name={'category1'} />
-                        <Category onChange={onChange} input={input.category2} name={'category2'} />
-                        <Category onChange={onChange} input={input.category3} name={'category3'} />
-                    </div>
-                    <button type="button" onClick={onClick} className={styles['submit-button']}>제출하기</button>
-                </form>
+                        <div className={styles['form-group']}>
+                            <InputForm
+                                type={'password'}
+                                input={input}
+                                onChange={onChange}
+                                className={error.passwordError ? styles['error-border'] : ''}
+                            />
+                            {error.passwordError && <span className={styles['error-message']}>{error.passwordError}</span>}
+                        </div>
+                        <div className={styles['form-group']}>
+                            <InputForm
+                                type={'passwordCheck'}
+                                input={input}
+                                onChange={onChange}
+                                className={error.passwordCheckError ? styles['error-border'] : ''}
+                            />
+                            {error.passwordCheckError && <span className={styles['error-message']}>{error.passwordCheckError}</span>}
+                        </div>
+                        <div className={styles['form-group']}>
+                            <InputForm
+                                type={'nickname'}
+                                input={input}
+                                onChange={onChange}
+                                className={error.nicknameError ? styles['error-border'] : ''}
+                            />
+                            {error.nicknameError && <span className={styles['error-message']}>{error.nicknameError}</span>}
+                        </div>
+                        <div className={styles['form-group']}>
+                            <label>주소</label>
+                            <div className={styles['address-container']}>
+                                <input
+                                    type="text"
+                                    name='address'
+                                    placeholder="주소를 찾아주세요"
+                                    onChange={onChange}
+                                    value={input.address}
+                                    className={error.addressError ? styles['error-border'] : ''}
+                                    readOnly
+                                />
+                                <button type='button' className={styles['find-address']}>찾기</button>
+                            </div>
+                            <input
+                                type="text"
+                                name='addressDetail'
+                                placeholder="상세주소 입력"
+                                onChange={onChange}
+                                value={input.addressDetail}
+                                className={error.addressError ? styles['error-border'] : ''}
+                                readOnly
+                            />
+                            {error.addressError && <span className={styles['error-message']}>{error.addressError}</span>}
+                        </div>
+                        <div className={styles['form-group']}>
+                            <label>관심 카테고리</label>
+                            <Category
+                                onChange={onChange}
+                                input={input.category1}
+                                name={'category1'}
+                            />
+                            <Category
+                                onChange={onChange}
+                                input={input.category2}
+                                name={'category2'}
+                            />
+                            <Category
+                                onChange={onChange}
+                                input={input.category3}
+                                name={'category3'}
+                            />
+                        </div>
+                        <button type="button" onClick={onClick} className={styles['submit-button']}>제출하기</button>
+                    </form>
+                </div>
             </div>
         </div>
     );
