@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '../../../styles/login/join.module.css';
 import InputForm from "../../components/login/LoginComponent";
-import InputForm2 from "../../components/login/LoginComponent";
 
 const Join = () => {
     const [input, setInput] = useState({
@@ -80,6 +79,29 @@ const Join = () => {
         return Object.keys(errors).length === 0;
     }
 
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
+    const openPostcodePopup = () => {
+        new window.daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업 창에서 주소를 선택한 후 메인 화면에 값 적용
+                setInput((prevState) => ({
+                    ...prevState,
+                    address: data.address, // 선택된 도로명 주소
+                }));
+            }
+        }).open();
+    };
+
     return (
         <div className={styles['join']}>
             <div className={styles['join-container']}>
@@ -129,12 +151,17 @@ const Join = () => {
                                     type="text"
                                     name='address'
                                     placeholder="주소를 찾아주세요"
-                                    onChange={onChange}
                                     value={input.address}
                                     className={error.addressError ? styles['error-border'] : ''}
                                     readOnly
                                 />
-                                <button type='button' className={styles['find-address']}>찾기</button>
+                                <button
+                                    type='button'
+                                    className={styles['find-address']}
+                                    onClick={openPostcodePopup} // 팝업 열기
+                                >
+                                    찾기
+                                </button>
                             </div>
                             <input
                                 type="text"
@@ -143,10 +170,10 @@ const Join = () => {
                                 onChange={onChange}
                                 value={input.addressDetail}
                                 className={error.addressError ? styles['error-border'] : ''}
-                                readOnly
                             />
                             {error.addressError && <span className={styles['error-message']}>{error.addressError}</span>}
                         </div>
+
                         <div className={styles['form-group']}>
                             <label>관심 카테고리</label>
                             <Category
