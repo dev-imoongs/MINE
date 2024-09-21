@@ -9,3 +9,8 @@ export const recommendProductListAtom = atom({
     key : 'recommendListAtom',
     default : [],
 })
+
+export const myProductListAtom = atom({
+    key : 'myProductListAtom',
+    default : [],
+})

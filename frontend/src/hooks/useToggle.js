@@ -3,7 +3,8 @@ import { useCallback, useState, useEffect, useRef } from 'react';
 export const useToggle = (initialToggleState = false) => {
     const [state, setState] = useState(initialToggleState);
 
-    const toggle = useCallback(() => {
+    const toggle = useCallback((e) => {
+        e.preventDefault();
         setState((prev) => !prev);
     }, []);
 
@@ -19,17 +20,17 @@ export const useDropdown = () => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-          if (ref.current && !ref.current.contains(event.target)) {
-            close();
-          }
+            if (ref.current && !ref.current.contains(event.target)) {
+                close();
+            }
         };
-    
+
         document.addEventListener('mousedown', handleClickOutside);
-        
+
         return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
     return { ref, isOpen, toggle, open, close };
-}
+};

@@ -15420,13 +15420,13 @@ table {
     border: 1px solid #ddd;
     border-collapse: collapse;
 }
-table td,
+/*table td,
 table th {
     padding: 5px;
     border: 1px solid #ddd;
     font-size: 12px;
     vertical-align: top;
-}
+}*/
 table th {
     text-align: center;
 }
