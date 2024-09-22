@@ -14,31 +14,31 @@ const MypageNavigation = ({onItemClick}) => {
     const [myProductList, setMyProductList] = useRecoilState(myProductListAtom);
     const [myAuctionList, setMyAuctionList] = useRecoilState(myAuctionListAtom);
 
-    // const myProductData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
-    //     queryKey: "myProductData", // 캐싱, 식별 고유값
-    //     queryFn: myProduct // 서버에서 데이터 가져오는 함수
-    // })
-
     const myAuctionData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
         queryKey: "myAuctionData", // 캐싱, 식별 고유값
         queryFn: myAuctionProduct // 서버에서 데이터 가져오는 함수
+    })
+
+    const myProductData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
+        queryKey: "myProductData", // 캐싱, 식별 고유값
+        queryFn: myProduct // 서버에서 데이터 가져오는 함수
     })
 
     const handleClick = (data ,isProduct) => {
         onItemClick(data, isProduct);
     }
 
-    // useEffect(() => {
-    //     if (myProductData) {
-    //         setMyProductList(myProductData.data);
-    //     }
-    // }, [myProductData, setMyProductList]);
+    useEffect(() => {
+        if (myProductData) {
+            setMyProductList(myProductData.data);
+        }
+    }, [myProductData.data]);
 
     useEffect(() => {
         if (myAuctionData) {
             setMyAuctionList(myAuctionData.data);
         }
-    }, [myAuctionData, setMyAuctionList]);
+    }, [myAuctionData.data]);
 
     return (
         <NaviContainer>
