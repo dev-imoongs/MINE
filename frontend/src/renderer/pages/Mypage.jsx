@@ -15,7 +15,7 @@ import {myProduct} from "../../services/productApiService.js";
 import {myAuctionProduct} from "../../services/auctionApiService.js";
 
 const MyPage = () => {
-    const [myData, setMyData] = useRecoilState(myProductListAtom);
+    const [myData, setMyData] = useState(null);
     const [isProduct, setIsProduct] = useState(true);
 
     const onItemClick = (data ,isProduct) => {
@@ -32,7 +32,7 @@ const MyPage = () => {
         if (myProductData) {
             setMyData(myProductData.data);
         }
-    }, [myProductData, setMyData]);
+    }, [myProductData.data]);
 
   return (
     <div className="mx-auto px-4 md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px] justify-between lg:gap-10 flex">

@@ -10,7 +10,10 @@
         "AUCTION_ITEM_END_TIME": "2024-09-08",
         "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
         "CATEGORY_ID": "0001",
-        "AUCTION_ITEM_STATUS": "진행중"
+        "AUCTION_ITEM_STATUS": 1,
+        "AUCTION_ITEM_STATUS_NAME": "대기중",
+        "IMG": "src/assets/temp_product.png",
+        "AUCTION_JOIN_COUNT": 3
     },
     {
         "AUCTION_ITEM_ID": 2,
@@ -22,7 +25,10 @@
         "AUCTION_ITEM_END_TIME": "2024-09-08",
         "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
         "CATEGORY_ID": "0001",
-        "AUCTION_ITEM_STATUS": "진행중"
+        "AUCTION_ITEM_STATUS": 2,
+        "AUCTION_ITEM_STATUS_NAME": "경매중",
+        "IMG": "src/assets/temp_product.png",
+        "AUCTION_JOIN_COUNT": 3
     },
     {
         "AUCTION_ITEM_ID": 3,
@@ -34,7 +40,10 @@
         "AUCTION_ITEM_END_TIME": "2024-09-08",
         "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
         "CATEGORY_ID": "0001",
-        "AUCTION_ITEM_STATUS": "진행중"
+        "AUCTION_ITEM_STATUS": 2,
+        "AUCTION_ITEM_STATUS_NAME": "경매중",
+        "IMG": "src/assets/temp_product.png",
+        "AUCTION_JOIN_COUNT": 4
     },
     {
         "AUCTION_ITEM_ID": 4,
@@ -46,7 +55,10 @@
         "AUCTION_ITEM_END_TIME": "2024-09-08",
         "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
         "CATEGORY_ID": "0001",
-        "AUCTION_ITEM_STATUS": "진행중"
+        "AUCTION_ITEM_STATUS": 1,
+        "AUCTION_ITEM_STATUS_NAME": "대기중",
+        "IMG": "src/assets/temp_product.png",
+        "AUCTION_JOIN_COUNT": 1
     },
     {
         "AUCTION_ITEM_ID": 5,
@@ -58,7 +70,10 @@
         "AUCTION_ITEM_END_TIME": "2024-09-08",
         "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
         "CATEGORY_ID": "0001",
-        "AUCTION_ITEM_STATUS": "진행중"
+        "AUCTION_ITEM_STATUS": 2,
+        "AUCTION_ITEM_STATUS_NAME": "경매중",
+        "IMG": "src/assets/temp_product.png",
+        "AUCTION_JOIN_COUNT": 8
     },
     {
         "AUCTION_ITEM_ID": 6,
@@ -70,7 +85,10 @@
         "AUCTION_ITEM_END_TIME": "2024-09-08",
         "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
         "CATEGORY_ID": "0001",
-        "AUCTION_ITEM_STATUS": "진행중"
+        "AUCTION_ITEM_STATUS": 2,
+        "AUCTION_ITEM_STATUS_NAME": "경매중",
+        "IMG": "src/assets/temp_product.png",
+        "AUCTION_JOIN_COUNT": 5
     },
     {
         "AUCTION_ITEM_ID": 7,
@@ -82,7 +100,10 @@
         "AUCTION_ITEM_END_TIME": "2024-09-08",
         "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
         "CATEGORY_ID": "0001",
-        "AUCTION_ITEM_STATUS": "진행중"
+        "AUCTION_ITEM_STATUS": 2,
+        "AUCTION_ITEM_STATUS_NAME": "경매중",
+        "IMG": "src/assets/temp_product.png",
+        "AUCTION_JOIN_COUNT": 30
     },
     {
         "AUCTION_ITEM_ID": 8,
@@ -94,7 +115,10 @@
         "AUCTION_ITEM_END_TIME": "2024-09-08",
         "AUCTION_ITEM_CREATE_TIME": "2024-09-07",
         "CATEGORY_ID": "0001",
-        "AUCTION_ITEM_STATUS": "진행중"
+        "AUCTION_ITEM_STATUS": 2,
+        "AUCTION_ITEM_STATUS_NAME": "경매중",
+        "IMG": "src/assets/temp_product.png",
+        "AUCTION_JOIN_COUNT": 0
     }
 ]
 
