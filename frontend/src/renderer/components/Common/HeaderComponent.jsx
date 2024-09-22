@@ -4,6 +4,7 @@ import logo from '../../../assets/mine.png';
 import { useDropdown } from '../../../hooks/useDropdown';
 import { useRecoilState } from 'recoil';
 import { recentSearchesAtom } from '../../../recoil/atoms/recentSearchAtom';
+import { chatDrawerState } from '../../../recoil/atoms/chatStateAtom';
 
 /**
  * 로그인 유무에 따라 마이페이지 드롭다운 설정
@@ -35,14 +36,23 @@ const HeaderComponent = () => {
         </header>
     );
 };
+
+// eslint-disable-next-line react-refresh/only-export-components
+export default HeaderComponent;
+
+
+
 const RightSideMenu = () => {
+    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
     const { ref, isOpen, toggle, open, close }= useDropdown();
     return (
         <>
             <div className="hidden lg:flex relative w-[300px]">
                 <ul className="flex w-full text-sm font-medium list-none text-jnGray-900 break-keep">
                     <li className="flex items-center justify-center pr-3">
-                        <button className="ga4_main_top_menu flex items-center justify-center">
+                        <button className="ga4_main_top_menu flex items-center justify-center"
+                            onClick={() => setDrawerVisible(true)}
+                        >
                             <div className="relative cursor-pointer" id="채팅하기">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -538,5 +548,3 @@ const MainLogo = () => {
     )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export default HeaderComponent;
