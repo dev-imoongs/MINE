@@ -13,8 +13,9 @@ export const tradeDetailProductAtom = atom({
             productExplain : '새제품 입니다. 새제품 입니다. 제발 사가세요 제발................................',
             tradePlace : {
                 preferredPlace : ['사당 1동', '사당 2동', '사당 3동'],
-                mapLon : 37.47657573458364,
-                mapLat : 126.98147605060717,
+                mapLat : 37.47657573458364,
+                mapLon : 126.98147605060717,
+                place : '서울 동작구 남부순환로 2089'
             },
             createAt : '2024-09-22 05:35:00'
         },
