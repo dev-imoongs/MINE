@@ -179,12 +179,12 @@ span {
     z-index: 10;
 }
 
-.old {
+.form-group .old {
     background-color: rgb(13, 204, 90);
     color: rgb(255, 255, 255);
 }
 
-.new {
+.form-group .new {
     background-color: rgb(255, 255, 255);
     border: 1px solid #000;
 }
