@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useToggle } from '../../../hooks/useToggle';
 import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
 import { useRecoilValue } from 'recoil';
 import { getTimeAgo } from '../../../services/commonService';
+import { useRecoilState } from 'recoil';
+import { chatDrawerState } from '../../../recoil/atoms/chatStateAtom';
+import { ToastContainer, toast } from 'react-toastify';
+import ToastComponent from '../../components/Common/ToastComponent'
+import 'react-toastify/dist/ReactToastify.css';
 const TradeProductInfoContainer = ({ StImg }) => {
     const [isLike, toggleLike] = useToggle();
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
     const productInfo = tradeProductInfo.productInfo;
     const sellerInfo = tradeProductInfo.sellerInfo;
+    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
+    const notify = useCallback(() => {
+        console.log("??????????");
+        toast("Wow, so easy!");
+    }, []);
+    useEffect(() => {
+        console.log('mount')
+    })
     return (
         <div>
             {console.log(tradeProductInfo)}
             <ProductInfo stImg={StImg} productInfo={productInfo} />
             <SellerInfo sellerInfo={sellerInfo}/>
             <div className="flex items-center space-s-4 pt-9 max-[479px]:fixed max-[479px]:bottom-0 max-[479px]:left-0 max-[479px]:z-20 max-[479px]:w-full max-[479px]:px-4 max-[479px]:pb-4 max-[479px]:bg-white">
-                <div className="w-8 h-8">
+                <div className="w-8 h-8"
+                    onClick={notify}
+                >
                     <label htmlFor=":r0:" className="relative cursor-pointer" onClick={toggleLike}>
                         <svg
                             width="32"
@@ -37,14 +52,15 @@ const TradeProductInfoContainer = ({ StImg }) => {
                 <button
                     data-variant="slim"
                     className="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack"
+                    onClick={() => setDrawerVisible(true)}
                 >
                     채팅하기
                 </button>
             </div>
         </div>
-        
     );
 };
+
 
 const ProductInfo = ({StImg, productInfo}) => {
     return (

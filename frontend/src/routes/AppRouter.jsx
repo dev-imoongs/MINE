@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
+import Drawer from 'rc-drawer';
+import 'rc-drawer/assets/index.css';
 import { Route,Outlet, Routes, useLocation } from 'react-router-dom';
 import MainPage from '../renderer/pages/MainPage';
 import Mypage from '../renderer/pages/Mypage.jsx';
-import NProgress from 'nprogress';
-// import 'nprogress/nprogress.css';
+import ChattingPage from '../renderer/pages/ChattingPage.jsx';
+import { useRecoilState } from 'recoil';
+import { chatDrawerState } from '../recoil/atoms/chatStateAtom.js'
 
 import HeaderComponent from '../renderer/components/Common/HeaderComponent';
 import FooterComponent from '../renderer//components/Common/FooterComponent';
@@ -19,30 +22,8 @@ import Index from '../renderer/pages/login/Index.jsx';
 import Join from '../renderer/pages/login/Join.jsx'
 import ChangePassword from '../renderer/pages/login/ChangePassword.jsx'
 import FindPassword from '../renderer/pages/login/FindPassword.jsx'
+import ToastComponent from '../renderer/components/Common/ToastComponent.jsx'
 const AppRouter = () => {
-    // const location = useLocation();
-    // useEffect(() => {
-    //     console.log('NProgress start called');
-    //     NProgress.configure({ 
-    //         parent: '#progress_bar',
-    //         showSpinner: false, // 스피너 제거
-    //         speed: 400, // 애니메이션 속도 조정
-    //         trickle: true,
-    //         trickleSpeed: 0.5, // 트리클 속도 조정
-    //         easing: "ease",
-    //      });
-    //     NProgress.start();
-    //     return () => {
-    //         console.log('NProgress done called');
-    //         NProgress.done();
-    //     }
-
-    // },[location.pathname])
-
-    // useEffect(() => {
-    //     NProgress.done();
-    // }, []); 
-
     return (
         <Routes>
             <Route element={<Layout />}>
@@ -70,12 +51,26 @@ const AppRouter = () => {
 };
 
 const Layout = React.memo(() => {
+    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
     return (
         <>
             <HeaderComponent />
             <main className="relative flex-grow border-b-2" style={{ minHeight: '0px', height: 'auto' }}>
                 <Outlet />
             </main>
+            <ToastComponent />
+            <Drawer
+                placement="right"
+                open={drawerVisible}
+                onClose={() => setDrawerVisible(false)}
+                width={600}
+                handler={false}
+                maskClosable={true}
+                mask={true}
+                duration="0.3s"
+            >
+                <ChattingPage />
+            </Drawer>
             <FooterComponent />
         </>
     );

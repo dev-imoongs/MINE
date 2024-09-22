@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tradeDetailProductAtom } from "../../recoil/atoms/tradeAtom";
 import { useQuery } from 'react-query';
 import { getProductDetail } from '../../services/productApiService';
@@ -11,6 +11,9 @@ import KakaoMap from '../components/Trade/KakaoMap';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 
 const TradeDetailPage = () => {
+    useEffect(() => {
+        console.log('mount')
+    },[])
     const  { productId }  = useParams(); 
     const setTradeDetailProduct = useSetRecoilState(tradeDetailProductAtom);
     const { data : productDetail, error, isLoading, isError } = useQuery(['productDetail', productId], // query key(productDetail) :  동일한 키로 요청을 보내면 React Query는 기존에 캐시된 데이터를 반환하고, 새로운 API 요청을 하지 않는다
@@ -37,7 +40,7 @@ const TradeDetailPage = () => {
         inset: '0px',
         color: 'transparent',
     };
-
+    
     return (
         <div className="flex flex-col min-hscreen default-height">
             <main className="relative flex-grow border-b-2 default-height">
