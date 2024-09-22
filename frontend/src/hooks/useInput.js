@@ -5,8 +5,11 @@ export const useInput = (initialValue = "") => {
 
   const onChange = (e) => {
     setValue(e.target.value);
-    console.log(e.target.value);
   };
 
-  return [value, onChange];
+  const clear = () => {
+    setValue(initialValue);
+  };
+
+  return [value, onChange, clear];
 };

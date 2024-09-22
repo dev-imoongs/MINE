@@ -8,10 +8,13 @@ const AuctionListFilterContainer = () => {
   const [isSearch, setIsSearch] = useState(true);
 
   const [isOpen, toggleOpen] = useToggle(false);
-  const [inputMinPrice, handleMinPriceChange] = useInput("");
-  const [inputMaxPrice, handleMaxPriceChange] = useInput("");
+  const [inputMinPrice, handleMinPriceChange, clearInputMinPrice] =
+    useInput("");
+  const [inputMaxPrice, handleMaxPriceChange, clearInputMaxPrice] =
+    useInput("");
   // 결과 내 검색 상태제어
-  const [inputSearchQuery, handleSearchChange] = useInput("");
+  const [inputSearchQuery, handleSearchChange, clearInputSearchQuery] =
+    useInput("");
 
   // 필터 상태 초기값
   const [filters, setFilters] = useState({
@@ -54,19 +57,22 @@ const AuctionListFilterContainer = () => {
       searchQuery: "",
     };
 
-    const newValue =
-      filterKey === "category"
-        ? "전체"
-        : filterKey === "priceRange"
-        ? { minPrice: "", maxPrice: "" }
-        : "";
-
     setFilters((prev) => ({
       ...prev,
       ...(filterKey === "initialize"
         ? initialState
-        : { [filterKey]: newValue }),
+        : { [filterKey]: initialState[filterKey] }),
     }));
+
+    // 입력 필드 초기화
+    if (filterKey === "priceRange" || filterKey === "initialize") {
+      clearInputMinPrice();
+      clearInputMaxPrice();
+    }
+
+    if (filterKey === "searchQuery" || filterKey === "initialize") {
+      clearInputSearchQuery();
+    }
   };
 
   // 반복을 위한, 선택한 필터 현재 상태를 받고있는 배열
@@ -199,6 +205,7 @@ const AuctionListFilterContainer = () => {
                 className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
                 placeholder="최소 가격"
                 data-idx="0"
+                value={inputMinPrice}
                 onChange={handleMinPriceChange}
               />
               <span className="mx-[6px]">
@@ -220,6 +227,7 @@ const AuctionListFilterContainer = () => {
                 className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
                 placeholder="최대 가격"
                 data-idx="1"
+                value={inputMaxPrice}
                 onChange={handleMaxPriceChange}
               />
               <button
@@ -242,6 +250,7 @@ const AuctionListFilterContainer = () => {
                 className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
                 placeholder="검색 키워드"
                 data-idx="0"
+                value={inputSearchQuery}
                 onChange={handleSearchChange}
               />
               <button
