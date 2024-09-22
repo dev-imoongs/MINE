@@ -1,10 +1,35 @@
 import React, {useEffect} from 'react';
+import { useParams } from 'react-router-dom';
+import { useSetRecoilState } from "recoil";
+import { tradeDetailProductAtom } from "../../recoil/atoms/tradeAtom";
+import { useQuery } from 'react-query';
+import { getProductDetail } from '../../services/productApiService';
 import SwipeImgComponent from '../components/Auction/SwipeImgComponent';
 import TradeProductInfoContainer from '../containers/Trade/TradeProductInfoContainer';
 import TradeProductDetailContainer from '../containers/Trade/TradeProductDetailContainer';
-import KakaoMap from '../components/Trade/KakaoMap'
+import KakaoMap from '../components/Trade/KakaoMap';
+import LoadingSpinner from '../components/Common/LoadingSpinner';
 
 const TradeDetailPage = () => {
+    const  { productId }  = useParams(); 
+    const setTradeDetailProduct = useSetRecoilState(tradeDetailProductAtom);
+    const { data : productDetail, error, isLoading, isError } = useQuery(['productDetail', productId], // query key(productDetail) :  동일한 키로 요청을 보내면 React Query는 기존에 캐시된 데이터를 반환하고, 새로운 API 요청을 하지 않는다
+        () => getProductDetail(productId),
+        {
+            enabled : !!productId, // productId 있을 때만 호출
+            onSuccess : (data) => {
+                setTradeDetailProduct(data) // 성공 시, Recoil 상태에 데이터 저장
+            },
+            onError : (error) => {
+                console.error("데이터를 가져오는 중 오류 발생:", error);
+            },
+            staleTime : 5 * 60 * 1000, // 5분동안 캐시 재사용
+            cacheTime : 10 * 60 * 1000 // 10분 동안 캐시 보관
+        }
+    )
+    if (isLoading) return <LoadingSpinner />; // 로딩 중일 때 표시할 컴포넌트
+    if (error) return <div>Error loading product details</div>; // 에러 발생 시 표시할 컴포넌트
+    
     const StImg = {
         position: 'absolute',
         height: '100%',
