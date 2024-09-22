@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom'
 import logo from '../../../assets/mine.png';
-import { useDropdown } from '../../../hooks/useToggle';
+import { useDropdown } from '../../../hooks/useDropdown';
 import { useRecoilState } from 'recoil';
 import { recentSearchesAtom } from '../../../recoil/atoms/recentSearchAtom';
 
@@ -13,6 +13,7 @@ const HeaderComponent = () => {
     useEffect(()=>{
         console.log('HeaderComponent mounted');
     },[])
+    
     return (
         <header
             id="siteHeader"

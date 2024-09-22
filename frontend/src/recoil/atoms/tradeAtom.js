@@ -1,0 +1,31 @@
+import { atom } from "recoil"
+import tempImgFile from '../../assets/temp_product.png';
+export const tradeDetailProductAtom = atom({
+    key : 'tradeDetailProductAtom',
+    default : {
+        productInfo : {
+            category : '남성의류',
+            price : 80000,
+            productPicture : [tempImgFile,tempImgFile,tempImgFile],
+            title : '새상품 입니다 아이다스 입니다. 테스트 입니다.',
+            state : '새상품',
+            productMethod : '직거래',
+            productExplain : '새제품 입니다. 새제품 입니다. 제발 사가세요 제발................................',
+            tradePlace : {
+                preferredPlace : ['사당 1동', '사당 2동', '사당 3동'],
+                mapLon : 37.47657573458364,
+                mapLat : 126.98147605060717,
+            },
+            createAt : '2024-09-22 05:35:00'
+        },
+        sellerInfo : {
+            userEmail : 'giggoon@abc.com',
+            userProfile : 'https://img2.joongna.com/common/Profile/Default/profile_f.png',
+            trustScore : 879
+        },
+
+
+        
+
+    },
+})

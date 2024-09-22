@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import SwipeImgComponent from '../components/Auction/SwipeImgComponent';
-import ProductInfoContainer from '../containers/Auction/ProductInfoContainer';
-import ProductDetailContainer from '../containers/Auction/ProductDetailContainer';
+import TradeProductInfoContainer from '../containers/Trade/TradeProductInfoContainer';
+import TradeProductDetailContainer from '../containers/Trade/TradeProductDetailContainer';
 import KakaoMap from '../components/Trade/KakaoMap'
 
 const TradeDetailPage = () => {
@@ -19,9 +19,9 @@ const TradeDetailPage = () => {
                 <div className="mx-auto md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px] lg:min-h-[950px] px-5 default-height">
                     <div className="items-start block grid-cols-2 lg:grid gap-x-[72px] lg:pt-[72px] lg:pb-[52px] pb-9 pt-0">
                         <SwipeImgComponent StImg={StImg} />
-                        <ProductInfoContainer StImg={StImg} />
+                        <TradeProductInfoContainer StImg={StImg} />
                     </div>
-                    <ProductDetailContainer />
+                    <TradeProductDetailContainer />
                     <KakaoMap/>
                 </div>
             </main>
