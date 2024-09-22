@@ -11,7 +11,7 @@ const SearchHeaderContainer = () => {
                 </h3>
                 <a
                     className="flex items-center text-xs lg:text-sm xl:text-base text-jnGray-700 mt-0.5 lg:mt-1"
-                    href="/product/list?type=recommend"
+                    href="/product"
                 >
                     바로가기
                     <svg

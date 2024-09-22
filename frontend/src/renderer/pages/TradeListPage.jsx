@@ -5,6 +5,7 @@ import TradeListItemContainer from '../containers/Trade/TradeListItemContainer';
 import TradeListPaginationContainer from '../containers/Trade/TradeListPaginationContainer';
 
 const TradeListPage = () => {
+
     return (
         <main
             className="relative flex-grow border-b-2"
