@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useToggle } from '../../../hooks/useToggle';
 import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
 import { useRecoilValue } from 'recoil';
@@ -9,18 +9,27 @@ import { ToastContainer, toast } from 'react-toastify';
 import ToastComponent from '../../components/Common/ToastComponent'
 import 'react-toastify/dist/ReactToastify.css';
 const TradeProductInfoContainer = ({ StImg }) => {
+    const countRef = useRef(0);
+    console.log(countRef.current)
     const [isLike, toggleLike] = useToggle();
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
     const productInfo = tradeProductInfo.productInfo;
     const sellerInfo = tradeProductInfo.sellerInfo;
-    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
+    const [toastStatus, setStatus] = useState();
     const notify = useCallback(() => {
-        console.log("??????????");
-        toast("Wow, so easy!");
+        if(countRef.current === 0) {
+            console.log(countRef)
+            toast("찜하기");
+            countRef.current +=1
+        }else{
+            console.log(countRef)
+            countRef.current -= 1;
+        }
     }, []);
+    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
     useEffect(() => {
         console.log('mount')
-    })
+    },[])
     return (
         <div>
             {console.log(tradeProductInfo)}
@@ -60,7 +69,6 @@ const TradeProductInfoContainer = ({ StImg }) => {
         </div>
     );
 };
-
 
 const ProductInfo = ({StImg, productInfo}) => {
     return (
