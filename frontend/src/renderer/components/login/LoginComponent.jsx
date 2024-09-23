@@ -16,6 +16,17 @@ const InputForm = ({type, input, onChange, className}) => {
             placeholder = '비밀번호 입력';
             value = input.password;
             break;
+        case 'presentPassword' :
+            title = '현재 비밀번호';
+            placeholder = '현재 비밀번호 입력';
+            value = input.presentPassword;
+            break;
+        case 'newPassword' :
+            type = "password";
+            title = '새 비밀번호';
+            placeholder = '새 비밀번호 입력';
+            value = input.password;
+            break;
         case 'passwordCheck' :
             title = '비밀번호 확인';
             placeholder = '비밀번호 입력';

@@ -8,6 +8,7 @@ import { myProductListAtom } from "../../../recoil/atoms/productListAtom.js"
 import { myAuctionListAtom } from "../../../recoil/atoms/auctionListAtom.js"
 import {myProduct} from "../../../services/productApiService.js";
 import {myAuctionProduct} from "../../../services/auctionApiService.js";
+import {Link} from "react-router-dom";
 
 const MypageNavigation = ({onItemClick}) => {
 
@@ -53,7 +54,9 @@ const MypageNavigation = ({onItemClick}) => {
             </ul>
             <h3>내 정보</h3>
             <ul>
-              <li>회원수정</li>
+              <li>
+                  <Link to="/editInfo">회원수정</Link>
+              </li>
               <li>탈퇴하기</li>
             </ul>
       </NaviContainer>
