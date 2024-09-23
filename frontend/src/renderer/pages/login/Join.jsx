@@ -2,10 +2,19 @@ import { useState, useEffect } from 'react';
 import styles from '../../../styles/login/join.module.css';
 import InputForm from "../../components/login/LoginComponent";
 
+import { myInfoAtom } from "../../../recoil/atoms/userAtom.js"
+import {useRecoilState} from "recoil";
+
+import { useLocation } from 'react-router-dom';
+
 const Join = () => {
+    const [myInfo, setMyInfo] = useRecoilState(myInfoAtom);
+    const location = useLocation();
+
     const [input, setInput] = useState({
         email: "",
         password: "",
+        presentPassword: "",
         passwordCheck: "",
         nickname: "",
         address: "",
@@ -15,8 +24,39 @@ const Join = () => {
         category3: ""
     });
 
+    useEffect(() => {
+        if (location.pathname === '/editInfo') {
+            setInput({
+                email: myInfo.USER_EMAIL,
+                presentPassword: "",
+                password: "",
+                passwordCheck: "",
+                nickname: myInfo.USER_NICKNAME,
+                address: myInfo.USER_ADDRESS,
+                addressDetail: myInfo.USER_ADDRESS_DETAIL,
+                category1: myInfo.USER_CATEGORY_ID,
+                category2: "",
+                category3: ""
+            });
+        } else {
+            setInput({
+                email: "",
+                presentPassword: "",
+                password: "",
+                passwordCheck: "",
+                nickname: "",
+                address: "",
+                addressDetail: "",
+                category1: "",
+                category2: "",
+                category3: ""
+            });
+        }
+    }, [location, myInfo]);
+
     const [error, setError] = useState({
         emailError: '',
+        presentPasswordError: '',
         passwordError: '',
         passwordCheckError: '',
         nicknameError: '',
@@ -32,7 +72,11 @@ const Join = () => {
 
     const onClick = () => {
         if (validateForm()) {
-            alert('회원가입 성공');
+            if(location.pathname === '/join') {
+                alert('회원가입 성공');
+            } else {
+                alert('수정되었습니다.');
+            }
         }
     };
 
@@ -48,16 +92,35 @@ const Join = () => {
             errors.emailError = '이메일 형식이 맞지 않습니다';
         }
 
-        if (!input.password) {
-            errors.passwordError = '비밀번호를 입력하세요';
-        } else if (!passwordRegex.test(input.password)) {
-            errors.passwordError = '비밀번호는 8자 이상, 영어 대/소문자, 특수문자가 포함되어야합니다';
+        if (myInfo.USER_PASSWORD) {
+            if (input.presentPassword !== myInfo.USER_PASSWORD) {
+                errors.presentPasswordError = '비밀번호가 다릅니다.';
+            }
         }
 
-        if (!input.passwordCheck) {
-            errors.passwordCheckError = '비밀번호를 다시 한번 적어주세요';
-        } else if (input.passwordCheck !== input.password) {
-            errors.passwordCheckError = '비밀번호가 동일하지 않습니다';
+        if (location.pathname === "/join") {
+            if (!input.password) {
+                errors.passwordError = '비밀번호를 입력하세요';
+            } else if (!passwordRegex.test(input.password)) {
+                errors.passwordError = '비밀번호는 8자 이상, 영어 대/소문자, 특수문자가 포함되어야합니다';
+            }
+        } else {
+            // 새 비밀번호가 빈값일 때 비밀번호는 set 하지 않기
+            if (input.password && !passwordRegex.test(input.password)) {
+                errors.passwordError = '비밀번호는 8자 이상, 영어 대/소문자, 특수문자가 포함되어야합니다';
+            }
+        }
+
+        if (location.pathname === "/join") {
+            if (!input.passwordCheck) {
+                errors.passwordCheckError = '비밀번호를 다시 한번 적어주세요';
+            } else if (input.passwordCheck !== input.password) {
+                errors.passwordCheckError = '비밀번호가 동일하지 않습니다';
+            }
+        } else {
+            if (input.passwordCheck !== input.password) {
+                errors.passwordCheckError = '비밀번호가 동일하지 않습니다';
+            }
         }
 
         if (!input.nickname) {
@@ -106,7 +169,7 @@ const Join = () => {
         <div className={styles['join']}>
             <div className={styles['join-container']}>
                 <div className={styles['signup-form']}>
-                    <h2>이메일로 회원가입</h2>
+                    <h2>{location.pathname === "/join" ? "이메일로 회원가입" : "회원정보 수정"}</h2>
                     <form>
                         <div className={styles['form-group']}>
                             <InputForm
@@ -117,14 +180,27 @@ const Join = () => {
                             />
                             {error.emailError && <span className={styles['error-message']}>{error.emailError}</span>}
                         </div>
+                        {location.pathname === "/editInfo" && (
+                            <div className={styles['form-group']}>
+                                <InputForm
+                                    type={'presentPassword'}
+                                    input={input}
+                                    onChange={onChange}
+                                    className={error.presentPasswordError ? styles['error-border'] : ''}
+                                />
+                                {error.presentPasswordError &&
+                                    <span className={styles['error-message']}>{error.presentPasswordError}</span>}
+                            </div>
+                        )}
                         <div className={styles['form-group']}>
                             <InputForm
-                                type={'password'}
+                                type={location.pathname === "/join" ? 'password' : 'newPassword'}
                                 input={input}
                                 onChange={onChange}
                                 className={error.passwordError ? styles['error-border'] : ''}
                             />
-                            {error.passwordError && <span className={styles['error-message']}>{error.passwordError}</span>}
+                            {error.passwordError &&
+                                <span className={styles['error-message']}>{error.passwordError}</span>}
                         </div>
                         <div className={styles['form-group']}>
                             <InputForm
@@ -192,7 +268,7 @@ const Join = () => {
                                 name={'category3'}
                             />
                         </div>
-                        <button type="button" onClick={onClick} className={styles['submit-button']}>제출하기</button>
+                        <button type="button" onClick={onClick} className={styles['submit-button']}>{location.pathname === "/join" ? "제출하기" : "수정하기"}</button>
                     </form>
                 </div>
             </div>

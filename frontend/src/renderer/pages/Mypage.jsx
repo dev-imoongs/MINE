@@ -11,11 +11,14 @@ import MypageMyList from "../containers/mypage/MypageMyList.jsx";
 
 import { myProductListAtom } from "../../recoil/atoms/productListAtom.js"
 import { myAuctionListAtom } from "../../recoil/atoms/auctionListAtom.js"
+import { myInfoAtom } from "../../recoil/atoms/userAtom.js"
 import {myProduct} from "../../services/productApiService.js";
 import {myAuctionProduct} from "../../services/auctionApiService.js";
+import {getMyInfo} from "../../services/userApiService.js";
 
 const MyPage = () => {
     const [myData, setMyData] = useState(null);
+    const [myInfo, setMyInfo] = useRecoilState(myInfoAtom);
     const [isProduct, setIsProduct] = useState(true);
 
     const onItemClick = (data ,isProduct) => {
@@ -28,11 +31,22 @@ const MyPage = () => {
         queryFn: myProduct // 서버에서 데이터 가져오는 함수
     })
 
+    const myInfoData = useQuery({
+        queryKey: "myInfoData",
+        queryFn: getMyInfo
+    })
+
     useEffect(() => {
         if (myProductData) {
             setMyData(myProductData.data);
         }
     }, [myProductData.data]);
+
+    useEffect(() => {
+        if (myInfoData) {
+            setMyInfo(myInfoData.data);
+        }
+    }, [myInfoData.data]);
 
   return (
     <div className="mx-auto px-4 md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px] justify-between lg:gap-10 flex">

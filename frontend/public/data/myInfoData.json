@@ -1,0 +1,18 @@
+
+
+{
+    "USER_ID": "1",
+    "USER_EMAIL": "juyeon@naver.com",
+    "USER_PASSWORD": "1234",
+    "USER_NICKNAME": "주연",
+    "USER_CATEGORY_ID": 1,
+    "USER_CATEGORY_NAME": "디지털기기",
+    "USER_LATITUDE": 37.4999942,
+    "USER_LONGITUDE": 127.0354155,
+    "USER_ADDRESS": "서울 강남구 테헤란로 146",
+    "USER_ADDRESS_DETAIL": "3층",
+    "USER_STATUS": "1",
+    "USER_STATUS_NAME": "유효"
+}
+
+
