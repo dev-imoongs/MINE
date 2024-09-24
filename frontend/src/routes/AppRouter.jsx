@@ -6,7 +6,7 @@ import MainPage from '../renderer/pages/MainPage';
 import Mypage from '../renderer/pages/Mypage.jsx';
 import ChattingPage from '../renderer/pages/ChattingPage.jsx';
 import { useRecoilState } from 'recoil';
-import { chatDrawerState } from '../recoil/atoms/chatStateAtom.js'
+import { chatDrawerState, currentChatId } from '../recoil/atoms/chatStateAtom.js'
 
 import HeaderComponent from '../renderer/components/Common/HeaderComponent';
 import FooterComponent from '../renderer//components/Common/FooterComponent';
@@ -23,6 +23,8 @@ import Join from '../renderer/pages/login/Join.jsx'
 import ChangePassword from '../renderer/pages/login/ChangePassword.jsx'
 import FindPassword from '../renderer/pages/login/FindPassword.jsx'
 import ToastComponent from '../renderer/components/Common/ToastComponent.jsx'
+import ChattingListContainer from '../renderer/containers/Chatting/ChattingListContainer'
+import ChattingRoomContainer from '../renderer/containers/Chatting/ChattingRoomContainer';
 const AppRouter = () => {
     return (
         <Routes>
@@ -53,6 +55,7 @@ const AppRouter = () => {
 
 const Layout = React.memo(() => {
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
+    const [chatId, setChatId] = useRecoilState(currentChatId);
     return (
         <>
             <HeaderComponent />
@@ -63,12 +66,14 @@ const Layout = React.memo(() => {
             <Drawer
                 placement="right"
                 open={drawerVisible}
-                onClose={() => setDrawerVisible(false)}
-                width={600}
+                onClose={() => {
+                    setDrawerVisible(false)
+                    setChatId(null)
+                }}
+                width={800}
                 handler={false}
                 maskClosable={true}
                 mask={true}
-                duration="0.3s"
             >
                 <ChattingPage />
             </Drawer>
