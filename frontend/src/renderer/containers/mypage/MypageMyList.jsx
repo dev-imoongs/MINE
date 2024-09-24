@@ -1,7 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
+import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js"
 
 import styled from "styled-components";
+import {useRecoilState} from "recoil";
 const MypageMyList = ({data,isProduct}) => {
+    const condition = ["판매내역", "판매완료", "구매내역", "찜한 상품"];
+    const filter = ["최신순", "낮은가격순", "높은가격순"];
+    const [openMenuIndex, setOpenMenuIndex] = useState(null); // 현재 열린 메뉴의 인덱스를 저장
+    const [activeIndex, setActiveIndex] = useRecoilState(activeIndexAtom);
+
+    const handleClick = (index) => {
+        setActiveIndex(index);
+        //case문으로 각각의 데이터 불러오는 로직
+        //...
+    };
+
+    const productMenuClick = (index) => {
+        setOpenMenuIndex(prevIndex => (prevIndex === index ? null : index)); // 같은 인덱스 클릭 시 닫기
+    };
+
+    const updateClick = () => {
+        console.log("상품수정")
+    }
+
   return (
       <MyListCon>
           <MyListTitleWrap>
@@ -10,18 +31,17 @@ const MypageMyList = ({data,isProduct}) => {
               </MyListTitle>
               <MyListSubTitle>
                   <ul className="colors flex flex-nowrap justify-between lg:justify-start -me-3 border-b border-[#DADEE5]">
-                      <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-black border-b-[2px] border-black">
-                          판매내역
-                      </li>
-                      <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">
-                          판매완료
-                      </li>
-                      <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">
-                          구매내역
-                      </li>
-                      <li className="shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out text-[#9CA3AF]">
-                          찜한 상품
-                      </li>
+                      {condition.map((item, index) => (
+                          <li
+                              key={index}
+                              className={`shrink grow lg:grow-0 cursor-pointer py-4 basis-[84px] lg:basis-[160px] flex justify-center items-center font-medium transition duration-200 ease-in-out ${
+                                  activeIndex === index ? 'text-black border-b-[2px] border-black' : 'text-[#9CA3AF]'
+                              }`}
+                              onClick={() => handleClick(index)}
+                          >
+                              {item}
+                          </li>
+                      ))}
                   </ul>
               </MyListSubTitle>
               <MyListFilter>
@@ -35,7 +55,7 @@ const MypageMyList = ({data,isProduct}) => {
                           </button>
                       </li>
                       <li>
-                          <span className="inline-block mb-0 w-[1px] h-[10px] border border-[#DADEE5]" />
+                          <span className="inline-block mb-0 w-[1px] h-[10px] border border-[#DADEE5]"/>
                       </li>
                       <li>
                           <button className="text-sm font-medium text-[#787E89]">
@@ -57,144 +77,219 @@ const MypageMyList = ({data,isProduct}) => {
               <MyListItemWrap>
                   {data.map((item, index) => (
                   isProduct ? (
-                  <div className="my-item-con relative" key={index}>
-                      <div className="my-content-con relative">
-                          <a
-                              className="my-content-link group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
-                              title={item.USED_ITEM_NAME}
-                          >
-                              <div
-                                  className="my-img-con relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
-                                  <img
-                                      alt= {item.USED_ITEM_NAME}
-                                      // referrerPolicy="no-referrer"
-                                      src={item.IMG}
-                                      decoding="async"
-                                      data-nimg="fill"
-                                      className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
-                                      loading="lazy"
-                                      style={{
-                                          position: "absolute",
-                                          height: "100%",
-                                          width: "100%",
-                                          inset: 0,
-                                          color: "transparent"
-                                      }}
-                                  />
-                              </div>
-                              <div className="my-text-con w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
-                                  <h2 className="line-clamp-2 min-h-[10h] text-sm md:text-base text-heading">
-                                      {item.USED_ITEM_NAME}
-                                  </h2>
-                                  <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                                      {item.USED_ITEM_PRICE}원
-                                  </div>
-                                  <div className="my-1">
-                                      <span className="text-sm text-gray-400">{item.USED_ITEM_PLACE}</span>
-                                      <span className="text-sm text-gray-400 mx-1">|</span>
-                                      <span className="text-sm text-gray-400">{item.USED_ITEM_REGISTER_TIME}</span>
-                                  </div>
-                              </div>
-                          </a>
-                      </div>
-                      <div
-                          className="function-con flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
-                          <div>
-                              <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width={32}
-                                  height={32}
-                                  fill="none"
-                                  className="text-white mr-2 w-8 h-8"
+                      <div className="my-item-con relative" key={index}>
+                          <div className="my-content-con relative">
+                              <a
+                                  className="my-content-link group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
+                                  title={item.USED_ITEM_NAME}
                               >
-                                  <path
-                                      fill="#fff"
-                                      d="M16.003 17.803a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 9.4a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 26.202a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6"
-                                  />
-                              </svg>
-                          </div>
-                      </div>
-                  </div>
-                  ) : (
-                  <div className="my-item-con relative" key={index}>
-                      <div className="my-content-con relative">
-                          <a
-                              className="my-content-link group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
-                              title={item.AUCTION_ITEM_NAME}
-                          >
-                              <div
-                                  className="my-img-con relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
-                                  <img
-                                      alt={item.AUCTION_ITEM_NAME}
-                                      // referrerPolicy="no-referrer"
-                                      src={item.IMG}
-                                      decoding="async"
-                                      data-nimg="fill"
-                                      className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
-                                      loading="lazy"
-                                      style={{
-                                          position: "absolute",
-                                          height: "100%",
-                                          width: "100%",
-                                          inset: 0,
-                                          color: "transparent"
-                                      }}
-                                  />
-                              </div>
-                              <div
-                                  className="my-text-con w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
-                                  <h2 className="line-clamp-2 min-h-[10h] text-sm md:text-base text-heading">
-                                      {item.AUCTION_ITEM_NAME}
-                                      <span className="text-sm text-gray-400 mx-1">|</span>
-                                      <span>{item.AUCTION_ITEM_STATUS_NAME}</span>
-                                  </h2>
-                                  <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                                      {item.AUCTION_ITEM_STATUS === 1
-                                          ? `${item.AUCTION_ITEM_START_PRICE}원`
-                                          : `${item.AUCTION_ITEM_HIGHEST_PRICE}원`}
-                                      {item.AUCTION_ITEM_STATUS !== 1 &&
-                                          <span className={"m-1"}>시작가: {item.AUCTION_ITEM_START_PRICE}</span>}
+                                  <div
+                                      className="my-img-con relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
+                                      <img
+                                          alt={item.USED_ITEM_NAME}
+                                          // referrerPolicy="no-referrer"
+                                          src={item.IMG}
+                                          decoding="async"
+                                          data-nimg="fill"
+                                          className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
+                                          loading="lazy"
+                                          style={{
+                                              position: "absolute",
+                                              height: "100%",
+                                              width: "100%",
+                                              inset: 0,
+                                              color: "transparent"
+                                          }}
+                                      />
                                   </div>
-                                  <div className="my-1">
-                                      <span className="text-sm text-gray-400">{item.AUCTION_ITEM_STATUS === 1 ? '등록시간' : '종료시간'}</span>
-                                      <span className="text-sm text-gray-400 mx-1">|</span>
-                                      <span className="text-sm text-gray-400">{item.AUCTION_ITEM_STATUS === 1 ? item.AUCTION_ITEM_CREATE_TIME : item.AUCTION_ITEM_END_TIME}</span>
-                                  </div>
-                                  {item.AUCTION_ITEM_STATUS === 2 && (
+                                  <div className="my-text-con w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
+                                      <h2 className="line-clamp-2 min-h-[10h] text-sm md:text-base text-heading">
+                                          {item.USED_ITEM_NAME}
+                                      </h2>
+                                      <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
+                                          {item.USED_ITEM_PRICE}원
+                                      </div>
                                       <div className="my-1">
-                                          <span className="text-sm text-gray-400">남은시간</span>
+                                          <span className="text-sm text-gray-400">{item.USED_ITEM_PLACE}</span>
+                                          <span className="text-sm text-gray-400 mx-1">|</span>
+                                          <span className="text-sm text-gray-400">{item.USED_ITEM_REGISTER_TIME}</span>
+                                      </div>
+                                  </div>
+                              </a>
+                          </div>
+                          <div
+                              className="function-con flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
+                              <div>
+                                  <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width={32}
+                                      height={32}
+                                      fill="none"
+                                      className="text-white mr-2 w-8 h-8"
+                                  >
+                                      <path
+                                          fill="#fff"
+                                          d="M16.003 17.803a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 9.4a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 26.202a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6"
+                                      />
+                                  </svg>
+                              </div>
+                          </div>
+                          <div
+                              className="flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
+                              <div onClick={() => productMenuClick(index)}>
+                                  <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width={32}
+                                      height={32}
+                                      fill="none"
+                                      className="text-white mr-2 w-8 h-8"
+                                  >
+                                      {/*<g*/}
+                                      {/*    stroke="#fff"*/}
+                                      {/*    strokeLinecap="round"*/}
+                                      {/*    strokeLinejoin="round"*/}
+                                      {/*    strokeWidth="1.5"*/}
+                                      {/*    clipPath="url(#md-close_svg__a)"*/}
+                                      {/*>*/}
+                                      {/*    <path d="M23 9 9 23M9 9l14 14"/>*/}
+                                      {/*</g>*/}
+                                      <defs>
+                                          <clipPath id="md-close_svg__a">
+                                              <path fill="#fff" d="M0 0h32v32H0z"/>
+                                          </clipPath>
+                                      </defs>
+                                  </svg>
+                              </div>
+                              <Menu
+                                  $isOpen={openMenuIndex === index}
+                                  className="flex flex-col w-full lg:w-[160px] bg-white text-black rounded-lg border border-jnGray-300 overflow-hidden">
+                                  <ul>
+                                      <li className="font-semibold text-sm hover:bg-jnGray-200">
+                                          <button onClick={updateClick} className="w-full py-5">수정</button>
+                                      </li>
+                                  </ul>
+                              </Menu>
+                          </div>
+
+                      </div>
+                  ) : (
+                      <div className="my-item-con relative" key={index}>
+                          <div className="my-content-con relative">
+                              <a
+                                  className="my-content-link group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
+                                  title={item.AUCTION_ITEM_NAME}
+                              >
+                                  <div
+                                      className="my-img-con relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
+                                      <img
+                                          alt={item.AUCTION_ITEM_NAME}
+                                          // referrerPolicy="no-referrer"
+                                          src={item.IMG}
+                                          decoding="async"
+                                          data-nimg="fill"
+                                          className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
+                                          loading="lazy"
+                                          style={{
+                                              position: "absolute",
+                                              height: "100%",
+                                              width: "100%",
+                                              inset: 0,
+                                              color: "transparent"
+                                          }}
+                                      />
+                                  </div>
+                                  <div
+                                      className="my-text-con w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
+                                      <h2 className="line-clamp-2 min-h-[10h] text-sm md:text-base text-heading">
+                                          {item.AUCTION_ITEM_NAME}
+                                          <span className="text-sm text-gray-400 mx-1">|</span>
+                                          <span>{item.AUCTION_ITEM_STATUS_NAME}</span>
+                                      </h2>
+                                      <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
+                                          {item.AUCTION_ITEM_STATUS === 1
+                                              ? `${item.AUCTION_ITEM_START_PRICE}원`
+                                              : `${item.AUCTION_ITEM_HIGHEST_PRICE}원`}
+                                          {item.AUCTION_ITEM_STATUS !== 1 &&
+                                              <span className={"m-1"}>시작가: {item.AUCTION_ITEM_START_PRICE}</span>}
+                                      </div>
+                                      <div className="my-1">
+                                          <span
+                                              className="text-sm text-gray-400">{item.AUCTION_ITEM_STATUS === 1 ? '등록시간' : '종료시간'}</span>
                                           <span className="text-sm text-gray-400 mx-1">|</span>
                                           <span
-                                              className="text-sm text-gray-400">01D 01H
+                                              className="text-sm text-gray-400">{item.AUCTION_ITEM_STATUS === 1 ? item.AUCTION_ITEM_CREATE_TIME : item.AUCTION_ITEM_END_TIME}</span>
+                                      </div>
+                                      {item.AUCTION_ITEM_STATUS === 2 && (
+                                          <div className="my-1">
+                                              <span className="text-sm text-gray-400">남은시간</span>
+                                              <span className="text-sm text-gray-400 mx-1">|</span>
+                                              <span
+                                                  className="text-sm text-gray-400">01D 01H
                                       </span>
-                                          <span
-                                              className="text-sm text-gray-400">
+                                              <span
+                                                  className="text-sm text-gray-400">
                                           <span className={"m-1"}>입찰수</span>
                                           <span>{item.AUCTION_JOIN_COUNT}회</span>
                                       </span>
-                                      </div>
-                                  )}
+                                          </div>
+                                      )}
+                                  </div>
+                              </a>
+                          </div>
+                          <div
+                              className="function-con flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
+                              <div>
+                                  <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width={32}
+                                      height={32}
+                                      fill="none"
+                                      className="text-white mr-2 w-8 h-8"
+                                  >
+                                      <path
+                                          fill="#fff"
+                                          d="M16.003 17.803a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 9.4a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 26.202a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6"
+                                      />
+                                  </svg>
                               </div>
-                          </a>
-                      </div>
-                      <div
-                          className="function-con flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
-                          <div>
-                              <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width={32}
-                                  height={32}
-                                  fill="none"
-                                  className="text-white mr-2 w-8 h-8"
-                              >
-                                  <path
-                                      fill="#fff"
-                                      d="M16.003 17.803a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 9.4a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6M16.003 26.202a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6"
-                                  />
-                              </svg>
+                          </div>
+                          <div
+                              className="flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
+                              <div onClick={() => productMenuClick(index)}>
+                                  <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width={32}
+                                      height={32}
+                                      fill="none"
+                                      className="text-white mr-2 w-8 h-8"
+                                  >
+                                      {/*<g*/}
+                                      {/*    stroke="#fff"*/}
+                                      {/*    strokeLinecap="round"*/}
+                                      {/*    strokeLinejoin="round"*/}
+                                      {/*    strokeWidth="1.5"*/}
+                                      {/*    clipPath="url(#md-close_svg__a)"*/}
+                                      {/*>*/}
+                                      {/*    <path d="M23 9 9 23M9 9l14 14"/>*/}
+                                      {/*</g>*/}
+                                      <defs>
+                                          <clipPath id="md-close_svg__a">
+                                              <path fill="#fff" d="M0 0h32v32H0z"/>
+                                          </clipPath>
+                                      </defs>
+                                  </svg>
+                              </div>
+                              <Menu
+                                  $isOpen={openMenuIndex === index}
+                                  className="flex flex-col w-full lg:w-[160px] bg-white text-black rounded-lg border border-jnGray-300 overflow-hidden">
+                                  <ul>
+                                      <li className="font-semibold text-sm hover:bg-jnGray-200">
+                                          <button onClick={updateClick} className="w-full py-5">수정</button>
+                                      </li>
+                                  </ul>
+                              </Menu>
                           </div>
                       </div>
-                  </div>
                   )
                   ))}
               </MyListItemWrap>
@@ -253,6 +348,11 @@ const MyListFilter = styled.div`
     align-items: center;
     justify-content: space-between;
 `
+
+const Menu = styled.div`
+    display: ${props => (props.$isOpen ? 'block' : 'none')};
+`
+
 const MyListItemWrap = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
