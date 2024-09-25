@@ -1,5 +1,5 @@
 import React from 'react';
-import ItemComponent from '../../components/Auction/ItemComponent';
+import ItemComponent from '../../components/Trade/ItemComponent';
 
 const SearchListItemContainer = () => {
     const itemInfo = [

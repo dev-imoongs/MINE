@@ -21,7 +21,7 @@ const MainContentContainer = () => {
          <MainProductListComponent product={productList[1]}/>
          <MainProductListComponent product={productList[2]}/>
 
-        <section className="relative aspect-[375/590] min-[761px]:aspect-[2560/680] bg-no-repeat bg-cover bg-center bg-app-down-main-mobile min-[761px]:bg-app-down-main-pc mb-12 md:mb-14 xl:mb-16 max-w-[1024px] min-[1600px]:max-w-[1280px] -mx-4 md:mx-auto">
+        {/* <section className="relative aspect-[375/590] min-[761px]:aspect-[2560/680] bg-no-repeat bg-cover bg-center bg-app-down-main-mobile min-[761px]:bg-app-down-main-pc mb-12 md:mb-14 xl:mb-16 max-w-[1024px] min-[1600px]:max-w-[1280px] -mx-4 md:mx-auto">
           <div className="justify-start flex absolute space-x-2 w-[81.5%] aspect-[311/48] top-[27.63%] left-[8.5%] min-[761px]:w-[31.5%] min-[761px]:aspect-[392/52] min-[761px]:top-[58%] min-[761px]:left-[15.625%]">
             <a
               className="w-[49%] min-[761px]:w-[41%] relative"
@@ -105,7 +105,7 @@ const MainContentContainer = () => {
               style={{ color: "transparent" }}
             />
           </div>
-        </section>
+        </section> */}
       </div>
     </>
   );
