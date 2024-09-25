@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from '../../../styles/login/join.module.css';
 import InputForm from "../../components/login/LoginComponent";
+import Category from "../../components/login/CategoryComponent";
 
 import { myInfoAtom } from "../../../recoil/atoms/userAtom.js"
 import {useRecoilState} from "recoil";
@@ -276,19 +277,5 @@ const Join = () => {
     );
 }
 
-const Category = ({ onChange, input, name }) => {
-    return (
-        <>
-            <select id={name} name={name} onChange={onChange} value={input}>
-                <option value="">카테고리</option>
-                <option value="1">머리</option>
-                <option value="2">어깨</option>
-                <option value="3">무릎</option>
-                <option value="4">발</option>
-                <option value="5">스웩</option>
-            </select>
-        </>
-    )
-}
 
 export default Join;
