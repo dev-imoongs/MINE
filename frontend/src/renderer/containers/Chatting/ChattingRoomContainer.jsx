@@ -1,7 +1,16 @@
-import { currentChatId } from '../../../recoil/atoms/chatStateAtom'
+import { currentChatId, textMessageArray, sendMessage } from '../../../recoil/atoms/chatStateAtom'
 import { useRecoilState } from 'recoil';
+import {formatDateToYMD, formatDateToTime } from '../../../services/commonService';
+import { useEffect, useState } from 'react';
 const ChattingRoomContainer = () => {
     const [chatId, setChatId] = useRecoilState(currentChatId);
+    const [message, setMessage] = useRecoilState(textMessageArray);
+    const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
+
+    useEffect(() => {
+        // setMessage에 기존 배열을 복사하고 sndMsg를 푸쉬
+        setMessage((prevMessages) => [...prevMessages, sndMsg]);
+    }, [sndMsg]); // sndMsg가 변경될 때마다 실행
     return (
         <>
             <div className="flex flex-col w-full h-full justify-between">
@@ -47,13 +56,22 @@ const ChattingRoomContainer = () => {
                                     <div className="flex items-center"><span className="font-semibold text-[15px] text-jnGray-900">6,000원</span><span className="text-[12px] text-jnGray-500 ml-2">배송비 별도</span></div><span className="block text-[12px]">닌텐도 wii 북미판 게임 2장</span>
                                 </div>
                             </a>
-                            <button className="text-[14px] text-[null] border-[1px] border-jnblack bg-[null]  p-2 rounded-md">안전거래</button>
                             </div>
                         <div className="p-5 bg-[#e9edef] overflow-auto h-full">
                             <div></div>
                             <div className="w-inherit h-full flex flex-col justify-between">
                                 <div>
-                                    <div>
+
+                                    {
+                                        message.map((data, i) => {
+                                            return (
+                                                <div key={i}>
+                                                    {data.type == 'send' ? <SendTextMessage data={data}/> : <ReceiveTextMessage data={data}/>}
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                    {/* <div>
                                         <div>
                                             <p className="text-center text-[14px] py-4">2024년 05월 16일</p>
                                         </div>
@@ -69,7 +87,8 @@ const ChattingRoomContainer = () => {
                                         </div>
                                     </div>
                                     <div>
-                                        <div></div>
+                                        <div>
+                                        </div>
                                         <div>
                                             <div type="textMessage">
                                                 <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
@@ -516,18 +535,13 @@ const ChattingRoomContainer = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div className="bg-jngreen flex justify-between items-center gap-[4px] px-[20px] py-[11px] cursor-pointer -mx-[20px] -mb-[20px]">
-                                    <div className="w-full flex justify-between items-center text-white whitespace-pre-wrap detail-medium-12">
-                                        <p className="mb-0">앱에서는 채팅 응답이 더 빠르고 편리합니다. 지금 설치하면 거래 확률을 높일 수 있어요!</p><button className="underline">앱 다운로드</button>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="carouselWrapper relative pt-1.5 pb-2.5 pl-1 pr-2.5 h-[44px] quick-menu-slider-wrapper">
+                {/* <div className="carouselWrapper relative pt-1.5 pb-2.5 pl-1 pr-2.5 h-[44px] quick-menu-slider-wrapper">
                     <div className="swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden" dir="ltr">
                         <div className="swiper-wrapper" style={{transform:"translate3d(0px, 0px, 0px)"}}>
                             <div className="swiper-slide swiper-slider-chat-event ml-1.5 flex items-center w-fit swiper-slide-active">
@@ -550,43 +564,118 @@ const ChattingRoomContainer = () => {
                         <div className="swiper-button-prev swiper-button-disabled swiper-button-lock"></div>
                         <div className="swiper-button-next swiper-button-disabled swiper-button-lock"></div>
                     </div>
-                </div>
-                <div>
-                    <form className="bg-[#F7F9FA] py-3 px-3 flex flex-col rounded-xl focus-within:shadow-banner h-auto">
-                        <textarea title="채팅" autoComplete="off" maxLength="1000" className="shrink-0 bg-transparent placeholder:text-[#9CA3AF] outline-none resize-none text-md h-16 w-full pre-wrap" placeholder="메시지를 입력해주세요" name="chat"></textarea>
-                        <div className="flex justify-between mt-3">
-                            <div className="flex gap-2">
-                                <div>
-                                    <div className="block">
-                                        <label htmlFor="chat-image-upload" className="text-gray-600 font-semibold text-sm leading-none cursor-pointer block border-[#e1e1e1] text-center border-0 m-0 p-0 w-6 h-6">
-                                            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 16 16" className="w-full h-full" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                                <path fillRule="evenodd" d="M.002 3a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2h-12a2 2 0 01-2-2V3zm1 9l2.646-2.354a.5.5 0 01.63-.062l2.66 1.773 3.71-3.71a.5.5 0 01.577-.094L15.002 9.5V13a1 1 0 01-1 1h-12a1 1 0 01-1-1v-1zm5-6.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clipRule="evenodd"></path>
-                                            </svg>
-                                        </label>
-                                        <input id="chat-image-upload" name="chat-image-upload" type="file" className="px-4 md:px-5 appearance-none border text-input text-xs lg:text-sm font-body placeholder-body min-h-12 transition duration-200 ease-in-out bg-gray-100 border-gray-300 focus:shadow focus:bg-white focus:border-primary a11yHidden w-auto py-0 rounded-md" autoComplete="off" spellCheck="false" aria-invalid="false" accept="image/png, image/jpeg, image/jpg" multiple="" />
-                                    </div>
-                                </div>
-                                <button className="w-6 h-6">
-                                    <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" className="w-full h-full" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M12,20c-4.411,0-8-3.589-8-8s3.589-8,8-8 s8,3.589,8,8S16.411,20,12,20z"></path>
-                                        <path d="M14.829,14.828c-0.185,0.184-0.384,0.349-0.592,0.489c-0.217,0.146-0.445,0.27-0.68,0.369 c-0.244,0.103-0.496,0.181-0.749,0.233c-0.531,0.108-1.087,0.108-1.616,0c-0.254-0.052-0.506-0.13-0.75-0.233 c-0.234-0.099-0.463-0.223-0.679-0.369c-0.209-0.141-0.408-0.305-0.593-0.489c-0.181-0.181-0.346-0.38-0.488-0.592l-1.658,1.119 c0.215,0.318,0.462,0.617,0.734,0.889c0.273,0.273,0.572,0.52,0.887,0.731c0.323,0.218,0.666,0.404,1.02,0.553 c0.365,0.154,0.744,0.272,1.128,0.35C11.189,17.959,11.596,18,12,18s0.811-0.041,1.208-0.122c0.383-0.078,0.762-0.196,1.127-0.35 c0.354-0.149,0.696-0.335,1.021-0.553c0.313-0.212,0.612-0.458,0.886-0.731c0.272-0.271,0.52-0.571,0.734-0.889l-1.658-1.119 C15.175,14.448,15.01,14.647,14.829,14.828z"></path>
-                                        <circle cx="8.5" cy="10.5" r="1.5"></circle>
-                                        <circle cx="15.493" cy="10.493" r="1.493"></circle>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div className="flex items-end space-x-2">
-                                <span className="text-sm leading-5 text-gray-400">0 / 1000</span>
-                                    <button type="submit" disabled="" className="w-6 h-6"><svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" className="w-full h-full fill-[#9CA3AF]" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                </div> */}
+                <SendChattingTextArea setSendMessage={setSndMsg}/>
             </div>
         </>
     )
 }
 export default ChattingRoomContainer;
+const SendChattingTextArea = ({setSendMessage}) => {
+    const [text, setText] = useState('');
+    const handleTextChange = (e) => {
+        setText(e.target.value);
+    }
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await setSendMessage(prev => ({
+            ...prev,
+            text: text,
+            time: new Date(),
+        }));
+        setText('');  // 전송 후 초기화
+    };
+    return (
+        <>
+            <div>
+                <form className="bg-[#F7F9FA] py-3 px-3 flex flex-col rounded-xl focus-within:shadow-banner h-auto"  onSubmit={handleSubmit}>
+                    <textarea title="채팅" autoComplete="off" maxLength="1000" className="shrink-0 bg-transparent placeholder:text-[#9CA3AF] outline-none resize-none text-md h-16 w-full pre-wrap" placeholder="메시지를 입력해주세요" name="chat"  onChange={(e) => {
+                        handleTextChange(e)
+                        if(!text.trim()){
+                            return
+                        }
+                    } } ></textarea>
+                    <div className="flex justify-between mt-3">
+                        <div className="flex gap-2">
+                            <div>
+                                <div className="block">
+                                    <label htmlFor="chat-image-upload" className="text-gray-600 font-semibold text-sm leading-none cursor-pointer block border-[#e1e1e1] text-center border-0 m-0 p-0 w-6 h-6">
+                                        <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 16 16" className="w-full h-full" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path fillRule="evenodd" d="M.002 3a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2h-12a2 2 0 01-2-2V3zm1 9l2.646-2.354a.5.5 0 01.63-.062l2.66 1.773 3.71-3.71a.5.5 0 01.577-.094L15.002 9.5V13a1 1 0 01-1 1h-12a1 1 0 01-1-1v-1zm5-6.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clipRule="evenodd"></path>
+                                        </svg>
+                                    </label>
+                                    <input id="chat-image-upload" name="chat-image-upload" type="file" className="px-4 md:px-5 appearance-none border text-input text-xs lg:text-sm font-body placeholder-body min-h-12 transition duration-200 ease-in-out bg-gray-100 border-gray-300 focus:shadow focus:bg-white focus:border-primary a11yHidden w-auto py-0 rounded-md" autoComplete="off" spellCheck="false" aria-invalid="false" accept="image/png, image/jpeg, image/jpg" multiple="" />
+                                </div>
+                            </div>
+                            <button className="w-6 h-6">
+                                <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" className="w-full h-full" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M12,20c-4.411,0-8-3.589-8-8s3.589-8,8-8 s8,3.589,8,8S16.411,20,12,20z"></path>
+                                    <path d="M14.829,14.828c-0.185,0.184-0.384,0.349-0.592,0.489c-0.217,0.146-0.445,0.27-0.68,0.369 c-0.244,0.103-0.496,0.181-0.749,0.233c-0.531,0.108-1.087,0.108-1.616,0c-0.254-0.052-0.506-0.13-0.75-0.233 c-0.234-0.099-0.463-0.223-0.679-0.369c-0.209-0.141-0.408-0.305-0.593-0.489c-0.181-0.181-0.346-0.38-0.488-0.592l-1.658,1.119 c0.215,0.318,0.462,0.617,0.734,0.889c0.273,0.273,0.572,0.52,0.887,0.731c0.323,0.218,0.666,0.404,1.02,0.553 c0.365,0.154,0.744,0.272,1.128,0.35C11.189,17.959,11.596,18,12,18s0.811-0.041,1.208-0.122c0.383-0.078,0.762-0.196,1.127-0.35 c0.354-0.149,0.696-0.335,1.021-0.553c0.313-0.212,0.612-0.458,0.886-0.731c0.272-0.271,0.52-0.571,0.734-0.889l-1.658-1.119 C15.175,14.448,15.01,14.647,14.829,14.828z"></path>
+                                    <circle cx="8.5" cy="10.5" r="1.5"></circle>
+                                    <circle cx="15.493" cy="10.493" r="1.493"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="flex items-end space-x-2">
+                            <span className="text-sm leading-5 text-gray-400">{text.length} / 1000</span>
+                                <button type="submit" disabled={!text.trim()} className="w-6 h-6"><svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" className="w-full h-full fill-[#9CA3AF]" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </>
+    )
+}
+
+const ReceiveTextMessage = (messageData) => {
+    const data = messageData.data
+    return (
+        <>
+            <div>
+                <div>
+                    {data.messageForFirstDate && (<p className="text-center text-[14px] py-4">{formatDateToYMD(data.time, data.messageForFirstDate)}</p>)}
+                </div>
+                <div>
+                    <div type="textMessage">
+                        <div className="flex items-end w-auto mb-2 flex-start space-x-1">
+                            <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
+                                <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">{data.text}</p>
+                            </div>
+                            <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">{formatDateToTime(data.time, data.messageForFirstDate)}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
+
+const SendTextMessage = (messageData) => {
+    const data = messageData.data
+    return (
+        <>
+            <div>
+                <div>
+                {data.messageForFirstDate && (<p className="text-center text-[14px] py-4">{formatDateToYMD(data.time, data.messageForFirstDate)}</p>)}
+                </div>
+                <div>
+                    <div type="textMessage">
+                        <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
+                            <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
+                                <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">{data.text}</p>
+                            </div>
+                            <div className="flex flex-col">
+                                <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">{formatDateToTime(data.time, data.messageForFirstDate)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </>
+    )
+}

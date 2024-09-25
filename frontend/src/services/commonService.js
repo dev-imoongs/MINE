@@ -42,3 +42,26 @@ export const titleCheck = (type) => {
       return "지금";
     }
   };
+
+export const formatDateToYMD = (date) => {
+  const newDate = new Date(date);
+  const year = newDate.getFullYear();
+  const month = newDate.getMonth() + 1;
+  const day = newDate.getDate();
+  return `${year}년 ${month}월 ${day}일`
+}
+
+export const formatDateToTime = (date) => {
+  const newDate = new Date(date);
+  let hour = newDate.getHours();
+  let minute = newDate.getMinutes();
+
+  if(hour < 10){
+    hour = '0' + hour
+  }
+  if(minute < 10){
+    minute = '0' + minute
+  }
+  
+  return `${hour}:${minute}`;
+}
