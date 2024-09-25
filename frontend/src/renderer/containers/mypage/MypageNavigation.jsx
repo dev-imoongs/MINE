@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useRecoilState } from "recoil";
 import {useQuery} from "react-query";
 
@@ -6,6 +6,8 @@ import styled from "styled-components";
 
 import { myProductListAtom } from "../../../recoil/atoms/productListAtom.js"
 import { myAuctionListAtom } from "../../../recoil/atoms/auctionListAtom.js"
+import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js"
+
 import {myProduct} from "../../../services/productApiService.js";
 import {myAuctionProduct} from "../../../services/auctionApiService.js";
 import {Link} from "react-router-dom";
@@ -14,6 +16,7 @@ const MypageNavigation = ({onItemClick}) => {
 
     const [myProductList, setMyProductList] = useRecoilState(myProductListAtom);
     const [myAuctionList, setMyAuctionList] = useRecoilState(myAuctionListAtom);
+    const [activeIndex, setActiveIndex] = useRecoilState(activeIndexAtom);
 
     const myAuctionData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
         queryKey: "myAuctionData", // 캐싱, 식별 고유값
@@ -27,6 +30,11 @@ const MypageNavigation = ({onItemClick}) => {
 
     const handleClick = (data ,isProduct) => {
         onItemClick(data, isProduct);
+        setActiveIndex(0);
+    }
+
+    const handleWithDraw = () => {
+        let result = confirm("탈퇴하시겠습니까?"); //확인 === true 취소 === false
     }
 
     useEffect(() => {
@@ -57,7 +65,7 @@ const MypageNavigation = ({onItemClick}) => {
               <li>
                   <Link to="/editInfo">회원수정</Link>
               </li>
-              <li>탈퇴하기</li>
+              <li onClick={handleWithDraw}>탈퇴하기</li>
             </ul>
       </NaviContainer>
     );

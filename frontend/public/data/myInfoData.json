@@ -12,7 +12,11 @@
     "USER_ADDRESS": "서울 강남구 테헤란로 146",
     "USER_ADDRESS_DETAIL": "3층",
     "USER_STATUS": "1",
-    "USER_STATUS_NAME": "유효"
+    "USER_STATUS_NAME": "유효",
+    "buy_count": 11,
+    "sell_count": 28,
+    "bid_count": 3,
+    "trustScore" : 789
 }
 
 

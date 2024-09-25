@@ -1,12 +1,14 @@
 import React from "react";
-const TrustRating = () => {
+
+const TrustRating = ({trust}) => {
+
   return (
       <div className="flex space-x-7 lg:pl-1 items-start">
           <div className="flex-1 self-center">
               <div className="flex justify-between items-center mb-2 text-[#0CB650] font-medium">
                           <span>
                             <span className="font-medium text-base">신뢰지수</span>
-                            <span className="font-bold inline-block ml-1 text-lg">146</span>
+                            <span className="font-bold inline-block ml-1 text-lg">{trust}</span>
                           </span>
                   <span className="text-[#9CA3AF] text-[14px] font-normal">
                             1,000
