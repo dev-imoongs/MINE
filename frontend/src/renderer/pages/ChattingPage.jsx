@@ -16,13 +16,13 @@ const ChattingPage = () => {
     }
   return (
     <>
-      <div>
           <div
             tabIndex="0"
             aria-hidden="true"
             data-sentinel="start"
             style={chatStyle}
-          ></div>
+          >
+          </div>
             {chatId === null ? (
                 <ChattingListContainer />
             ) : (
@@ -34,7 +34,6 @@ const ChattingPage = () => {
             data-sentinel="end"
             style={chatStyle}
           ></div>
-        </div>
     </>
   );
 };

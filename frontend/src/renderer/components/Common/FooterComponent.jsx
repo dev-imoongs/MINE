@@ -6,21 +6,18 @@ const FooterComponent = () => {
                 <div className="text-xs leading-[14.32px] text-jnGray-600 px-5 xl:px-0 mx-auto mt-8 mb-10 xl:mt-10 xl:mb-11 max-w-[1024px] min-[1600px]:max-w-[1280px]">
                     <section className="flex flex-col justify-between md:flex-row">
                         <div className="mb-6 md:mb-0">
-                            <h4 className="mb-3 font-bold text-jnGray-900">(주)중고나라 사업자 정보</h4>
+                            <h4 className="mb-3 font-bold text-jnGray-900">(주)MINE 사업자 정보</h4>
                             <ul className="[&amp;>li]:mb-2">
                                 <li className="flex items-center">
-                                    (주)중고나라
+                                    (주)MINE
                                     <div className="w-[1px] h-2 bg-[#E0E0E0] mx-2"></div>
-                                    대표자 : 최인욱
+                                    대표자 : 정현진
                                 </li>
-                                <li>사업자 등록번호 : 215-87-87482</li>
-                                <li>통신판매신고번호 : 제2019-서울서초-0097호</li>
                                 <li>주소 : 서울특별시 서초구 서초대로 301 동익성봉빌딩 7층</li>
-                                <li>대표번호 : 1533-7861</li>
-                                <li>메일 : joongna@joonggonara.co.kr</li>
-                                <li>호스팅제공자 : 아마존웹서비스</li>
+                                <li>대표번호 : 010-xxxx-xxxx</li>
+                                <li>메일 : mine@mine.co.kr</li>
                             </ul>
-                            <div className="flex">
+                            {/* <div className="flex">
                                 <h5 className="font-semibold leading-[17px] tracking-[0.2px] mr-3 text-jnGray-700">
                                     Contact
                                 </h5>
@@ -33,9 +30,9 @@ const FooterComponent = () => {
                                         <a href="https://vvd.bz/eFFQ">중고나라 광고 문의</a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> */}
                         </div>
-                        <ul className="flex">
+                        {/* <ul className="flex">
                             <li className="w-5 h-5 mr-5 last:mr-0 text-jnGray-600">
                                 <a
                                     className="[&amp;>*]:w-full [&amp;>*]:h-full"
@@ -177,13 +174,13 @@ const FooterComponent = () => {
                                     </svg>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> */}
                     </section>
                     <hr className="w-full h-[1px] border-white mt-8 mb-4 xl:my-5" />
                     <section className="flex flex-col justify-between lg:flex-row">
                         <div className="lg:w-[48%]">
                             <ul className="flex flex-wrap items-center mb-5 leading-loose xl:mb-3 text-jnGray-900">
-                                <a className="" href="/terms">
+                                <a className="" >
                                     이용약관
                                 </a>
                                 <div className="w-[1px] h-2 bg-[#E0E0E0] mx-2"></div>
@@ -191,31 +188,30 @@ const FooterComponent = () => {
                                     개인정보처리방침
                                 </a>
                                 <div className="w-[1px] h-2 bg-[#E0E0E0] mx-2"></div>
-                                <a className="" href="/member-dispute">
+                                <a className="" >
                                     분쟁처리절차
                                 </a>
                                 <div className="w-[1px] h-2 bg-[#E0E0E0] mx-2"></div>
-                                <a className="" href="/youthpolicy">
+                                <a className="" >
                                     청소년보호정책
                                 </a>
                                 <div className="w-[1px] h-2 bg-[#E0E0E0] mx-2"></div>
                                 <a
                                     className=""
-                                    href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=2158787482&amp;apv_perm_no="
                                 >
                                     사업자정보확인
                                 </a>
                                 <div className="w-[1px] h-2 bg-[#E0E0E0] mx-2"></div>
-                                <a className="" href="/post-policy">
+                                <a className="" >
                                     게시글 수집 및 이용 안내
                                 </a>
                                 <div className="w-[1px] h-2 bg-[#E0E0E0] mx-2"></div>
                                 <a className="" href="/cs-center">
-                                    중고나라 고객센터
+                                    Mine 고객센터
                                 </a>
                             </ul>
                             <p className="leading-[22px]">
-                                “중고나라” 상점의 판매상품을 제외한 모든 상품들에 대하여, (주)중고나라는
+                                Mine 상점의 판매상품을 제외한 모든 상품들에 대하여, (주)Mine는
                                 통신판매중개자로서 거래 당사자가 아니며 판매 회원과 구매 회원 간의 상품거래 정보 및
                                 거래에 관여하지 않고, 어떠한 의무와 책임도 부담하지 않습니다.
                             </p>

@@ -70,7 +70,7 @@ const Layout = React.memo(() => {
                     setDrawerVisible(false)
                     setChatId(null)
                 }}
-                width={800}
+                width={600}
                 handler={false}
                 maskClosable={true}
                 mask={true}

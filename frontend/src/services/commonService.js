@@ -1,5 +1,9 @@
+/**
+ * 
+ * @param {*} type 
+ * @returns String
+ */
 export const titleCheck = (type) => {
-    console.log("type ::: ", type)
     const recommendTile = ["당신을 위한 추천 경매!", "방금 등록된 상품! ", "실시간 인기상품!"]
     if(type == "recommend"){
       return recommendTile[0]
@@ -9,6 +13,12 @@ export const titleCheck = (type) => {
       return recommendTile[2]
     }
   }
+
+  /**
+   * 
+   * @param time timestamp
+   * @returns {시간} 전
+   */
   export const getTimeAgo = (time) => {
     const now = new Date().getTime();
     const diff = now - new Date(time).getTime();

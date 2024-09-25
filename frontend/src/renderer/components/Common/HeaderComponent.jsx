@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../../assets/mine.png';
 import { useDropdown } from '../../../hooks/useDropdown';
 import { useRecoilState } from 'recoil';
@@ -45,6 +45,8 @@ export default HeaderComponent;
 const RightSideMenu = () => {
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
     const { ref, isOpen, toggle, open, close }= useDropdown();
+    const [userId, setUserId] = useState(1)
+    const nav = useNavigate()
     return (
         <>
             <div className="hidden lg:flex relative w-[300px]">
@@ -91,7 +93,7 @@ const RightSideMenu = () => {
                         </button>
                     </li>
                     <li className='after:contents-[""] after:absolute after:w-[1px] after:h-4 after:bg-jnGray-300 after:right-0 before:contents-[""] before:absolute before:w-[1px] before:h-4 before:bg-jnGray-300 before:left-0 ga4_main_top_menu relative flex items-center justify-center px-3'>
-                        <a className="flex items-center justify-center [&amp;>p]:ml-1" href="">
+                        <Link className="flex items-center justify-center [&amp;>p]:ml-1" to="productRegister">
                             <svg
                                 id="판매하기"
                                 width="24"
@@ -140,13 +142,13 @@ const RightSideMenu = () => {
                                 ></path>
                             </svg>
                             <p id="판매하기">판매하기</p>
-                        </a>
+                        </Link>
                     </li>
                     <li className="relative flex flex-1 pl-3"
                         ref={ref}
                     >
                         <button className="flex items-center justify-center [&amp;>p]:ml-1"
-                            onClick={open}
+                            onClick={() => userId ? open() : nav('/login')}
                             
                         >
                             <svg
@@ -169,12 +171,19 @@ const RightSideMenu = () => {
                         {isOpen && (
                             <ul className="border border-jnGray-300 z-10 text-xs text-center font-medium bg-white rounded-lg absolute flex flex-col justify-center top-[30px] right-[23px] w-[100px] [&amp;>li]:mx-2 [&amp;>li]:border-b [&amp;>li]:border-jnGray-200 [&amp;>li:last-of-type]:border-b-0">
                                 <li className="pt-3 pb-2 ga4_main_top_menu">
-                                    <a href="/store/9057510">
+                                    <Link to="mypage">
                                         <p id="마이 페이지">마이페이지</p>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="pt-2 pb-3">
-                                    <button className="cursor-pointer disabled:text-stone-400">로그아웃</button>
+                                    <button className="cursor-pointer disabled:text-stone-400"
+                                        onClick={() => {
+                                            setUserId(null)
+                                            close()
+                                            nav('/')
+
+                                        }}
+                                    >로그아웃</button>
                                 </li>
                             </ul>
                         )}
@@ -280,9 +289,11 @@ const SearchForm = () => {
                                 {recentSearchValues.map((value, index) => {
                                     return(
                                         <li key={index} className=" flex items-center justify-center flex-shrink-0 max-w-full px-3 py-2 mr-2 text-sm capitalize truncate transition duration-200 ease-in-out border rounded-lg cursor-pointer group border-jnGray-300 text-heading hover:border-heading break-keep">
-                                            <a className="flex" href={'/search?product=' + recentSearchValues}>
+                                            <a className="flex" href={'/search?product=' + value}
+                                            >
                                                 <p className="mx-1 text-center text-ellipsis">{value}</p>
                                             </a>
+                                            
                                             <button
                                                 onClick={(e) => setRecentSearchValues(prev => prev.filter((item) => item!== value))}
                                             >
@@ -304,7 +315,6 @@ const SearchForm = () => {
     )
 }
 const CategoryComponent = () => {
-
     return (
         <>
             <div className="md:px-8 2xl:px-16 lg:flex lg:h-16 items-center min-[1600px]:max-w-[1280px] max-w-[1024px] hidden headerBottom mx-auto box-content">
@@ -338,20 +348,20 @@ const CategoryComponent = () => {
                                 style={{ backgroundColor: '#f6ffff' }}
                             >
                                 <li className="">
-                                    <a
-                                        className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
-                                    >
-                                        디지털 기기
-                                    </a>
+                                <Link 
+                                    className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300" 
+                                    to={{ pathname: "/search", search: "?category=1" }}
+                                >
+                                    디지털 기기
+                                </Link>
                                 </li>
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=2" }}
                                     >
                                         생활 가전
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                             <ul
@@ -359,20 +369,20 @@ const CategoryComponent = () => {
                                 style={{ backgroundColor: 'rgb(243 248 249)' }}
                             >
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=3" }}
                                     >
                                         가구/인테리어
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=4" }}
                                     >
                                         생활/주방
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                             <ul
@@ -380,20 +390,20 @@ const CategoryComponent = () => {
                                 style={{ backgroundColor: '#f6ffff' }}
                             >
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=5" }}
                                     >
                                         도서
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=6" }}
                                     >
                                         의류
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                             <ul
@@ -401,28 +411,28 @@ const CategoryComponent = () => {
                                 style={{ backgroundColor: 'rgb(243 248 249)' }}
                             >
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=7" }}
                                     >
                                         뷰티/미용
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=8" }}
                                     >
                                         스포츠/레저
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=9" }}
                                     >
                                         식물
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                             <ul
@@ -430,28 +440,28 @@ const CategoryComponent = () => {
                                 style={{ backgroundColor: '#f6ffff' }}
                             >
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=10" }}
                                     >
                                         취미/게임/음반
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=11" }}
                                     >
                                         상품권/모바일티켓
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="">
-                                    <a
+                                    <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        href="/search"
+                                        to={{ pathname: "/search", search: "?category=12" }}
                                     >
                                         식품
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -467,21 +477,12 @@ const CategoryComponent = () => {
                         </Link>
                     </div>
                     <div className="menuItem group cursor-pointer">
-                        <a
+                        <Link
                             className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                            href="/auction"
+                            to="/auction"
                         >
                             동 네 경 매
-                        </a>
-                    </div>
-                    <div className="menuItem group cursor-pointer">
-                        <a
-                            target="_self"
-                            className="ga4_main_gnb relative inline-flex items-center px-3 py-3 text-sm font-normal xl:text-base text-heading xl:px-4 group-hover:text-black"
-                            href=""
-                        >
-                            상 품 등 록
-                        </a>
+                        </Link>
                     </div>
                 </nav>
             </div>
