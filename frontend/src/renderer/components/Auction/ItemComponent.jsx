@@ -26,7 +26,7 @@ const ItemComponent = ({
 
   switch (destinationType) {
     case 1:
-      url = `/trade/${id}`;
+      url = `/product/${id}`;
       break;
     case 2:
       url = `/auction/${id}`;
