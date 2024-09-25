@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useToggle } from "../../../hooks/useToggle";
 import { useInput } from "../../../hooks/useInput";
 
-const AuctionListFilterContainer = () => {
+const AuctionListFilterContainer = ({ itemsCount }) => {
   // 검색해서 경매 들어왔는지 여부
   const [isSearch, setIsSearch] = useState(true);
 
@@ -119,7 +119,7 @@ const AuctionListFilterContainer = () => {
           )}
           검색 결과
         </h2>
-        {isSearch && <p className="text-jnGray-700">총 157,523개</p>}
+        {isSearch && <p className="text-jnGray-700">총 {itemsCount}개</p>}
       </div>
       <table className="filterTable hidden lg:table w-full">
         <tbody>
