@@ -2,8 +2,8 @@ import { currentChatId, textMessageArray, sendMessage } from '../../../recoil/at
 import { useRecoilState } from 'recoil';
 import {formatDateToYMD, formatDateToTime } from '../../../services/commonService';
 import { useEffect, useState, useRef } from 'react';
-import { TextMessageComponent } from '../../components/Chat/TextMessageComponent'
-import { ImageMessageComponent } from '../../components/Chat/ImageMessageComponent'
+import TextMessageComponent from '../../components/Chat/TextMessageComponent'
+import ImageMessageComponent from '../../components/Chat/ImageMessageComponent'
 const ChattingRoomContainer = () => {
     const [chatId, setChatId] = useRecoilState(currentChatId);
     const [message, setMessage] = useRecoilState(textMessageArray);
