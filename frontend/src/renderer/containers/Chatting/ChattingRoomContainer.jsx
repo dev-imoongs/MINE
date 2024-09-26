@@ -2,6 +2,8 @@ import { currentChatId, textMessageArray, sendMessage } from '../../../recoil/at
 import { useRecoilState } from 'recoil';
 import {formatDateToYMD, formatDateToTime } from '../../../services/commonService';
 import { useEffect, useState, useRef } from 'react';
+import { TextMessageComponent } from '../../components/Chat/TextMessageComponent'
+import { ImageMessageComponent } from '../../components/Chat/ImageMessageComponent'
 const ChattingRoomContainer = () => {
     const [chatId, setChatId] = useRecoilState(currentChatId);
     const [message, setMessage] = useRecoilState(textMessageArray);
@@ -16,10 +18,11 @@ const ChattingRoomContainer = () => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         
     };
-        // message 배열이 업데이트될 때마다 스크롤 내림
-        useEffect(() => {
-            scrollToBottom();
-        }, [message]);
+    // message 배열이 업데이트될 때마다 스크롤 내림
+    useEffect(() => {
+        scrollToBottom();
+    }, [message]);
+
     return (
         <>
             <div className="flex flex-col w-full h-full justify-between">
@@ -31,7 +34,11 @@ const ChattingRoomContainer = () => {
                         </svg>
                     </button>
                     <h2 className="flex flex-col md:flex-row justify-center items-center md:space-x-2 flex-1 text-lg font-semibold text-center text-jnGray-900 cursor-pointer">
-                        <p className="mb-0"><span className="flex items-center justify-center space-x-2"><span>문킥</span><span className="text-[11px] text-[#0CB650] border border-jngreen px-2 rounded-2xl h-5 leading-5">691점</span></span>
+                        <p className="mb-0">
+                            <span className="flex items-center justify-center space-x-2">
+                                <span>문킥</span>
+                                <span className="text-[11px] text-[#0CB650] border border-jngreen px-2 rounded-2xl h-5 leading-5">691점</span>
+                            </span>
                             <p className="text-[12px] text-gray-400 h-4">보통 2시간 이내 응답</p>
                         </p>
                     </h2>
@@ -62,7 +69,11 @@ const ChattingRoomContainer = () => {
                                     <img alt="상품 썸네일" src="https://img2.joongna.com/media/original/2023/06/05/1685922131019iUp_CAfIn.jpg?impolicy=thumb" decoding="async" data-nimg="fill" className="rounded-md" loading="lazy" style={{position: "absolute", height: "100%", width: "100%", inset: "0px", color: "transparent"}} />
                                 </div>
                                 <div>
-                                    <div className="flex items-center"><span className="font-semibold text-[15px] text-jnGray-900">6,000원</span><span className="text-[12px] text-jnGray-500 ml-2">배송비 별도</span></div><span className="block text-[12px]">닌텐도 wii 북미판 게임 2장</span>
+                                    <div className="flex items-center">
+                                        <span className="font-semibold text-[15px] text-jnGray-900">6,000원</span>
+                                        <span className="text-[12px] text-jnGray-500 ml-2">배송비 별도</span>
+                                    </div>
+                                    <span className="block text-[12px]">닌텐도 wii 북미판 게임 2장</span>
                                 </div>
                             </a>
                             </div>
@@ -75,7 +86,13 @@ const ChattingRoomContainer = () => {
                                         message.map((data, i) => {
                                             return (
                                                 <div key={i}>
-                                                    {data.type == 'send' ? <SendTextMessage data={data}/> : <ReceiveTextMessage data={data}/>}
+                                                    {data.message == 'text' ? (
+                                                            <TextMessageComponent data={data}/>
+                                                        ) : (
+                                                            <ImageMessageComponent data={data}/>
+                                                        )
+                                                    }
+                                                    
                                                 </div>
                                             )
                                         })
@@ -86,7 +103,7 @@ const ChattingRoomContainer = () => {
                         </div>
                     </div>
                 </div>
-                <SendChattingTextArea setSendMessage={setSndMsg}/>
+                <SendChattingArea setSendMessage={setSndMsg} scrollToBottom={scrollToBottom}/>
             </div>
         </>
     )
@@ -94,8 +111,18 @@ const ChattingRoomContainer = () => {
 
 export default ChattingRoomContainer;
 
-const SendChattingTextArea = ({setSendMessage}) => {
+const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
     const [text, setText] = useState('');
+    const handleFileUpload = (e) => {
+        const files = e.target.files;
+        if (files.length > 0) {
+          // 선택된 파일 배열을 처리하는 코드
+          for (let i = 0; i < files.length; i++) {
+            console.log(files[i]);
+            // 파일을 서버에 업로드하거나 미리보기 이미지로 처리하는 등의 작업
+          }
+        }
+      };
     const handleTextChange = (e) => {
         setText(e.target.value);
     }
@@ -113,11 +140,18 @@ const SendChattingTextArea = ({setSendMessage}) => {
         
         setText('');  // 전송 후 초기화
     };
+
+    // 입력 후 스크롤 아래로
+    useEffect(() => {
+        scrollToBottom()
+    },[handleSubmit()])
+
+
     return (
         <>
             <div>
                 <form className="bg-[#F7F9FA] py-3 px-3 flex flex-col rounded-xl focus-within:shadow-banner h-auto"  onSubmit={handleSubmit}>
-                    <textarea title="채팅" autoComplete="off" maxLength="1000" className="shrink-0 bg-transparent placeholder:text-[#9CA3AF] outline-none resize-none text-md h-16 w-full pre-wrap" placeholder="메시지를 입력해주세요" name="chat" 
+                    <textarea title="채팅" autoComplete="off" maxLength="1000" className="shrink-0 bg-transparent placeholder:text-[#9CA3AF] outline-none resize-none text-md h-16 w-full pre-wrap" placeholder="메시지를 입력해주세요" name="chat" value={text}
                     onChange={(e) => {
                         handleTextChange(e);
                         if (!e.target.value.trim()) {
@@ -133,17 +167,9 @@ const SendChattingTextArea = ({setSendMessage}) => {
                                             <path fillRule="evenodd" d="M.002 3a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2h-12a2 2 0 01-2-2V3zm1 9l2.646-2.354a.5.5 0 01.63-.062l2.66 1.773 3.71-3.71a.5.5 0 01.577-.094L15.002 9.5V13a1 1 0 01-1 1h-12a1 1 0 01-1-1v-1zm5-6.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clipRule="evenodd"></path>
                                         </svg>
                                     </label>
-                                    <input id="chat-image-upload" name="chat-image-upload" type="file" className="px-4 md:px-5 appearance-none border text-input text-xs lg:text-sm font-body placeholder-body min-h-12 transition duration-200 ease-in-out bg-gray-100 border-gray-300 focus:shadow focus:bg-white focus:border-primary a11yHidden w-auto py-0 rounded-md" autoComplete="off" spellCheck="false" aria-invalid="false" accept="image/png, image/jpeg, image/jpg" multiple="" />
+                                    <input id="chat-image-upload" name="chat-image-upload" type="file" className="px-4 md:px-5 appearance-none border text-input text-xs lg:text-sm font-body placeholder-body min-h-12 transition duration-200 ease-in-out bg-gray-100 border-gray-300 focus:shadow focus:bg-white focus:border-primary a11yHidden w-auto py-0 rounded-md" autoComplete="off" spellCheck="false" aria-invalid="false" accept="image/png, image/jpeg, image/jpg" multiple onClick={handleFileUpload} />
                                 </div>
                             </div>
-                            <button className="w-6 h-6">
-                                <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" className="w-full h-full" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M12,20c-4.411,0-8-3.589-8-8s3.589-8,8-8 s8,3.589,8,8S16.411,20,12,20z"></path>
-                                    <path d="M14.829,14.828c-0.185,0.184-0.384,0.349-0.592,0.489c-0.217,0.146-0.445,0.27-0.68,0.369 c-0.244,0.103-0.496,0.181-0.749,0.233c-0.531,0.108-1.087,0.108-1.616,0c-0.254-0.052-0.506-0.13-0.75-0.233 c-0.234-0.099-0.463-0.223-0.679-0.369c-0.209-0.141-0.408-0.305-0.593-0.489c-0.181-0.181-0.346-0.38-0.488-0.592l-1.658,1.119 c0.215,0.318,0.462,0.617,0.734,0.889c0.273,0.273,0.572,0.52,0.887,0.731c0.323,0.218,0.666,0.404,1.02,0.553 c0.365,0.154,0.744,0.272,1.128,0.35C11.189,17.959,11.596,18,12,18s0.811-0.041,1.208-0.122c0.383-0.078,0.762-0.196,1.127-0.35 c0.354-0.149,0.696-0.335,1.021-0.553c0.313-0.212,0.612-0.458,0.886-0.731c0.272-0.271,0.52-0.571,0.734-0.889l-1.658-1.119 C15.175,14.448,15.01,14.647,14.829,14.828z"></path>
-                                    <circle cx="8.5" cy="10.5" r="1.5"></circle>
-                                    <circle cx="15.493" cy="10.493" r="1.493"></circle>
-                                </svg>
-                            </button>
                         </div>
                         <div className="flex items-end space-x-2">
                             <span className="text-sm leading-5 text-gray-400">{text.length} / 1000</span>
@@ -155,55 +181,6 @@ const SendChattingTextArea = ({setSendMessage}) => {
                     </div>
                 </form>
             </div>
-        </>
-    )
-}
-
-const ReceiveTextMessage = (messageData) => {
-    const data = messageData.data
-    return (
-        <>
-            <div>
-                <div>
-                    {data.messageForFirstDate && (<p className="text-center text-[14px] py-4">{formatDateToYMD(data.time, data.messageForFirstDate)}</p>)}
-                </div>
-                <div>
-                    <div type="textMessage">
-                        <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                            <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">{data.text}</p>
-                            </div>
-                            <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">{formatDateToTime(data.time, data.messageForFirstDate)}</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
-
-const SendTextMessage = (messageData) => {
-    const data = messageData.data
-    return (
-        <>
-            <div>
-                <div>
-                {data.messageForFirstDate && (<p className="text-center text-[14px] py-4">{formatDateToYMD(data.time, data.messageForFirstDate)}</p>)}
-                </div>
-                <div>
-                    <div type="textMessage">
-                        <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                            <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">{data.text}</p>
-                            </div>
-                            <div className="flex flex-col">
-                                <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">{formatDateToTime(data.time, data.messageForFirstDate)}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </>
     )
 }
