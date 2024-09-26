@@ -1,16 +1,25 @@
 import { currentChatId, textMessageArray, sendMessage } from '../../../recoil/atoms/chatStateAtom'
 import { useRecoilState } from 'recoil';
 import {formatDateToYMD, formatDateToTime } from '../../../services/commonService';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 const ChattingRoomContainer = () => {
     const [chatId, setChatId] = useRecoilState(currentChatId);
     const [message, setMessage] = useRecoilState(textMessageArray);
     const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
-
+    const messageEndRef = useRef(null);
     useEffect(() => {
-        // setMessage에 기존 배열을 복사하고 sndMsg를 푸쉬
-        setMessage((prevMessages) => [...prevMessages, sndMsg]);
-    }, [sndMsg]); // sndMsg가 변경될 때마다 실행
+        if (sndMsg.text && sndMsg.text.trim()) {
+            setMessage((prevMessages) => [...prevMessages, sndMsg]);
+        }
+    }, [sndMsg]);// sndMsg가 변경될 때마다 실행
+    const scrollToBottom = () => {
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        
+    };
+        // message 배열이 업데이트될 때마다 스크롤 내림
+        useEffect(() => {
+            scrollToBottom();
+        }, [message]);
     return (
         <>
             <div className="flex flex-col w-full h-full justify-between">
@@ -71,506 +80,20 @@ const ChattingRoomContainer = () => {
                                             )
                                         })
                                     }
-                                    {/* <div>
-                                        <div>
-                                            <p className="text-center text-[14px] py-4">2024년 05월 16일</p>
-                                        </div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">오늘저녁에풀릴듯요.</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오전 8:53</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div>
-                                        </div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">살의향 잇으시면 말씀해주세요</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 5:33</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">나중에</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 5:33</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">넵 </p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 5:35</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div>
-                                            <p className="text-center text-[14px] py-4">2024년 05월 17일</p>
-                                        </div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">지금되시나요</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오전 10:15</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">아 넵 좀 늦엇습니다</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오전 11:07</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">일하느라 못봣네요</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오전 11:07</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">준비되면 말씀해주세요</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오전 11:25</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">준완요</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 1:45</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">그러면 10만원권하고 5천원권 500원 이렇게 드릴게요</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:49</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">네</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 1:49</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">예금주 - 황자현
-                                                            은행 - 국민은행
-                                                            계좌번호 - **************</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 1:50</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="noticeMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl w-full bg-white">
-                                                        <div style={{color: "rgb(13, 204, 90)", backgroundColor: "rgb(255, 255, 255)", borderColor: "rgb(255, 255, 255)"}}>
-                                                            <div className="flex justify-between font-semibold mb-[10px]">
-                                                                <div className="flex items-center">
-                                                                    <img alt="title" aria-hidden="true" src="https://common.joongna.com/image/chatting/live/siren.png" width="23" height="23" decoding="async" data-nimg="1" className="mr-[10px] object-contain" loading="lazy" style={{color: "transparent"}} />
-                                                                    <h3 className="text-lg">계좌번호 전송 안내</h3>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm" style={{backgroundColor: "rgb(255, 255, 255)", color: "rgb(156, 163, 175)", border: "1px solid rgb(218, 222, 229)", padding: "5px"}}>AI자동알림</p>
-                                                                </div>
-                                                            </div>
-                                                            <p>
-                                                                <font color="#333333">안전한 거래를 위해 <b>직접 보낸 계좌번호는 표기되지 않습니다.</b></font>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start"></span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">맞으시나요?</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 1:50</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="depositMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="font-bold">계좌정보 안내</p>
-                                                        <ul className="mt-4 space-y-1 text-sm">
-                                                            <li className="flex space-x-2">
-                                                                <p className="basis-[50px] text-[#9CA3AF]">예금주</p><span className="flex-1 font-semibold">황자현</span>
-                                                            </li>
-                                                            <li className="flex space-x-2">
-                                                                <p className="basis-[50px] text-[#9CA3AF]">은행명</p><span className="flex-1 font-semibold">국민은행</span>
-                                                            </li>
-                                                            <li className="flex space-x-2">
-                                                                <p className="basis-[50px] text-[#9CA3AF]">계좌번호</p><span className="text-sm flex-1 space-x-0 font-semibold tracking-wider"><span>61250201378228</span><button type="button" className="m-0"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline">
-                                                                            <rect x="1.125" y="5.125" width="9.75" height="9.75" rx="1.375" stroke="#9CA3AF" strokeWidth="1.25"></rect>
-                                                                            <path fillRule="evenodd" clipRule="evenodd" d="M6.5 1.75H13.5C13.9142 1.75 14.25 2.08579 14.25 2.5V9.5C14.25 9.91421 13.9142 10.25 13.5 10.25H11V11.5H13.5C14.6046 11.5 15.5 10.6046 15.5 9.5V2.5C15.5 1.39543 14.6046 0.5 13.5 0.5H6.5C5.39543 0.5 4.5 1.39543 4.5 2.5V5H5.75V2.5C5.75 2.08579 6.08579 1.75 6.5 1.75Z" fill="#9CA3AF"></path>
-                                                                        </svg></button></span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:50</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">여기 다시보내드렷습니더</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:50</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">ㄱㄷㅅ입완요</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 1:50</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">ANTJFKIOTHOGJVHDOIYF</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:51</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">10만원이요</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:51</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">나머지도 바꾸고올게요</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:51</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">네</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 1:51</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">JLLOONMWQJLHJVHOWTHI</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:51</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">5000원</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:52</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">네</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 1:52</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">MTLRRNPOENKHMOLDXLYF</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:52</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">500원입니더</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 1:52</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tl bg-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">거래 감사드립니다.
-                                                            좋은하루 보내시구
-                                                            또 파시면 연락바랍니다.</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-start">오후 1:53</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">감사합니다</p>
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <p className="mb-0 text-right text-[13px]">읽음</p><span className="block text-[13px] uppercase text-end">오후 2:06</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div>
-                                            <p className="text-center text-[14px] py-4">2024년 09월 23일</p>
-                                        </div>
-                                        <div>
-                                            <div type="textMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-auto">
-                                                        <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">안녕하세요. [닌텐도 wii 북미판 게임 2장] 보고 문의드립니다.</p>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-end">오전 0:30</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div></div>
-                                        <div>
-                                            <div type="productMessage">
-                                                <div className="flex items-end w-auto mb-2 flex-start space-x-1 flex-row-reverse space-x-reverse">
-                                                    <div className="p-3 rounded-xl h-auto rounded-tr bg-[#363C45] text-white w-[226px]">
-                                                        <a className="flex justify-between space-x-3" href="/product/115257819">
-                                                            <div className="flex flex-col justify-between"><span className="m-0 overflow-hidden text-sm font-semibold text-ellipsis line-clamp-2">닌텐도 wii 북미판 게임 2장</span><span className="inline-block mt-1 mr-1 font-bold ">6,000원</span></div>
-                                                            <div className="w-[60px] h-[60px] relative overflow-hidden">
-                                                                <img alt="닌텐도 wii 북미판 게임 2장" src="https://img2.joongna.com/media/original/2023/06/05/1685922131019iUp_CAfIn.jpg?impolicy=thumb" decoding="async" data-nimg="fill" className="self-center object-cover rounded-lg" loading="lazy" style={{position: "absolute", height: "100%", width: "100%", inset: "0px", color: "transparent"}} /></div>
-                                                        </a>
-                                                        <button data-variant="flat" className="text-[13px] md:text-sm leading-4 items-center cursor-pointer transition ease-in-out duration-300 font-body justify-center border-0 border-transparent placeholder-white focus-visible:outline-none focus:outline-none w-full mt-[10px] text-center text-white font-bold rounded-lg bg-jngreen block h-[36px] px-3 md:px-3 lg:px-3 py-2 md:py-2 lg:py-2">구매하기</button>
-                                                    </div>
-                                                    <div className="flex flex-col"><span className="block text-[13px] uppercase text-end">오전 0:30</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> */}
+                                    <div ref={messageEndRef} />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {/* <div className="carouselWrapper relative pt-1.5 pb-2.5 pl-1 pr-2.5 h-[44px] quick-menu-slider-wrapper">
-                    <div className="swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden" dir="ltr">
-                        <div className="swiper-wrapper" style={{transform:"translate3d(0px, 0px, 0px)"}}>
-                            <div className="swiper-slide swiper-slider-chat-event ml-1.5 flex items-center w-fit swiper-slide-active">
-                                <li className="cursor-pointer w-fit">
-                                    <div className="flex items-center h-[31px] bg-jnGray-200 rounded-[40px] px-3 py-[6.5px] gap-[6px] w-fit">
-                                        <img alt="중고나라 안전거래 소개" src="https://chat-media.joongna.com/quickButton/icon_card.png" width="18" height="18" decoding="async" data-nimg="1" loading="lazy" style={{color: "transparent"}}/>
-                                        <span className="inline-block text-xs font-medium ">중고나라 안전거래 소개</span>
-                                    </div>
-                                </li>
-                            </div>
-                            <div className="swiper-slide swiper-slider-chat-event ml-1.5 flex items-center w-fit swiper-slide-next">
-                                <li className="cursor-pointer w-fit">
-                                    <div className="flex items-center h-[31px] bg-jnGray-200 rounded-[40px] px-3 py-[6.5px] gap-[6px] w-fit">
-                                        <img alt="사기예방tip" src="https://chat-media.joongna.com/quickButton/icon_caution.png" width="18" height="18" decoding="async" data-nimg="1" loading="lazy" style={{color: "transparent"}}/>
-                                        <span className="inline-block text-xs font-medium ">사기예방tip</span>
-                                    </div>
-                                </li>
-                            </div>
-                        </div>
-                        <div className="swiper-button-prev swiper-button-disabled swiper-button-lock"></div>
-                        <div className="swiper-button-next swiper-button-disabled swiper-button-lock"></div>
-                    </div>
-                </div> */}
                 <SendChattingTextArea setSendMessage={setSndMsg}/>
             </div>
         </>
     )
 }
+
 export default ChattingRoomContainer;
+
 const SendChattingTextArea = ({setSendMessage}) => {
     const [text, setText] = useState('');
     const handleTextChange = (e) => {
@@ -579,21 +102,26 @@ const SendChattingTextArea = ({setSendMessage}) => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!text.trim()) return;
+
         await setSendMessage(prev => ({
             ...prev,
             text: text,
             time: new Date(),
         }));
+        
         setText('');  // 전송 후 초기화
     };
     return (
         <>
             <div>
                 <form className="bg-[#F7F9FA] py-3 px-3 flex flex-col rounded-xl focus-within:shadow-banner h-auto"  onSubmit={handleSubmit}>
-                    <textarea title="채팅" autoComplete="off" maxLength="1000" className="shrink-0 bg-transparent placeholder:text-[#9CA3AF] outline-none resize-none text-md h-16 w-full pre-wrap" placeholder="메시지를 입력해주세요" name="chat"  onChange={(e) => {
-                        handleTextChange(e)
-                        if(!text.trim()){
-                            return
+                    <textarea title="채팅" autoComplete="off" maxLength="1000" className="shrink-0 bg-transparent placeholder:text-[#9CA3AF] outline-none resize-none text-md h-16 w-full pre-wrap" placeholder="메시지를 입력해주세요" name="chat" 
+                    onChange={(e) => {
+                        handleTextChange(e);
+                        if (!e.target.value.trim()) {
+                            return;
                         }
                     } } ></textarea>
                     <div className="flex justify-between mt-3">
