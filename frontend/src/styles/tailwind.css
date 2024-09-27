@@ -160,6 +160,7 @@
 
 .Toastify .Toastify__toast {
     background-color: #000;
+    border-radius: 40px; /* 둥근 모서리 */
 }
 
 .Toastify .Toastify__toast .Toastify__close-button,
