@@ -1,24 +1,49 @@
 import { currentChatId, textMessageArray, sendMessage } from '../../../recoil/atoms/chatStateAtom'
 import { useRecoilState } from 'recoil';
 import { useEffect, useState, useRef } from 'react';
+import io from 'socket.io-client';
 import TextMessageComponent from '../../components/Chat/TextMessageComponent'
 import ImageMessageComponent from '../../components/Chat/ImageMessageComponent'
+
+const socket = io('http://localhost:3080/chat');
 const ChattingRoomContainer = () => {
     const [chatId, setChatId] = useRecoilState(currentChatId);
     const [message, setMessage] = useRecoilState(textMessageArray);
     const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
     const messageEndRef = useRef(null);
     useEffect(() => {
-        console.log(sndMsg)
-        if(sndMsg.message == 'text'){
+        if (sndMsg.message === 'text') {
             if (sndMsg.text && sndMsg.text.trim()) {
                 setMessage((prevMessages) => [...prevMessages, sndMsg]);
+                socket.emit('message', sndMsg.text);
             }
-        }else{
+        } else {
             setMessage((prevMessages) => [...prevMessages, sndMsg]);
         }
+    }, [sndMsg]);
 
-    }, [sndMsg]);// sndMsg가 변경될 때마다 실행
+    useEffect(() => {
+        // 소켓 연결 확인
+        socket.on('connect', () => {
+            console.log('Connected to the server: ' + socket.id);
+        });
+
+        // 서버에서 메시지를 받으면 콘솔에 출력
+        socket.on('message', (message) => {
+            console.log('Message from server:', message);
+        });
+
+        // 연결이 끊겼을 때
+        socket.on('disconnect', (err) => {
+            console.error('Disconnected from the server due to error: ' + err);
+            console.log('Disconnected from the server');
+        });
+
+        return () => {
+            // socket.disconnect(); // 컴포넌트가 언마운트될 때 소켓 연결 해제
+        };
+    }, []);
+
     const scrollToBottom = () => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };

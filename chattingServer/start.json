@@ -1,0 +1,17 @@
+{
+    "apps": [
+      {
+        "name": "Mine_Chat_Server",            
+        "script": "chat_server.js",             
+        "instances": 2,                   
+        "exec_mode": "cluster",           
+        "watch": true,                    
+        "env": {
+          "NODE_ENV": "dev"      
+        },
+        "env_production": {
+          "NODE_ENV": "production"
+        }
+      }
+    ]
+  }
