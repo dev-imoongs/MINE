@@ -4,7 +4,7 @@ import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tradeDetailProductAtom } from "../../recoil/atoms/tradeAtom";
 import { useQuery } from 'react-query';
 import { getProductDetail } from '../../services/productApiService';
-import SwipeImgComponent from '../components/Auction/SwipeImgComponent';
+import SwipeImgComponent from '../components/Common/SwipeImgComponent';
 import TradeProductInfoContainer from '../containers/Trade/TradeProductInfoContainer';
 import TradeProductDetailContainer from '../containers/Trade/TradeProductDetailContainer';
 import KakaoMap from '../components/Trade/KakaoMap';
