@@ -10,14 +10,16 @@ const chattingSocket = (server) => {
     });
     const chatNamespace = io.of('/chat');
     chatNamespace.on('connection', (chatSocket) => {
-        console.log('A user connected: ' + chatSocket.id);
+        const userId = chatSocket.handshake.headers['userid'];
+        console.log('userId:', userId);
+        console.log('연결 유저: ' + chatSocket.id);
 
         chatSocket.on('message', (message) => {
-            console.log('Received message from client: ', message);
+            console.log('메세지 받음: ', message);
         });
 
         chatSocket.on('disconnect', (err) => {
-            console.error('Client disconnected due to error:', err);
+            console.error('클라이언트로 부터 에러:', err);
             console.log('Client disconnected:', chatSocket.id);
         });
 

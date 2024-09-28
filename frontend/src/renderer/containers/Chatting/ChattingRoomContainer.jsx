@@ -5,9 +5,13 @@ import io from 'socket.io-client';
 import TextMessageComponent from '../../components/Chat/TextMessageComponent'
 import ImageMessageComponent from '../../components/Chat/ImageMessageComponent'
 
-const socket = io('http://localhost:3080/chat');
 const ChattingRoomContainer = () => {
     const [chatId, setChatId] = useRecoilState(currentChatId);
+    const socket = io('http://localhost:3080/chat', {
+        extraHeaders : {
+            userId : chatId
+        }
+    });
     const [message, setMessage] = useRecoilState(textMessageArray);
     const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
     const messageEndRef = useRef(null);
@@ -25,18 +29,17 @@ const ChattingRoomContainer = () => {
     useEffect(() => {
         // 소켓 연결 확인
         socket.on('connect', () => {
-            console.log('Connected to the server: ' + socket.id);
+            console.log('연결: ' + socket.id);
         });
 
         // 서버에서 메시지를 받으면 콘솔에 출력
         socket.on('message', (message) => {
-            console.log('Message from server:', message);
+            console.log('서버로 부터 받은 메세지:', message);
         });
 
         // 연결이 끊겼을 때
         socket.on('disconnect', (err) => {
-            console.error('Disconnected from the server due to error: ' + err);
-            console.log('Disconnected from the server');
+            console.error('Disconnected 에러: ' + err);
         });
 
         return () => {
