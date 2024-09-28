@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../../assets/mine.png';
 import { useDropdown } from '../../../hooks/useDropdown';
@@ -38,12 +39,12 @@ const HeaderComponent = () => {
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export default HeaderComponent;
+export default memo(HeaderComponent);
 
 
 
-const RightSideMenu = () => {
-    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
+const RightSideMenu = memo(() => {
+    const [, setDrawerVisible] = useRecoilState(chatDrawerState);
     const { ref, isOpen, toggle, open, close }= useDropdown();
     const [userId, setUserId] = useState(1)
     const nav = useNavigate()
@@ -193,9 +194,9 @@ const RightSideMenu = () => {
             </div>
         </>
     )
-}
+})
 
-const SearchForm = () => {
+const SearchForm = memo(() => {
     // dropdown 
     const { ref, isOpen, toggle, open, close }= useDropdown();
     const [searchValue, setSearchValue] = useState('');
@@ -313,8 +314,8 @@ const SearchForm = () => {
             </div>
         </>
     )
-}
-const CategoryComponent = () => {
+})
+const CategoryComponent = memo(() => {
     return (
         <>
             <div className="md:px-8 2xl:px-16 lg:flex lg:h-16 items-center min-[1600px]:max-w-[1280px] max-w-[1024px] hidden headerBottom mx-auto box-content">
@@ -488,7 +489,7 @@ const CategoryComponent = () => {
             </div>
         </>
     );
-};
+});
 
 const MainLogo = () => {
     return (

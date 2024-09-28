@@ -1,8 +1,17 @@
-/* eslint-disable react/no-unescaped-entities */
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
-const SearchHeaderContainer = ({link, type, title}) => {
+// eslint-disable-next-line react-refresh/only-export-components
+const SearchHeaderContainer = ({link, type, title, itemInfo}) => {
+    let sum, count, max, min, avg;
+    
+    if (itemInfo) {
+        sum = itemInfo.reduce((acc, cur) => acc + cur.price, 0);
+        count = itemInfo.length;
+        max = Math.max(...itemInfo.map((item) => item.price));
+        min = Math.min(...itemInfo.map((item) => item.price));
+    }
+   
     return (
         <div className="relative">
             <div className="flex flex-col lg:flex-row lg:items-center gap-[6px] items-start mb-[10px] justify-between">
@@ -48,7 +57,7 @@ const SearchHeaderContainer = ({link, type, title}) => {
                             tabIndex="0"
                             className="font-bold text-lg text-jnGray-800 lg:text-xl min-[1600px]:text-2xl"
                         >
-                            401,913원
+                            {sum/count}원
                         </span>
                     </div>
                     <div
@@ -66,7 +75,7 @@ const SearchHeaderContainer = ({link, type, title}) => {
                             tabIndex="0"
                             className="font-bold text-lg text-jnGray-800 lg:text-xl min-[1600px]:text-2xl"
                         >
-                            3,100,000원
+                            {max}원
                         </span>
                     </div>
                     <div
@@ -84,7 +93,7 @@ const SearchHeaderContainer = ({link, type, title}) => {
                             tabIndex="0"
                             className="font-bold text-lg text-jnGray-800 lg:text-xl min-[1600px]:text-2xl"
                         >
-                            10,000원
+                            {min}원
                         </span>
                     </div>
                 </div>
@@ -93,4 +102,5 @@ const SearchHeaderContainer = ({link, type, title}) => {
     );
 };
 
-export default SearchHeaderContainer;
+// eslint-disable-next-line react-refresh/only-export-components
+export default memo(SearchHeaderContainer);
