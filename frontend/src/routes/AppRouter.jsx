@@ -23,8 +23,6 @@ import Join from '../renderer/pages/login/Join.jsx'
 import ChangePassword from '../renderer/pages/login/ChangePassword.jsx'
 import FindPassword from '../renderer/pages/login/FindPassword.jsx'
 import ToastComponent from '../renderer/components/Common/ToastComponent.jsx'
-import ChattingListContainer from '../renderer/containers/Chatting/ChattingListContainer'
-import ChattingRoomContainer from '../renderer/containers/Chatting/ChattingRoomContainer';
 const AppRouter = () => {
     return (
         <Routes>
@@ -55,7 +53,7 @@ const AppRouter = () => {
 
 const Layout = React.memo(() => {
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
-    const [chatId, setChatId] = useRecoilState(currentChatId);
+    const [, setChatId] = useRecoilState(currentChatId);
     return (
         <>
             <HeaderComponent />

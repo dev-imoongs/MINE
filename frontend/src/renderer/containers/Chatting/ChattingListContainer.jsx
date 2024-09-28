@@ -1,3 +1,4 @@
+import React from 'react';
 import { currentChatId, chatDrawerState } from '../../../recoil/atoms/chatStateAtom'
 import { useRecoilState } from 'recoil';
 const ChattingListContainer = () => {
@@ -200,4 +201,5 @@ const ChattingListComponent = () => {
     )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default ChattingListContainer;

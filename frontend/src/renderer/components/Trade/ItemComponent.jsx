@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useCallback} from "react";
 import { useToggle } from "../../../hooks/useToggle";
 import { Link } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
 const ItemComponent = ({
   id,
   image,
@@ -13,7 +13,6 @@ const ItemComponent = ({
   destinationType,
 }) => {
   const [isLike, toggleLike] = useToggle();
-
   const StImg = {
     position: "absolute",
     height: "100%",
@@ -23,7 +22,14 @@ const ItemComponent = ({
   };
 
   let url;
-
+  const notify = (() => {
+    if (!isLike){
+      toast("찜 상품에 추가 되었습니다.");
+    }else{
+      toast("찜 상품에 해제 되었습니다.");
+    }
+    console.log("자 보자")
+});
   switch (destinationType) {
     case 1:
       url = `/product/${id}`;
@@ -69,6 +75,7 @@ const ItemComponent = ({
                 className="w-6 h-6 cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
+                  notify()
                   toggleLike();
                 }}
               >
@@ -93,7 +100,7 @@ const ItemComponent = ({
               <span className="text-sm text-gray-400">{elapsedTime}</span>
             </div>
             <div className="flex justify-between">
-              <NaverPayBadge />
+              {/* <NaverPayBadge /> */}
               <div className="text-xs text-gray-400 text-muted">
                 찜 {likes} ∙ 채팅 {chats}
               </div>
