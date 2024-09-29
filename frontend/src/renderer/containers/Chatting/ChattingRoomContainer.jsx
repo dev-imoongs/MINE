@@ -1,4 +1,4 @@
-import { currentChatId, textMessageArray, sendMessage } from '../../../recoil/atoms/chatStateAtom'
+import { currentChatId, textMessageArray, sendMessage,chatDrawerState } from '../../../recoil/atoms/chatStateAtom'
 import { useRecoilState } from 'recoil';
 import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
@@ -7,45 +7,56 @@ import ImageMessageComponent from '../../components/Chat/ImageMessageComponent'
 
 const ChattingRoomContainer = () => {
     const [chatId, setChatId] = useRecoilState(currentChatId);
-    const socket = io('http://localhost:3080/chat', {
-        extraHeaders : {
-            userId : chatId
-        }
-    });
+    const [socket, setSocket] = useState(null); // 소켓 상태 관리
+    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState); // 드로어 상태
     const [message, setMessage] = useRecoilState(textMessageArray);
     const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
     const messageEndRef = useRef(null);
+
     useEffect(() => {
-        if (sndMsg.message === 'text') {
-            if (sndMsg.text && sndMsg.text.trim()) {
-                setMessage((prevMessages) => [...prevMessages, sndMsg]);
-                socket.emit('message', sndMsg.text);
-            }
-        } else {
-            setMessage((prevMessages) => [...prevMessages, sndMsg]);
+        if(drawerVisible && chatId && !socket){
+            const newSocket = io('http://localhost:3080/chat', {
+                extraHeaders: {
+                    userId: chatId
+                }
+            });
+            setSocket(newSocket)
+
+            // 소켓 연결 확인
+            newSocket.on('connect', () => {
+                console.log('연결: ' + newSocket.id);
+            });
+    
+            // 서버에서 메시지를 받으면 콘솔에 출력
+            newSocket.on('message', (message) => {
+                console.log('서버로 부터 받은 메세지:', message);
+            });
+    
+            // 연결이 끊겼을 때
+            newSocket.on('disconnect', (err) => {
+                console.error('Disconnected 에러: ' + err);
+            });
+    
+            return () => {
+                // socket.disconnect(); // 컴포넌트가 언마운트될 때 소켓 연결 해제
+            };
         }
-    }, [sndMsg]);
+    }, [drawerVisible, chatId, socket]);
 
     useEffect(() => {
-        // 소켓 연결 확인
-        socket.on('connect', () => {
-            console.log('연결: ' + socket.id);
-        });
+        if(socket){
+            if (sndMsg.message === 'text') {
+                if (sndMsg.text && sndMsg.text.trim()) {
+                    setMessage((prevMessages) => [...prevMessages, sndMsg]);
+                    socket.emit('message', sndMsg.text);
+                }
+            } else {
+                setMessage((prevMessages) => [...prevMessages, sndMsg]);
+            }
+        }
+    }, [sndMsg, socket]);
 
-        // 서버에서 메시지를 받으면 콘솔에 출력
-        socket.on('message', (message) => {
-            console.log('서버로 부터 받은 메세지:', message);
-        });
-
-        // 연결이 끊겼을 때
-        socket.on('disconnect', (err) => {
-            console.error('Disconnected 에러: ' + err);
-        });
-
-        return () => {
-            // socket.disconnect(); // 컴포넌트가 언마운트될 때 소켓 연결 해제
-        };
-    }, []);
+    
 
     const scrollToBottom = () => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
