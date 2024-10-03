@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "image": "tempimgurl",
+    "title": "(정품) 프라다 버킷백",
+    "price": 500000,
+    "elapsedTime": "49분 전",
+    "likes": "3",
+    "chats": "0"
+  },
+  {
+    "id": "2",
+    "image": "tempimgurl",
+    "title": "(정품) 프라다 버킷백2",
+    "price": 200000,
+    "elapsedTime": "1시간 전",
+    "likes": "7",
+    "chats": "2"
+  },
+  {
+    "id": "3",
+    "image": "tempimgurl",
+    "title": "(정품) 프라다 버킷백3",
+    "price": 75000,
+    "elapsedTime": "2시간 전",
+    "likes": "1",
+    "chats": "5"
+  }
+]
