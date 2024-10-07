@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom'
 import { titleCheck } from "../../../services/commonService";
-import tempImg from "../../../assets/temp_product.png";
 
 
 const MainProductListComponent = ({product}) => {
@@ -16,7 +15,7 @@ const MainProductListComponent = ({product}) => {
     </>
   );
 };
-const ItemProductTitle = ({recommendTile, type}) => {
+const ItemProductTitle = ({type}) => {
   return (
     <>
       <div className="flex items-center justify-between mt-2 pb-0.5 mb-4 md:mb-5 lg:mb-6 2xl:mb-7 3xl:mb-8">

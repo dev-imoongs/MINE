@@ -5,16 +5,22 @@ const ToastComponent =() => {
         <>
             <ToastContainer
                 position="bottom-center"
-                autoClose={500}
+                autoClose={300}
                 hideProgressBar={true}
                 newestOnTop={false}
-                // closeOnClick
+                closeButton={false}
                 rtl={false}
-                // pauseOnFocusLoss
-                // draggable
+                limit={1}
+                theme="dark"
                 pauseOnHover
+                style={{
+                    width: 'auto',
+                    height: 'auto',
+                    padding: "0px 10px"
+                }}
             />
         </>
     )
 }
+
 export default ToastComponent

@@ -12,7 +12,6 @@ const MainSlideComponent = () => {
             dir="ltr"
           >
             <Swiper
-              spaceBetween={50}
               slidesPerView={1}
               navigation={true}
               pagination={{ clickable: true }}
@@ -96,7 +95,6 @@ const MainSlideComponent = () => {
                       </div>
                   </div>
                 </div>
-                
               </SwiperSlide>
             </Swiper>
           </div>

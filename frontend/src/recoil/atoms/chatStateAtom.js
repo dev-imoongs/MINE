@@ -12,11 +12,13 @@ export const chatDrawerState = atom({
   export const sendMessage = atom({
     key: 'sendMessage',
     default: {
+      message : "text",
       type: "send",
       text: "",
       time: new Date(),
       userId: "2",
-      messageForFirstDate: false
+      messageForFirstDate: false,
+      image:[]
     },
   })
 

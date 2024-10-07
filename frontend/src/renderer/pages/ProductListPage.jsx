@@ -58,7 +58,7 @@ const ProductList = ({productList}) => {
         {console.log(productList)}
           {productList.map((item, i) => (
                 <Link key={i} className="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
-                    to="/product/182541754">
+                    to={"/product/"+i}>
                     <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5" >
                         <img
                             alt={item.title}
