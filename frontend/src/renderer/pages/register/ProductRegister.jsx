@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import plusIcon from '../../../assets/plus.png';
 import minusIcon from '../../../assets/minus.png';
 import styles from "../../../styles/register/product-register.module.css";
@@ -12,11 +12,14 @@ const ProductRegister = () => {
         category: "",
         explain: "",
         status: "중고",
-        tradeWay: "택배거래",
-        tradePlace: ""
+        tradePlace: "",
+        address: "",
+        addressDetail: ""
     });
 
     const [images, setImages] = useState([]);
+
+    const [selectedPlaces, setSelectedPlaces] = useState([]); // 선택된 동 리스트 상태
 
     const fileInputRef = useRef(null);
 
@@ -36,6 +39,9 @@ const ProductRegister = () => {
         // 새 이미지를 URL로 변환하여 images 배열에 추가
         const newImages = files.map(file => URL.createObjectURL(file));
         setImages(prevImages => [...prevImages, ...newImages]);
+
+        // input을 초기화하여 동일 파일도 다시 선택할 수 있게 함
+        fileInputRef.current.value = null;  // 이 줄 추가
     };
 
     const deleteImage = (index) => {
@@ -61,6 +67,44 @@ const ProductRegister = () => {
             ...input,
             [name]: value
         });
+    };
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
+    const openPostcodePopup = () => {
+        new window.daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업 창에서 주소를 선택한 후 메인 화면에 값 적용
+                setInput((prevState) => ({
+                    ...prevState,
+                    address: data.address, // 선택된 도로명 주소
+                }));
+            }
+        }).open();
+    };
+
+    const handlePlaceAddClick = () => {
+        new window.daum.Postcode({
+            oncomplete: function(data) {
+                const fullAddress = data.address;
+                const addressArr = fullAddress.split(" ");
+                const dong = addressArr.length > 2 ? addressArr[2] : addressArr[1]; // 동 주소만 추출
+                setSelectedPlaces(prevPlaces => [...prevPlaces, dong]); // 동 추가
+            }
+        }).open();
+    };
+
+    const deletePlace = (index) => {
+        setSelectedPlaces(prevPlaces => prevPlaces.filter((_, i) => i !== index));
     };
 
     return (
@@ -140,7 +184,7 @@ const ProductRegister = () => {
                     <button type='button' className={`${styles.btn} ${input.status == '새상품' ? styles.old : styles.new}`} onClick={() => {setStatusClick('status', '새상품')}}>새상품</button>
                 </div>
 
-                <div className={styles['form-group']}>
+                {/* <div className={styles['form-group']}>
                     <label>거래방법</label>
                     <div className={styles['trade-type-container']}>
                         <div className={styles['trade-type']} onClick={() => setStatusClick('tradeWay', '택배거래') }>
@@ -162,13 +206,23 @@ const ProductRegister = () => {
                             <span>직거래</span>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className={styles['form-group']}>
                     <label>희망 지역&nbsp;<span><span>0</span>/5</span></label>
                     <div className={styles['place-container']}>
-                        <button className={`${styles.btn} ${styles['btn-place']}`}>+ 추가하기</button>
-                        <div className={styles['select-place']}>
+                        <button type='button' className={`${styles.btn} ${styles['btn-place']}`} onClick={handlePlaceAddClick}>+ 추가하기</button>
+                        <div className={styles['select-place-container']}>
+                            {selectedPlaces.map((place, index) => (
+                                <div key={index} className={styles['select-place']}>
+                                    <span>{place}</span>
+                                    <button type="button" onClick={() => deletePlace(index)}>
+                                        <svg>...</svg>
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        {/* <div className={styles['select-place']}>
                             <span>상도 제1동</span>
                             <button type="button">
                                 <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -177,9 +231,36 @@ const ProductRegister = () => {
                                     <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" strokeLinecap="round"></path>
                                 </svg>
                             </button>
-                        </div>
+                        </div> */}
                         {/* 추가 선택지 */}
                     </div>
+                </div>
+
+                <div className={styles['form-group']}>
+                    <label>주소</label>
+                    <div className={styles['address-container']}>
+                        <input
+                            type="text"
+                            name='address'
+                            placeholder="주소를 찾아주세요"
+                            value={input.address}
+                            readOnly
+                        />
+                        <button
+                            type='button'
+                            className={styles['find-address']}
+                            onClick={openPostcodePopup} // 팝업 열기
+                        >
+                            찾기
+                        </button>
+                    </div>
+                    <input
+                        type="text"
+                        name='addressDetail'
+                        placeholder="상세주소 입력"
+                        onChange={setInputState}
+                        value={input.addressDetail}
+                    />
                 </div>
 
                 <div className={styles['form-group']}>

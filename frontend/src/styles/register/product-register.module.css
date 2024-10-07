@@ -64,16 +64,16 @@
     z-index: 10;
 }
 
-label {
+.form-container label {
     display: block;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-input[type="text"],
-input[type="datetime-local"],
-textarea,
-select {
+.form-container input[type="text"],
+.form-container input[type="datetime-local"],
+.form-container textarea,
+.form-container select {
     width: 100%;
     height: 50px;
     padding: 8px;
@@ -81,16 +81,16 @@ select {
     border-radius: .375rem;
 }
 
-select {
+.form-container select {
     width: 50%;
 }
 
-textarea {
+.form-container textarea {
     height: 200px;
     resize: none;
 }
 
-input[type="datetime-local"] {
+.form-container input[type="datetime-local"] {
     width: 30%;
 }
 
@@ -128,6 +128,18 @@ input[type="datetime-local"] {
     margin: 0;
 }
 
+.address-container {
+    display: flex;
+}
+
+.find-address {
+    background-color: white;
+    color: black;
+    border: solid 1px black;
+    cursor: pointer;
+    width: 20%;
+}
+
 .btn, .select-place {
     width: 80px;
     padding: 8px 15px;
@@ -140,7 +152,7 @@ input[type="datetime-local"] {
     line-height: 1.5rem;
 }
 
-.btn-place {
+.form-group .btn-place {
     padding: 5px;
     margin: 10px 10px 10px 0px;
     background-color: rgb(13, 204, 90);
