@@ -1,68 +1,97 @@
-import React, { useEffect, useState } from "react";
-import AuctionListFilterContainer from "../containers/Auction/AuctionListFilterContainer";
-import AuctionListSortContainer from "../containers/Auction/AuctionListSortContainer";
-import AuctionListItemContainer from "../containers/Auction/AuctionListItemContainer";
-import AuctionListPaginationContainer from "../containers/Auction/AuctionListPaginationContainer";
-import AuctionListPriceInfoContainer from "../containers/Auction/AuctionListPriceInfoContainer";
-import { auctionItems } from "../../services/auctionApiService";
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from 'react';
+import AuctionListFilterContainer from '../containers/Auction/AuctionListFilterContainer';
+import AuctionListSortContainer from '../containers/Auction/AuctionListSortContainer';
+import AuctionListItemContainer from '../containers/Auction/AuctionListItemContainer';
+import AuctionListPaginationContainer from '../containers/Auction/AuctionListPaginationContainer';
+import AuctionListPriceInfoContainer from '../containers/Auction/AuctionListPriceInfoContainer';
+import { auctionItems } from '../../services/auctionApiService';
+import { useQuery } from 'react-query';
+import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { acutionListfiltersAtom } from '../../recoil/atoms/auctionListAtom';
 
 const AuctionListPage = () => {
-  const destinationType = 2;
-  const [itemsInfo, setItemsInfo] = useState(null);
+    const destinationType = 2;
+    const [itemsInfo, setItemsInfo] = useState(null);
+    const [filters, setFilters] = useRecoilState(acutionListfiltersAtom);
 
-  const items = useQuery({
-    queryKey: "auctionItemsData",
-    queryFn: auctionItems,
-  });
+    const items = useQuery({
+        queryKey: 'auctionItemsData',
+        queryFn: auctionItems,
+    });
 
-  useEffect(() => {
-    if (items.data) {
-      setItemsInfo(items.data);
-    }
-  }, [items.data]);
+    useEffect(() => {
+        if (items.data) {
+            setItemsInfo(items.data);
+        }
+    }, [items.data]);
 
-  // sort 정렬 기준 0: 좋아요순, 1: 최신순, 2: 낮은 가격순, 3: 높은 가격순
+    const buildQueryParams = (filters) => {
+        const params = {};
 
-  // 데이터 불러오는 예시
-  const fetchAuctions = async (sort) => {
-    console.log("버튼을 눌렀을때 sort값", sort);
-    // const response = await axios.get(`/auction/?sort=${sort}`);
-    // return response.data;
-  };
+        const { category, priceRange, searchQuery, sort } = filters;
 
-  const handleSortChange = (criteria) => {
-    fetchAuctions(criteria);
-  };
+        // 각 필터가 유효한 경우에만 params에 추가
+        if (category && category !== '전체') params.category = category;
+        if (priceRange.minPrice) params.minPrice = priceRange.minPrice;
+        if (priceRange.maxPrice) params.maxPrice = priceRange.maxPrice;
+        if (searchQuery) params.search = searchQuery;
+        if (sort) params.sort = sort;
 
-  return (
-    <main
-      className="relative flex-grow border-b-2"
-      style={{ minHeight: "0px !important; height: auto !important" }}
-    >
-      {itemsInfo && (
-        <div
-          className="mx-auto px-4 md:px-8 2xl:px-16 box-content pt-8 pb-16 bg-white lg:pt-[72px] lg:pb-20 max-w-[1024px] min-[1600px]:max-w-[1280px]"
-          style={{ height: "auto !important" }}
+        return params;
+    };
+
+    // sort 정렬 기준 0: 좋아요순, 1: 최신순, 2: 낮은 가격순, 3: 높은 가격순
+
+    // 데이터 불러오는 예시
+    const fetchAuctions = async (filters) => {
+        const queryParams = buildQueryParams(filters);
+        const response = await axios.get('/auction/', { params: queryParams });
+        console.log('queryParams', queryParams);
+        return response.data;
+    };
+
+    const handleSortChange = async (criteria) => {
+        setFilters((prev) => ({
+            ...prev,
+            sort: criteria,
+        }));
+    };
+
+    // 비동기 업데이트가 완료되면 fetchAuctions를 수행하도록 수정
+    useEffect(() => {
+        const fetchFilteredAuctions = async () => {
+            const data = await fetchAuctions(filters);
+        };
+        fetchFilteredAuctions();
+    }, [filters]);
+
+    return (
+        <main
+            className="relative flex-grow border-b-2"
+            style={{ minHeight: '0px !important; height: auto !important' }}
         >
-          <div
-            className="w-full 2xl:-ms-9"
-            style={{ height: "auto !important" }}
-          >
-            <AuctionListFilterContainer itemsCount={itemsInfo.length} />
-            <AuctionListPriceInfoContainer />
-            <AuctionListSortContainer onSortChange={handleSortChange} />
-            <AuctionListItemContainer
-              itemsInfo={itemsInfo}
-              destinationType={destinationType}
-            />
-            <AuctionListPaginationContainer />
-          </div>
-        </div>
-      )}
-      <div className="Toastify"></div>
-    </main>
-  );
+            {itemsInfo && (
+                <div
+                    className="mx-auto px-4 md:px-8 2xl:px-16 box-content pt-8 pb-16 bg-white lg:pt-[72px] lg:pb-20 max-w-[1024px] min-[1600px]:max-w-[1280px]"
+                    style={{ height: 'auto !important' }}
+                >
+                    <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important' }}>
+                        <AuctionListFilterContainer
+                            itemsCount={itemsInfo.length}
+                            filters={filters}
+                            setFilters={setFilters}
+                        />
+                        <AuctionListPriceInfoContainer />
+                        <AuctionListSortContainer onSortChange={handleSortChange} />
+                        <AuctionListItemContainer itemsInfo={itemsInfo} destinationType={destinationType} />
+                        <AuctionListPaginationContainer />
+                    </div>
+                </div>
+            )}
+            <div className="Toastify"></div>
+        </main>
+    );
 };
 
 export default AuctionListPage;
