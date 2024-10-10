@@ -1,6 +1,6 @@
 import React from 'react';
 
-const InputForm = ({type, input, onChange, className}) => {
+const InputForm = ({type, input, onChange, className, disabled}) => {
     let title;
     let placeholder;
     let value;
@@ -48,7 +48,8 @@ const InputForm = ({type, input, onChange, className}) => {
                 placeholder={placeholder}
                 onChange={onChange}
                 value={value}
-                className={className} />
+                className={className}
+                disabled = {disabled}/>
         </>
     );
 }

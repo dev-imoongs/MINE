@@ -178,6 +178,7 @@ const Join = () => {
                                 input={input}
                                 onChange={onChange}
                                 className={error.emailError ? styles['error-border'] : ''}
+                                disabled={location.pathname === "/editInfo" && true}
                             />
                             {error.emailError && <span className={styles['error-message']}>{error.emailError}</span>}
                         </div>
