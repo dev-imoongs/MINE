@@ -200,45 +200,58 @@ const AuctionListFilterContainer = ({ itemsCount }) => {
           <tr>
             <td>가격</td>
             <td className="price-filter">
-              <input
-                type="text"
-                className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
-                placeholder="최소 가격"
-                data-idx="0"
-                value={inputMinPrice}
-                onChange={handleMinPriceChange}
-              />
-              <span className="mx-[6px]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="4"
-                  fill="none"
-                  className="inline"
+              <div>
+                <input
+                  type="text"
+                  className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
+                  placeholder="최소 가격"
+                  data-idx="0"
+                  value={inputMinPrice}
+                  onChange={handleMinPriceChange}
+                />
+                <span className="mx-[6px]">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="10"
+                    height="4"
+                    fill="none"
+                    className="inline"
+                  >
+                    <path
+                      fill="#5A616B"
+                      d="M7.895.628 9.297.62q0 .651-.182 1.205-.182.545-.515.947-.326.401-.788.628-.454.22-1 .22-.636 0-1.129-.25-.484-.258-1.045-.773a3.5 3.5 0 0 0-.652-.507 1.25 1.25 0 0 0-.651-.182.94.94 0 0 0-.584.182 1.14 1.14 0 0 0-.378.5 2 2 0 0 0-.137.757H.796q0-.659.183-1.197.18-.545.507-.931.333-.395.788-.606a2.3 2.3 0 0 1 1-.213q.636 0 1.144.266.516.265 1.046.757.363.349.659.523.295.174.628.174a1 1 0 0 0 .599-.19q.257-.196.401-.537a1.95 1.95 0 0 0 .144-.765"
+                    ></path>
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
+                  placeholder="최대 가격"
+                  data-idx="1"
+                  value={inputMaxPrice}
+                  onChange={handleMaxPriceChange}
+                />
+                <button
+                  data-routerlink="true"
+                  className="w-full mt-3 lg:mt-0 lg:w-auto bg-jnBlack py-[10px] px-4 m-0 lg:mx-2 rounded text-sm font-medium text-white"
+                  onClick={() => {
+                    setPriceRange(inputMinPrice, inputMaxPrice);
+                  }}
                 >
-                  <path
-                    fill="#5A616B"
-                    d="M7.895.628 9.297.62q0 .651-.182 1.205-.182.545-.515.947-.326.401-.788.628-.454.22-1 .22-.636 0-1.129-.25-.484-.258-1.045-.773a3.5 3.5 0 0 0-.652-.507 1.25 1.25 0 0 0-.651-.182.94.94 0 0 0-.584.182 1.14 1.14 0 0 0-.378.5 2 2 0 0 0-.137.757H.796q0-.659.183-1.197.18-.545.507-.931.333-.395.788-.606a2.3 2.3 0 0 1 1-.213q.636 0 1.144.266.516.265 1.046.757.363.349.659.523.295.174.628.174a1 1 0 0 0 .599-.19q.257-.196.401-.537a1.95 1.95 0 0 0 .144-.765"
-                  ></path>
-                </svg>
-              </span>
-              <input
-                type="text"
-                className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
-                placeholder="최대 가격"
-                data-idx="1"
-                value={inputMaxPrice}
-                onChange={handleMaxPriceChange}
-              />
-              <button
-                data-routerlink="true"
-                className="w-full mt-3 lg:mt-0 lg:w-auto bg-jnBlack py-[10px] px-4 m-0 lg:mx-2 rounded text-sm font-medium text-white"
-                onClick={() => {
-                  setPriceRange(inputMinPrice, inputMaxPrice);
-                }}
-              >
-                적용
-              </button>
+                  적용
+                </button>
+              </div>
+              {parseFloat(inputMinPrice) > parseFloat(inputMaxPrice) && (
+                <div
+                  style={{
+                    margin: "8px 0 0 5px",
+                    fontSize: "9pt",
+                    color: "red",
+                  }}
+                >
+                  *최대 가격의 설정값이 최소 가격의 설정값보다 작습니다.
+                </div>
+              )}
             </td>
           </tr>
 
@@ -257,7 +270,11 @@ const AuctionListFilterContainer = ({ itemsCount }) => {
                 data-routerlink="true"
                 className="w-full mt-3 lg:mt-0 lg:w-auto bg-jnBlack py-[10px] px-4 m-0 lg:mx-2 rounded text-sm font-medium text-white"
                 onClick={() => {
-                  setSearchQuery(inputSearchQuery);
+                  if (parseFloat(inputMinPrice) < parseFloat(inputMaxPrice)) {
+                    setSearchQuery(inputSearchQuery);
+                  } else {
+                    alert("이게뭐야");
+                  }
                 }}
               >
                 적용

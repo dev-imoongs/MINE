@@ -1,76 +1,98 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef, memo } from 'react';
 import { useToggle } from '../../../hooks/useToggle';
 import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
 import { useRecoilValue } from 'recoil';
 import { getTimeAgo } from '../../../services/commonService';
 import { useRecoilState } from 'recoil';
-import { chatDrawerState } from '../../../recoil/atoms/chatStateAtom';
+import { chatDrawerState, currentChatId } from '../../../recoil/atoms/chatStateAtom';
 import { ToastContainer, toast } from 'react-toastify';
-import ToastComponent from '../../components/Common/ToastComponent'
+import ChattingRoomContainer from '../Chatting/ChattingRoomContainer'
+
 import 'react-toastify/dist/ReactToastify.css';
+
+
 const TradeProductInfoContainer = ({ StImg }) => {
     const countRef = useRef(0);
-    console.log(countRef.current)
-    const [isLike, toggleLike] = useToggle();
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
+    const [,setChatId] = useRecoilState(currentChatId);
     const productInfo = tradeProductInfo.productInfo;
     const sellerInfo = tradeProductInfo.sellerInfo;
-    const [toastStatus, setStatus] = useState();
-    const notify = useCallback(() => {
-        if(countRef.current === 0) {
-            console.log(countRef)
-            toast("찜하기");
-            countRef.current +=1
-        }else{
-            console.log(countRef)
-            countRef.current -= 1;
-        }
-    }, []);
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
     useEffect(() => {
         console.log('mount')
     },[])
     return (
-        <div>
-            {console.log(tradeProductInfo)}
-            <ProductInfo stImg={StImg} productInfo={productInfo} />
-            <SellerInfo sellerInfo={sellerInfo}/>
-            <div className="flex items-center space-s-4 pt-9 max-[479px]:fixed max-[479px]:bottom-0 max-[479px]:left-0 max-[479px]:z-20 max-[479px]:w-full max-[479px]:px-4 max-[479px]:pb-4 max-[479px]:bg-white">
-                <div className="w-8 h-8"
-                    onClick={notify}
-                >
-                    <label htmlFor=":r0:" className="relative cursor-pointer" onClick={toggleLike}>
-                        <svg
-                            width="32"
-                            height="32"
-                            viewBox="0 0 32 32"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="pointer-events-none w-8 h-8"
-                        >
-                            <path
-                                d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
-                                strokeWidth="1.5"
-                                stroke={isLike ? '#dc2626' : '#9CA3AF'}
-                                fill={isLike ? '#dc2626' : 'transparent'}
-                            ></path>
-                        </svg>
-                    </label>
-                    <input id=":r0:" type="checkbox" className="a11yHidden" />
+        <>
+            <div>
+                {console.log(tradeProductInfo)}
+                <ProductInfo stImg={StImg} productInfo={productInfo} />
+                <SellerInfo sellerInfo={sellerInfo}/>
+                <div className="flex items-center space-s-4 pt-9 max-[479px]:fixed max-[479px]:bottom-0 max-[479px]:left-0 max-[479px]:z-20 max-[479px]:w-full max-[479px]:px-4 max-[479px]:pb-4 max-[479px]:bg-white">
+                    <LikeButton countRef={countRef}/>
+                    <button
+                        data-variant="slim"
+                        className="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack"
+                        onClick={() => 
+                            {
+                                setDrawerVisible(true)
+                                setChatId(1)
+                            }
+                        }
+                    >
+                        채팅하기
+                    </button>
                 </div>
-                <button
-                    data-variant="slim"
-                    className="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack"
-                    onClick={() => setDrawerVisible(true)}
-                >
-                    채팅하기
-                </button>
             </div>
-        </div>
+        </>
     );
 };
+const LikeButton = React.memo(({countRef}) => {
+    const [isLike, toggleLike] = useToggle();
+    const notify = (() => {
+        // if (!toast.isActive(countRef.current)) {
+        //     countRef.current = toast("찜 상품에 추가 되었습니다.");
+        // }else{
+        //     console.log("토스트가 이미 활성화 상태입니다.");
+        // }
+        if(!isLike){
+            toast("찜 상품에 추가 되었습니다.");
+        }else{
+            toast("찜 상품에 해제 되었습니다.");
+        }
+    });
 
-const ProductInfo = ({StImg, productInfo}) => {
+    return (
+      <div className="w-8 h-8">
+        <label htmlFor=":r0:" className="relative cursor-pointer"
+        onClick={(e) => {
+            e.preventDefault();
+            notify()
+            toggleLike();
+          }}
+        >
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="pointer-events-none w-8 h-8"
+            
+          >
+            <path
+              d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
+              strokeWidth="1.5"
+              stroke={isLike ? '#dc2626' : '#9CA3AF'}
+              fill={isLike ? '#dc2626' : 'transparent'}
+            />
+          </svg>
+        </label>
+        <input id=":r0:" type="checkbox" className="a11yHidden" />
+      </div>
+    );
+  });
+
+const ProductInfo = React.memo(({StImg, productInfo}) => {
     return (
         <>
             <div className="flex items-center w-full chawkbazarBreadcrumb pt-5 lg:py-2 pb-[10px]">
@@ -189,8 +211,9 @@ const ProductInfo = ({StImg, productInfo}) => {
             </ul>
         </>
     )
-}
-const SellerInfo = ({sellerInfo}) => {
+})
+
+const SellerInfo = React.memo(({sellerInfo}) => {
     const StProfileImg = {
         color: 'transparent',
     };
@@ -199,43 +222,9 @@ const SellerInfo = ({sellerInfo}) => {
         width: sellerInfo.trustScore/10 + '%',
     };
 
-    const StSwiperWrap = {
-        transform: 'translate3d(0px, 0px, 0px)',
-    };
-
-    const StSwiper = {
-        width: '132px',
-        marginRight: '12px',
-    };
-
-    const StImg = {
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
-        inset: '0px',
-        color: 'transparent',
-    };
-
     return (
         <div className="w-full flex py-2">
             <div name="product-store" className="w-full ">
-               {/*  <span
-                    className="flex items-center justify-between w-full pb-3 border-b border-gray-300 lg:pb-5"
-                    href="#"
-                >
-                    <h3 className="md:text-[22px] font-bold text-jnBlack text-lg">가게 정보</h3>
-                    <svg
-                        stroke="currentColor"
-                        fill="currentColor"
-                        strokeWidth="0"
-                        viewBox="0 0 512 512"
-                        height="24"
-                        width="24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z"></path>
-                    </svg>
-                </span> */}
                 <div className="flex flex-col">
                     <div>
                         <div className="flex">
@@ -274,5 +263,5 @@ const SellerInfo = ({sellerInfo}) => {
             </div>
         </div>
     );
-};
+});
 export default TradeProductInfoContainer;

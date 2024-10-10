@@ -1,12 +1,11 @@
-import React from "react";
-import Drawer from 'rc-drawer';
+/* eslint-disable react-refresh/only-export-components */
+import React, {memo} from "react";
 import ChattingListContainer from '../containers/Chatting/ChattingListContainer'
 import ChattingRoomContainer from '../containers/Chatting/ChattingRoomContainer'
 import {currentChatId } from '../../recoil/atoms/chatStateAtom'
-import { useRecoilState } from 'recoil';
-import { Outlet } from 'react-router-dom';
+import { useRecoilState,useRecoilValue } from 'recoil';
 const ChattingPage = () => {
-    const [chatId, setChatId] = useRecoilState(currentChatId);
+  const chatId = useRecoilValue(currentChatId);
     const chatStyle = {
         width: "0px",
         height: "0px",
@@ -16,13 +15,13 @@ const ChattingPage = () => {
     }
   return (
     <>
-      <div>
           <div
             tabIndex="0"
             aria-hidden="true"
             data-sentinel="start"
             style={chatStyle}
-          ></div>
+          >
+          </div>
             {chatId === null ? (
                 <ChattingListContainer />
             ) : (
@@ -34,10 +33,9 @@ const ChattingPage = () => {
             data-sentinel="end"
             style={chatStyle}
           ></div>
-        </div>
     </>
   );
 };
 
-export default ChattingPage;
+export default memo(ChattingPage);
 

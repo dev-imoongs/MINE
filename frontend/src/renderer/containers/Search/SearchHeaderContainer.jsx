@@ -1,17 +1,27 @@
-/* eslint-disable react/no-unescaped-entities */
-import React from 'react';
+import React, { memo } from 'react';
+import { Link } from 'react-router-dom';
 
-const SearchHeaderContainer = () => {
+// eslint-disable-next-line react-refresh/only-export-components
+const SearchHeaderContainer = ({link, type, title, itemInfo}) => {
+    let sum, count, max, min, avg;
+    
+    if (itemInfo) {
+        sum = itemInfo.reduce((acc, cur) => acc + cur.price, 0);
+        count = itemInfo.length;
+        max = Math.max(...itemInfo.map((item) => item.price));
+        min = Math.min(...itemInfo.map((item) => item.price));
+    }
+   
     return (
         <div className="relative">
             <div className="flex flex-col lg:flex-row lg:items-center gap-[6px] items-start mb-[10px] justify-between">
                 <h3 className="text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-normal text-heading">
-                    <strong className="font-semibold">'맥북'</strong> 중고 검색 결과
+                    <strong className="font-semibold">'{title}'</strong> {type} 검색 결과
                     <span className="text-jnGray-700" style={{ fontSize: '20px', paddingLeft: '20px' }}> 총 63,026개</span>
                 </h3>
-                <a
+                <Link
                     className="flex items-center text-xs lg:text-sm xl:text-base text-jnGray-700 mt-0.5 lg:mt-1"
-                    href="/product"
+                    to={link}
                 >
                     바로가기
                     <svg
@@ -28,7 +38,7 @@ const SearchHeaderContainer = () => {
                             d="M6 1 1 5l5 4"
                         ></path>
                     </svg>
-                </a>
+                </Link>
             </div>
             <div tabIndex="0" aria-labelledby="product-list-price-title" style={{ margin: '20px 0px 35px 0px' }}>
                 <div className="flex flex-col overflow-hidden lg:rounded-lg lg:flex-row lg:bg-jnGray-100">
@@ -47,7 +57,7 @@ const SearchHeaderContainer = () => {
                             tabIndex="0"
                             className="font-bold text-lg text-jnGray-800 lg:text-xl min-[1600px]:text-2xl"
                         >
-                            401,913원
+                            {sum/count}원
                         </span>
                     </div>
                     <div
@@ -65,7 +75,7 @@ const SearchHeaderContainer = () => {
                             tabIndex="0"
                             className="font-bold text-lg text-jnGray-800 lg:text-xl min-[1600px]:text-2xl"
                         >
-                            3,100,000원
+                            {max}원
                         </span>
                     </div>
                     <div
@@ -83,7 +93,7 @@ const SearchHeaderContainer = () => {
                             tabIndex="0"
                             className="font-bold text-lg text-jnGray-800 lg:text-xl min-[1600px]:text-2xl"
                         >
-                            10,000원
+                            {min}원
                         </span>
                     </div>
                 </div>
@@ -92,4 +102,5 @@ const SearchHeaderContainer = () => {
     );
 };
 
-export default SearchHeaderContainer;
+// eslint-disable-next-line react-refresh/only-export-components
+export default memo(SearchHeaderContainer);

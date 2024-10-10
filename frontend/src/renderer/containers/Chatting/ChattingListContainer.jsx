@@ -1,7 +1,8 @@
-import { currentChatId } from '../../../recoil/atoms/chatStateAtom'
+import React from 'react';
+import { currentChatId, chatDrawerState } from '../../../recoil/atoms/chatStateAtom'
 import { useRecoilState } from 'recoil';
 const ChattingListContainer = () => {
-    
+    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
     const chatListStyle = {
         position: "absolute",
         height: "100%",
@@ -16,7 +17,9 @@ const ChattingListContainer = () => {
     <>
         <div className="flex flex-col w-full h-full justify-between">
             <div className="min-h-[70px] basis-[70px] flex justify-center items-center px-[20px]">
-                <button className="w-10 h-10 basis-10 invisible">
+                <button className="w-10 h-10 basis-10 invisible"
+                    
+                >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -43,7 +46,9 @@ const ChattingListContainer = () => {
                 </p>
                 </h2>
                 <div>
-                <button>
+                <button
+                    onClick={() => setDrawerVisible(false)}
+                >
                     <svg
                     stroke="currentColor"
                     fill="currentColor"
@@ -196,4 +201,5 @@ const ChattingListComponent = () => {
     )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default ChattingListContainer;
