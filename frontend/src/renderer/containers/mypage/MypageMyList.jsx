@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js"
+import {useNavigate, useNavigation} from 'react-router-dom';
 
 import styled from "styled-components";
 import {useRecoilState} from "recoil";
@@ -8,6 +9,7 @@ const MypageMyList = ({data,isProduct}) => {
     const filter = ["최신순", "낮은가격순", "높은가격순"];
     const [openMenuIndex, setOpenMenuIndex] = useState(null); // 현재 열린 메뉴의 인덱스를 저장
     const [activeIndex, setActiveIndex] = useRecoilState(activeIndexAtom);
+    const navigate = useNavigate();
 
     const handleClick = (index) => {
         setActiveIndex(index);
@@ -19,8 +21,18 @@ const MypageMyList = ({data,isProduct}) => {
         setOpenMenuIndex(prevIndex => (prevIndex === index ? null : index)); // 같은 인덱스 클릭 시 닫기
     };
 
-    const updateClick = () => {
+    const updateClick = (id) => {
         console.log("상품수정")
+        console.log("id>>", id);
+        isProduct ? navigate('/productRegister', { state: { id } }) : navigate('/auctionRegister', { state: { id } });
+        // register 페이지에서 아래와 같이 useLocation 임포트하여 id 받을 수 있음
+        // import { useLocation } from 'react-router-dom';
+        // const location = useLocation();
+        // const { id } = location.state || {};
+    }
+
+    const evaluateTrust = () => {
+        console.log("평가하기")
     }
 
   return (
@@ -79,12 +91,11 @@ const MypageMyList = ({data,isProduct}) => {
                   isProduct ? (
                       <div className="my-item-con relative" key={index}>
                           <div className="my-content-con relative">
-                              <a
-                                  className="my-content-link group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
-                                  title={item.USED_ITEM_NAME}
-                              >
-                                  <div
-                                      className="my-img-con relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
+                              {/*<a*/}
+                              {/*    className="my-content-link group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"*/}
+                              {/*    title={item.USED_ITEM_NAME}*/}
+                              {/*>*/}
+                                  <div className="my-img-con relative w-full rounded-md overflow-hidden pt-[100%] mb-3 md:mb-3.5">
                                       <img
                                           alt={item.USED_ITEM_NAME}
                                           // referrerPolicy="no-referrer"
@@ -101,6 +112,15 @@ const MypageMyList = ({data,isProduct}) => {
                                               color: "transparent"
                                           }}
                                       />
+                                      {activeIndex === 2 && (
+                                          <div
+                                              className="absolute top-0 left-0 flex items-end w-full h-full bg-black bg-opacity-50">
+                                              <button
+                                                  onClick={evaluateTrust}
+                                                  className="w-full p-2 text-center text-white bg-jngreen bg-opacity-80">신뢰평가하기
+                                              </button>
+                                          </div>
+                                      )}
                                   </div>
                                   <div className="my-text-con w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
                                       <h2 className="line-clamp-2 min-h-[10h] text-sm md:text-base text-heading">
@@ -115,7 +135,7 @@ const MypageMyList = ({data,isProduct}) => {
                                           <span className="text-sm text-gray-400">{item.USED_ITEM_REGISTER_TIME}</span>
                                       </div>
                                   </div>
-                              </a>
+                              {/*</a>*/}
                           </div>
                           <div
                               className="function-con flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
@@ -165,7 +185,7 @@ const MypageMyList = ({data,isProduct}) => {
                                   className="flex flex-col w-full lg:w-[160px] bg-white text-black rounded-lg border border-jnGray-300 overflow-hidden">
                                   <ul>
                                       <li className="font-semibold text-sm hover:bg-jnGray-200">
-                                          <button onClick={updateClick} className="w-full py-5">수정</button>
+                                          <button onClick={() => updateClick(item.USED_ITEM_ID)} className="w-full py-5">수정</button>
                                       </li>
                                   </ul>
                               </Menu>
@@ -174,7 +194,7 @@ const MypageMyList = ({data,isProduct}) => {
                       </div>
                   ) : (
                       <div className="my-item-con relative" key={index}>
-                          <div className="my-content-con relative">
+                      <div className="my-content-con relative">
                               <a
                                   className="my-content-link group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
                                   title={item.AUCTION_ITEM_NAME}
@@ -284,7 +304,7 @@ const MypageMyList = ({data,isProduct}) => {
                                   className="flex flex-col w-full lg:w-[160px] bg-white text-black rounded-lg border border-jnGray-300 overflow-hidden">
                                   <ul>
                                       <li className="font-semibold text-sm hover:bg-jnGray-200">
-                                          <button onClick={updateClick} className="w-full py-5">수정</button>
+                                          <button onClick={() => updateClick(item.AUCTION_ITEM_ID)} className="w-full py-5">수정</button>
                                       </li>
                                   </ul>
                               </Menu>
