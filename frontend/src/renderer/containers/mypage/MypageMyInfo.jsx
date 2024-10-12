@@ -72,38 +72,6 @@ const MypageMyInfo = () => {
               <TrustRating trust={myInfo && myInfo.trustScore}></TrustRating>
               <CountBox box={box}></CountBox>
               <MyProductRegister>
-                  <div className="w-10 lg:w-12 h-10 lg:h-12 mr-3 shrink-0 relative">
-                      <img
-                          alt="카페"
-                          src="/_next/static/media/cafe.4ecb0d6e.webp"
-                          decoding="async"
-                          data-nimg="fill"
-                          className=""
-                          loading="lazy"
-                          style={{
-                              position: "absolute",
-                              height: "100%",
-                              width: "100%",
-                              inset: 0,
-                              color: "transparent"
-                          }}
-                      />
-                      <img
-                          alt="채팅"
-                          src="/_next/static/media/chat.8164dbdd.webp"
-                          decoding="async"
-                          data-nimg="fill"
-                          className="hidden"
-                          loading="lazy"
-                          style={{
-                              position: "absolute",
-                              height: "100%",
-                              width: "100%",
-                              inset: 0,
-                              color: "transparent"
-                          }}
-                      />
-                  </div>
                   <div className="flex-auto">
                       <span className="block text-gray-900 font-bold text-[14px] lg:text-lg">
                       거래하러가기
