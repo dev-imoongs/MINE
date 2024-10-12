@@ -1,0 +1,43 @@
+{
+    "productInfo": {
+        "category": "남성의류",
+        "price": 80000,
+        "productPicture": ["src/assets/temp_product.png", "src/assets/temp_product.png", "src/assets/temp_product.png"],
+        "title": "경매 디테일 페이지 타이틀",
+        "state": "새상품",
+        "description": "경매 디테일 페이지 상세 상품정보 내용",
+        "startPrice": 20000,
+        "currentPrice": 55000,
+        "startTime": "2024-10-13 05:00:00",
+        "endTime": "2024-10-17 12:00:00",
+        "createAt": "2024-09-22 05:35:00"
+    },
+    "sellerInfo": {
+        "userEmail": "giggoon@abc.com",
+        "userProfile": "https://img2.joongna.com/common/Profile/Default/profile_f.png",
+        "trustScore": 789
+    },
+    "bidHistory": [
+        {
+            "id": 1,
+            "userEmail": "example01@google.com",
+            "bidAmount": 20000,
+            "createAt": "2024-09-22 05:35:00",
+            "updateAt": "2024-09-22 05:35:00"
+        },
+        {
+            "id": 2,
+            "userEmail": "example02@google.com",
+            "bidAmount": 22000,
+            "createAt": "2024-09-22 06:35:00",
+            "updateAt": "2024-09-22 06:35:00"
+        },
+        {
+            "id": 3,
+            "userEmail": "example03@google.com",
+            "bidAmount": 25000,
+            "createAt": "2024-09-22 06:35:00",
+            "updateAt": "2024-09-22 06:35:00"
+        }
+    ]
+}
