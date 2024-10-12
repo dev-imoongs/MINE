@@ -93,12 +93,20 @@ const ProductRegister = () => {
     };
 
     const handlePlaceAddClick = () => {
+        if (selectedPlaces.length >= 5) {
+            alert('최대 5개의 장소만 추가할 수 있습니다.');
+            return;
+        }
+
         new window.daum.Postcode({
             oncomplete: function(data) {
-                const fullAddress = data.address;
-                const addressArr = fullAddress.split(" ");
-                const dong = addressArr.length > 2 ? addressArr[2] : addressArr[1]; // 동 주소만 추출
-                setSelectedPlaces(prevPlaces => [...prevPlaces, dong]); // 동 추가
+                const fullAddress = `${data.sido} ${data.sigungu} ${data.bname}`; // 서울 상도1동 형태
+
+                if (!selectedPlaces.includes(fullAddress)) {
+                    setSelectedPlaces(prevPlaces => [...prevPlaces, fullAddress]); // 중복 없으면 추가
+                } else {
+                    alert('이미 선택된 장소입니다.');
+                }
             }
         }).open();
     };
@@ -209,19 +217,23 @@ const ProductRegister = () => {
                 </div> */}
 
                 <div className={styles['form-group']}>
-                    <label>희망 지역&nbsp;<span><span>0</span>/5</span></label>
+                    <label>희망 지역&nbsp;<span><span>{selectedPlaces.length}</span>/5</span></label>
                     <div className={styles['place-container']}>
                         <button type='button' className={`${styles.btn} ${styles['btn-place']}`} onClick={handlePlaceAddClick}>+ 추가하기</button>
-                        <div className={styles['select-place-container']}>
-                            {selectedPlaces.map((place, index) => (
+                        {selectedPlaces.map((place, index) => (
+                            <div className={styles['select-place-container']}>
                                 <div key={index} className={styles['select-place']}>
                                     <span>{place}</span>
                                     <button type="button" onClick={() => deletePlace(index)}>
-                                        <svg>...</svg>
+                                        <svg width="20px" height="20px" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            {/* <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" fill="white"></path>
+                                                <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5V18.5C14.6944 18.5 18.5 14.6944 18.5 10H17.5ZM10 17.5C5.85786 17.5 2.5 14.1421 2.5 10H1.5C1.5 14.6944 5.30558 18.5 10 18.5V17.5ZM2.5 10C2.5 5.85786 5.85786 2.5 10 2.5V1.5C5.30558 1.5 1.5 5.30558 1.5 10H2.5ZM10 2.5C14.1421 2.5 17.5 5.85786 17.5 10H18.5C18.5 5.30558 14.6944 1.5 10 1.5V2.5Z" fill="#DADEE5"></path> */}
+                                            <path d="M7 7L13 13M13 7L7 13" stroke="#363C45" strokeLinecap="round"></path>
+                                        </svg>
                                     </button>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                         {/* <div className={styles['select-place']}>
                             <span>상도 제1동</span>
                             <button type="button">
