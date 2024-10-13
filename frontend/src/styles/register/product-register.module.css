@@ -71,6 +71,7 @@
 }
 
 .form-container input[type="text"],
+.form-container input[type="number"],
 .form-container input[type="datetime-local"],
 .form-container textarea,
 .form-container select {
@@ -205,7 +206,7 @@
     border: 1px solid #000;
 }
 
-.submit-btn {
+.form-group .submit-btn {
     width: 100%;
     padding: 10px;
     background-color: #000;

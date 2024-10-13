@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../../../styles/login/index.module.css';
 
 const Index = () => {
+    const navigate = useNavigate();
+    
     const [input, setInput] = useState({
         email: "",
         password: "",
@@ -25,6 +28,8 @@ const Index = () => {
             alert('비밀번호를 입력하세요');
             return;
         }
+
+        navigate('/');
     }
 
     return (
