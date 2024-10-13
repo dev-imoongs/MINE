@@ -10,7 +10,7 @@ const AuctionListItemContainer = ({ itemsInfo, destinationType }) => {
                     image={item.image}
                     title={item.title}
                     price={item.price}
-                    elapsedTime={item.elapsedTime}
+                    endTime={item.endTime}
                     likes={item.likes}
                     chats={item.chats}
                     destinationType={destinationType}
