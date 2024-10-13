@@ -1,27 +1,43 @@
-import React from 'react';
-import ReactPaginate from 'react-paginate';
+import React from "react";
+import ReactPaginate from "react-paginate";
 
-const Pagination = ({ pageCount, onPageChange }) => {
-    return (
-        <ReactPaginate
-            nextLabel=">"
-            onPageChange={onPageChange}
-            pageRangeDisplayed={5}
-            marginPagesDisplayed={2}
-            pageCount={pageCount}
-            previousLabel="<"
-            containerClassName="flex justify-center space-x-2 space-x-reverse"
-            pageClassName="w-10 h-10 rounded-md shrink-0"
-            pageLinkClassName="block leading-10"
-            previousClassName="w-4 mr-2"
-            previousLinkClassName="items-center h-full flex"
-            nextClassName="w-4 mr-2"
-            nextLinkClassName="items-center h-full flex"
-            activeClassName="bg-jngreen/80 text-white"
-            breakClassName="w-4"
-            breakLinkClassName="items-center h-full flex"
-        />
-    );
+const Pagination = ({
+  totalPage,
+  currentPage,
+  prev,
+  next,
+  pageNumbers,
+  paginate,
+}) => {
+  return (
+    <ul
+      style={{ textAlign: "center" }}
+      className="flex justify-center space-x-2 space-x-reverse"
+    >
+      {currentPage === 1 ? null : (
+        <button className="w-4 mr-2" onClick={prev}>
+          &lt;
+        </button>
+      )}
+      {pageNumbers.map((num) => (
+        <li
+          className={`w-10 h-10 rounded-md shrink-0  ${
+            currentPage === num ? "bg-jngreen/80 text-white" : ""
+          }`}
+          key={num}
+        >
+          <button className="block leading-10" onClick={() => paginate(num)}>
+            {num}
+          </button>
+        </li>
+      ))}
+      {currentPage === totalPage ? null : (
+        <button className="w-4 mr-2" onClick={next}>
+          &gt;
+        </button>
+      )}
+    </ul>
+  );
 };
 
 export default Pagination;
