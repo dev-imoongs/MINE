@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../../../styles/login/join.module.css';
 import InputForm from "../../components/login/LoginComponent";
 import Category from "../../components/login/CategoryComponent";
@@ -11,6 +12,7 @@ import { useLocation } from 'react-router-dom';
 const Join = () => {
     const [myInfo, setMyInfo] = useRecoilState(myInfoAtom);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [input, setInput] = useState({
         email: "",
@@ -75,6 +77,7 @@ const Join = () => {
         if (validateForm()) {
             if(location.pathname === '/join') {
                 alert('회원가입 성공');
+                navigate('/');
             } else {
                 alert('수정되었습니다.');
             }
