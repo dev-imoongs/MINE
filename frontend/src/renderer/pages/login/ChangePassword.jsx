@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../../../styles/login/find-password.module.css';
 import InputForm from "../../components/login/LoginComponent";
 
 const ChangePassword = () => {
+    const navigate = useNavigate();
+
     const [input, setInput] = useState({
         password: "",
         passwordCheck: ""
@@ -23,6 +26,7 @@ const ChangePassword = () => {
     const onClick = () => {
         if (validateForm()) {
             alert('성공');
+            navigate('/');
         }
     };
 
