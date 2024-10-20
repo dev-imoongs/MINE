@@ -5,11 +5,11 @@ export const myAuctionListAtom = atom({
     default: [],
 });
 
-export const acutionListfiltersAtom = atom({
-    key: 'filtersAtom',
+export const auctionListFiltersAtom = atom({
+    key: 'auctionFiltersAtom',
     default: {
         category: '전체',
-        priceRange: { minPrice: '', maxPrice: '' },
+        priceRange: { minPrice: undefined, maxPrice: undefined },
         searchQuery: '',
         sort: '',
     },

@@ -1,43 +1,29 @@
-import React from "react";
-import ReactPaginate from "react-paginate";
+import React from 'react';
+import ReactPaginate from 'react-paginate';
 
-const Pagination = ({
-  totalPage,
-  currentPage,
-  prev,
-  next,
-  pageNumbers,
-  paginate,
-}) => {
-  return (
-    <ul
-      style={{ textAlign: "center" }}
-      className="flex justify-center space-x-2 space-x-reverse"
-    >
-      {currentPage === 1 ? null : (
-        <button className="w-4 mr-2" onClick={prev}>
-          &lt;
-        </button>
-      )}
-      {pageNumbers.map((num) => (
-        <li
-          className={`w-10 h-10 rounded-md shrink-0  ${
-            currentPage === num ? "bg-jngreen/80 text-white" : ""
-          }`}
-          key={num}
-        >
-          <button className="block leading-10" onClick={() => paginate(num)}>
-            {num}
-          </button>
-        </li>
-      ))}
-      {currentPage === totalPage ? null : (
-        <button className="w-4 mr-2" onClick={next}>
-          &gt;
-        </button>
-      )}
-    </ul>
-  );
+const Pagination = ({ pageCount, onPageChange, currentPage }) => {
+    return (
+        <ReactPaginate
+            nextLabel={currentPage === pageCount - 1 ? '' : '>'}
+            onPageChange={onPageChange}
+            pageRangeDisplayed={6}
+            marginPagesDisplayed={0}
+            pageCount={pageCount}
+            previousLabel={currentPage === 0 ? '' : '<'}
+            containerClassName="flex justify-center space-x-2 space-x-reverse"
+            pageClassName="w-10 h-10 rounded-md shrink-0"
+            pageLinkClassName="block leading-10"
+            previousClassName="w-4 mr-2"
+            previousLinkClassName="items-center h-full flex"
+            nextClassName="w-4 mr-2"
+            nextLinkClassName="items-center h-full flex"
+            activeClassName="bg-jngreen/80 text-white"
+            breakClassName="hidden"
+            breakLabel="..." // break을 숨기고 싶다면 이 줄도 추가
+            forcePage={currentPage}
+            renderOnZeroPageCount={null}
+        />
+    );
 };
 
 export default Pagination;
