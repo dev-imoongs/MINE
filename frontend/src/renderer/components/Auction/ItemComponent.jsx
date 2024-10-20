@@ -2,6 +2,7 @@ import React from 'react';
 import { useToggle } from '../../../hooks/useToggle';
 import { Link } from 'react-router-dom';
 import '../../../styles/item.css';
+import useFormattedPrice from '../../../hooks/useFormattedPrice';
 
 const ItemComponent = ({ id, image, title, price, endTime, likes, chats, destinationType }) => {
     const [isLike, toggleLike] = useToggle();
@@ -77,16 +78,18 @@ const ItemComponent = ({ id, image, title, price, endTime, likes, chats, destina
                     <div className="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
                         <h2 className="line-clamp-2 min-h-[2lh] text-sm md:text-base">{title}</h2>
                         <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                            {price}원
+                            {useFormattedPrice(price)}원
                         </div>
-                        {destinationType === '1' ? (
+                        {destinationType == 1 ? (
                             <div>
-                                <div className="my-1 h-6">
-                                    <span className="text-sm text-gray-400">{endTime}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <NaverPayBadge />
-                                    <div className="text-xs text-gray-400 text-muted">
+                                <div className="my-1 h-6 flex justify-between">
+                                    <span className="text-sm text-gray-400" style={{ alignContent: 'center' }}>
+                                        {endTime}
+                                    </span>
+                                    <div
+                                        className="text-xs text-gray-400 text-muted"
+                                        style={{ marginRight: '3px', alignContent: 'center' }}
+                                    >
                                         찜 {likes} ∙ 채팅 {chats}
                                     </div>
                                 </div>
