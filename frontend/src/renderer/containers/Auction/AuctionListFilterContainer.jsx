@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useToggle } from '../../../hooks/useToggle';
 import { useInput } from '../../../hooks/useInput';
+import { toast } from 'react-toastify';
+import useFormattedPrice from '../../../hooks/useFormattedPrice';
 
-const AuctionListFilterContainer = ({ itemsCount, filters, setFilters }) => {
+const AuctionListFilterContainer = ({ itemsCount, filters, setFilters, destinationType }) => {
     // 검색해서 경매 들어왔는지 여부
     const [isSearch, setIsSearch] = useState(true);
 
     const [isOpen, toggleOpen] = useToggle(false);
+    const [isClick, clickToggle] = useToggle();
+
     const [inputMinPrice, handleMinPriceChange, clearInputMinPrice] = useInput('');
     const [inputMaxPrice, handleMaxPriceChange, clearInputMaxPrice] = useInput('');
     // 결과 내 검색 상태제어
     const [inputSearchQuery, handleSearchChange, clearInputSearchQuery] = useInput('');
+    const isSold = filters.isSold;
+    const { minPrice, maxPrice } = filters.priceRange;
+    const formattedMinPrice = useFormattedPrice(minPrice);
+    const formattedMaxPrice = useFormattedPrice(maxPrice);
 
     // filters와 setFilters를 상위에서 정의하고 Props로 넘기기 때문에
     // 거래와 경매에서 둘다 필터를 사용할 수 있음
@@ -31,6 +39,20 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters }) => {
         }));
     };
 
+    // 가격 적용 버튼 클릭 핸들러
+    const handlePriceFilter = () => {
+        const minPrice = parseFloat(inputMinPrice);
+        const maxPrice = parseFloat(inputMaxPrice);
+
+        if (!isNaN(minPrice) && (isNaN(maxPrice) || minPrice < maxPrice)) {
+            setPriceRange(minPrice, isNaN(maxPrice) ? undefined : maxPrice);
+        } else if (isNaN(minPrice) && !isNaN(maxPrice)) {
+            setPriceRange(undefined, maxPrice);
+        } else {
+            toast('가격 범위가 유효하지 않습니다.');
+        }
+    };
+
     // 필터 상태 결과 내 검색
     const setSearchQuery = (inputSearchQuery) => {
         setFilters((prev) => ({
@@ -39,12 +61,21 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters }) => {
         }));
     };
 
+    // 판매완료 아이템 선택
+    const setIsSoldItem = async () => {
+        setFilters((prev) => ({
+            ...prev,
+            isSold: !prev.isSold,
+        }));
+    };
+
     // 선택한 필터 제거
     const removeFilter = (filterKey) => {
         const initialState = {
             category: '전체',
-            priceRange: { minPrice: '', maxPrice: '' },
+            priceRange: { minPrice: undefined, maxPrice: undefined },
             searchQuery: '',
+            isSold: false,
         };
 
         setFilters((prev) => ({
@@ -63,16 +94,24 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters }) => {
         }
     };
 
+    // 가격 범위 레이블 계산
+    const priceRangeLabel = useMemo(() => {
+        if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+            return `${formattedMinPrice}원 ~ ${formattedMaxPrice}원`;
+        }
+        if (!isNaN(minPrice)) {
+            return `${formattedMinPrice}원 이상`;
+        }
+        if (!isNaN(maxPrice)) {
+            return `${formattedMaxPrice}원 이하`;
+        }
+        return ''; // 두 가격 모두 없으면 빈 문자열
+    }, [filters.priceRange]);
+
     // 반복을 위한, 선택한 필터 현재 상태를 받고있는 배열
     const filterItems = [
         { key: 'category', value: filters.category },
-        {
-            key: 'priceRange',
-            value:
-                filters.priceRange.minPrice || filters.priceRange.maxPrice
-                    ? `${filters.priceRange.minPrice} ~ ${filters.priceRange.maxPrice}`
-                    : '',
-        },
+        { key: 'priceRange', value: priceRangeLabel }, // 함수 호출
         { key: 'searchQuery', value: filters.searchQuery },
     ];
 
@@ -211,13 +250,7 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters }) => {
                                 <button
                                     data-routerlink="true"
                                     className="w-full mt-3 lg:mt-0 lg:w-auto bg-jnBlack py-[10px] px-4 m-0 lg:mx-2 rounded text-sm font-medium text-white"
-                                    onClick={() => {
-                                        if (parseFloat(inputMinPrice) < parseFloat(inputMaxPrice)) {
-                                            setPriceRange(inputMinPrice, inputMaxPrice);
-                                        } else {
-                                            alert('가격이 안맞아용');
-                                        }
-                                    }}
+                                    onClick={handlePriceFilter}
                                 >
                                     적용
                                 </button>
@@ -239,23 +272,67 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters }) => {
                     <tr>
                         <td>결과 내 검색</td>
                         <td className="price-filter">
-                            <input
-                                type="text"
-                                className="w-[152px] border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
-                                placeholder="검색 키워드"
-                                data-idx="0"
-                                value={inputSearchQuery}
-                                onChange={handleSearchChange}
-                            />
-                            <button
+                            <label
                                 data-routerlink="true"
-                                className="w-full mt-3 lg:mt-0 lg:w-auto bg-jnBlack py-[10px] px-4 m-0 lg:mx-2 rounded text-sm font-medium text-white"
-                                onClick={() => {
-                                    setSearchQuery(inputSearchQuery);
-                                }}
+                                htmlFor="saleYn"
+                                className="flex items-center justify-start text-base font-medium break-all cursor-pointer text-jnBlack"
                             >
-                                적용
-                            </button>
+                                <input
+                                    type="text"
+                                    className="border rounded border-jnGray-200 py-[10px] px-4 text-sm font-medium"
+                                    style={{ width: '65%' }}
+                                    placeholder="검색어를 입력해주세요."
+                                    data-idx="0"
+                                    value={inputSearchQuery}
+                                    onChange={handleSearchChange}
+                                />
+                                <button
+                                    data-routerlink="true"
+                                    className="w-full mt-3 lg:mt-0 lg:w-auto bg-jnBlack py-[10px] px-4 m-0 lg:mx-2 rounded text-sm font-medium text-white"
+                                    onClick={() => {
+                                        setSearchQuery(inputSearchQuery);
+                                    }}
+                                >
+                                    적용
+                                </button>
+                                {destinationType == 1 && (
+                                    <label
+                                        data-routerlink="true"
+                                        htmlFor="saleYn"
+                                        className="flex items-center justify-start text-base font-medium break-all cursor-pointer text-jnBlack"
+                                        onClick={setIsSoldItem}
+                                    >
+                                        <svg
+                                            width="20"
+                                            height="20"
+                                            viewBox="2 2 20 20"
+                                            fill={isSold ? '#0DCC5A' : '#C2C6CE'}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="mr-1 pointer-events-none"
+                                            data-routerlink="true"
+                                            style={{ marginLeft: '2.25rem' }}
+                                        >
+                                            <path
+                                                d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                                                stroke={isSold ? '0DCC5A' : '#C2C6CE'}
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            ></path>
+                                            <path
+                                                d="M16 9L10.5 14.5L8 12"
+                                                stroke="#FFFFFF"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            ></path>
+                                        </svg>
+                                        <span data-routerlink="true" className="text-base ps-1">
+                                            판매완료 상품 포함
+                                        </span>
+                                    </label>
+                                )}
+                            </label>
                         </td>
                     </tr>
                     <tr>

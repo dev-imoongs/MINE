@@ -8,12 +8,12 @@ import { auctionItems } from '../../services/auctionApiService';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { acutionListfiltersAtom } from '../../recoil/atoms/auctionListAtom';
+import { auctionListFiltersAtom } from '../../recoil/atoms/auctionListAtom';
 
 const AuctionListPage = () => {
     const destinationType = 2;
     const [itemsInfo, setItemsInfo] = useState(null);
-    const [filters, setFilters] = useRecoilState(acutionListfiltersAtom);
+    const [filters, setFilters] = useRecoilState(auctionListFiltersAtom);
 
     const items = useQuery({
         queryKey: 'auctionItemsData',
@@ -81,6 +81,7 @@ const AuctionListPage = () => {
                             itemsCount={itemsInfo.length}
                             filters={filters}
                             setFilters={setFilters}
+                            destinationType={destinationType}
                         />
                         <AuctionListPriceInfoContainer />
                         <AuctionListSortContainer onSortChange={handleSortChange} />
