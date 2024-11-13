@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mine.mapper.FileMapper">
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 파일 등록 insertFile -->
+    <insert id="insertFile" parameterType="fileVO">
+        /* 파일 등록 insertFile */
+        insert into
+            tbl_file(file_name, file_path, file_type, file_size, created_at, updated_at,
+                 <if test='usedItemId != null and usedItemId != ""'>
+                     used_item_id
+                 </if>
+                 <if test='auctionItemId != null and auctionItemId != ""'>
+                     auction_item_id
+                 </if>
+                 )
+        values('', '', '', 0, current_timestamp, current_timestamp,
+            <if test='usedItemId != null and usedItemId != ""'>
+                #{usedItemId}
+            </if>
+            <if test='auctionItemId != null and auctionItemId != ""'>
+                #{actionItemId}
+            </if>
+            );
+    </insert>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 파일 삭제 deleteFile -->
+    <delete id="deleteFile">
+        delete from tbl_file
+        where 1 = 1
+        <if test='usedItemId != null and usedItemId != ""'>
+            and used_item_id = #{usedItemId}
+        </if>
+        <if test='auctionItemId != null and auctionItemId != ""'>
+            and auction_item_id = #{auctionItemId}
+        </if>
+        <if test='fileUuid != null and fileUuid != ""'>
+            and file_uuid = #{fileUuid}
+        </if>
+    </delete>
+</mapper>
