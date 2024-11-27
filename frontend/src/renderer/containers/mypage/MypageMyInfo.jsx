@@ -10,7 +10,7 @@ import TrustRating from "../../components/Layout/TrustRating.jsx"
 import { myInfoAtom } from "../../../recoil/atoms/userAtom.js"
 
 const MypageMyInfo = () => {
-    const box = ["구매횟수", "판매횟수", "입찰중"];
+    const box = ["구매횟수", "판매횟수", "입찰중", "포인트"];
     const [myInfo, setMyInfo] = useRecoilState(myInfoAtom);
     const navigate = useNavigate();
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mine.mapper.AuctionItemMapper">
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 경매 물품 등록 insertAuctionItem -->
+    <insert id="insertAuctionItem" parameterType="auctionItemVO">
+        /* 경매 물품 등록 insertAuctionItem */
+        insert into mine.tbl_auction_item
+        (user_id, auction_item_name, auction_item_explain, auction_item_start_price, auction_item_end_time, created_at, category_id, auction_item_status, min_bid_amount)
+        values(#{userId}, #{auctionItemName}, #{auctionItemExplain}, #{auctionItemStartPrice}, #{auctionItemEndTime}, current_timestamp, #{categoryId}, #{auctionItemStatus}, #{minBidAmount})
+    </insert>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 경매 물품 수정 updateAuctionItem -->
+    <update id="updateAuctionItem" parameterType="auctionItemVO">
+        /* 경매 물품 수정 updateAuctionItem */
+        update tbl_used_item
+        <set>
+            <if test='auctionItemName != null and auctionItemName != ""'>
+                auction_item_name = #{auctionItemName}
+            </if>
+            <if test='auctionItemExplain != null and auctionItemExplain != ""'>
+                auction_item_explain = #{auctionItemExplain}
+            </if>
+            <if test='auctionItemStartPrice != null and auctionItemStartPrice != ""'>
+                auction_item_start_price = #{auctionItemStartPrice}
+            </if>
+            <if test='auctionItemEndTime != null and auctionItemEndTime != ""'>
+                auction_item_end_time = #{auctionItemEndTime}
+            </if>
+            <if test='categoryId != null and categoryId != ""'>
+                category_id = #{categoryId}
+            </if>
+            <if test='auctionItemStatus != null and auctionItemStatus != ""'>
+                auction_item_status = #{auctionItemStatus}
+            </if>
+            <if test='minBidAmount != null and minBidAmount != ""'>
+                min_bid_amount = #{minBidAmount}
+            </if>
+        </set>
+        where auction_item_id = #{auctionItemId}
+    </update>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+</mapper>

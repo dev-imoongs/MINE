@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mine.mapper.UserMapper">
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <select id="selectUser" resultType="usedItemVO">
+        select user_id, user_email, user_password, user_nickname, user_category, user_longitude, user_latitude, user_address, user_status
+        from tbl_user
+        where user_email = #{userEmail}
+        <if test='userPassword != null and userPassword != ""'>
+            and user_password = #{userPassword}
+        </if>
+        and user_status = '사용'
+    </select>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <insert id="insertUser" parameterType="userVO">
+        insert into tbl_user(user_id, user_email, user_password, user_nickname, user_category, user_longitude, user_latitude, user_address, user_status)
+        values(0, #{userEmail}, #{userPassword}, #{userName}, #{userCategory}, #{userLongitude}, #{userLatitude}, #{userAddress}, '사용')
+    </insert>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <update id="updateUser" parameterType="userVO">
+        update tbl_user
+        <set>
+            <if test='userId != null and userId != ""'>
+                user_id = #{userId}
+            </if>
+            <if test='userId != null and userId != ""'>
+                user_email = #{userEmail}
+            </if>
+            <if test='userId != null and userId != ""'>
+                user_password = #{userPassword}
+            </if>
+            <if test='userId != null and userId != ""'>
+                user_nickname = #{userName}
+            </if>
+            <if test='userId != null and userId != ""'>
+                user_category = #{userCategory}
+            </if>
+            <if test='userId != null and userId != ""'>
+                user_longitude = #{userLongitude}
+            </if>
+            <if test='userId != null and userId != ""'>
+                user_latitude = #{userLatitude}
+            </if>
+            <if test='userId != null and userId != ""'>
+                user_address = #{userAddress}
+            </if>
+            <if test='userId != null and userId != ""'>
+                user_status = #{userStatus}
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <delete id="deleteUser">
+        delete from tbl_user where user_id = #{userId}
+    </delete>
+</mapper>
