@@ -1,9 +1,11 @@
 import React, {useState} from "react";
-import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js"
+import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js";
+import TrustRatingModal from '../../pages/modal/TrustRatingModal.jsx';
 import {Link, useNavigate, useNavigation} from 'react-router-dom';
 
 import styled from "styled-components";
 import {useRecoilState} from "recoil";
+import PayModal from "../../pages/modal/PayModal.jsx";
 const MypageMyList = ({data,isProduct}) => {
     const productCondition = ["판매내역", "판매완료", "구매내역", "찜한 상품"];
     const auctionCondition = ["경매내역", "경매완료", "구매내역", "찜한 상품"];
@@ -11,6 +13,7 @@ const MypageMyList = ({data,isProduct}) => {
     const [openMenuIndex, setOpenMenuIndex] = useState(null); // 현재 열린 메뉴의 인덱스를 저장
     const [activeIndex, setActiveIndex] = useRecoilState(activeIndexAtom);
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
 
     const handleClick = (index) => {
         setActiveIndex(index);
@@ -43,7 +46,8 @@ const MypageMyList = ({data,isProduct}) => {
     }
 
     const evaluateTrust = () => {
-        console.log("평가하기")
+        setOpen(true);
+        // console.log("평가하기")
     }
 
   return (
@@ -127,7 +131,7 @@ const MypageMyList = ({data,isProduct}) => {
                                           <div
                                               className="absolute top-0 left-0 flex items-end w-full h-full bg-black bg-opacity-50">
                                               <button
-                                                  onClick={evaluateTrust}
+                                                  onClick={() => evaluateTrust()}
                                                   className="w-full p-2 text-center text-white bg-jngreen bg-opacity-80">신뢰평가하기
                                               </button>
                                           </div>
@@ -201,6 +205,7 @@ const MypageMyList = ({data,isProduct}) => {
                                   </ul>
                               </Menu>
                           </div>
+                          <TrustRatingModal open={open} setOpen={setOpen} />
 
                       </div>
                   ) : (
