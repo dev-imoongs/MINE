@@ -15,8 +15,8 @@
     </settings>
 
 	<typeAliases>
-		<typeAlias type="com.app.mine.vo.UserVO" alias="userItemVO"/>
-		<typeAlias type="com.app.mine.vo.UsedItemVO" alias="userItemVO"/>
+		<typeAlias type="com.app.mine.vo.UserVO" alias="userVO"/>
+		<typeAlias type="com.app.mine.vo.UsedItemVO" alias="usedItemVO"/>
 		<typeAlias type="com.app.mine.vo.AuctionItemVO" alias="auctionItemVO"/>
 		<typeAlias type="com.app.mine.vo.FileVO" alias="fileVO"/>
 	</typeAliases>
