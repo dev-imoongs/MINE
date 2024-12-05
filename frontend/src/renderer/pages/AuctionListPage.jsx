@@ -4,9 +4,8 @@ import AuctionListSortContainer from '../containers/Auction/AuctionListSortConta
 import AuctionListItemContainer from '../containers/Auction/AuctionListItemContainer';
 import AuctionListPaginationContainer from '../containers/Auction/AuctionListPaginationContainer';
 import AuctionListPriceInfoContainer from '../containers/Auction/AuctionListPriceInfoContainer';
-import { auctionItems } from '../../services/auctionApiService';
+import { getAuctionItems } from '../../services/auctionApiService';
 import { useQuery } from 'react-query';
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { auctionListFiltersAtom } from '../../recoil/atoms/auctionListAtom';
 
@@ -16,8 +15,8 @@ const AuctionListPage = () => {
     const [filters, setFilters] = useRecoilState(auctionListFiltersAtom);
 
     const items = useQuery({
-        queryKey: 'auctionItemsData',
-        queryFn: auctionItems,
+        queryKey: 'getAuctionItemsData',
+        queryFn: () => getAuctionItems(filters),
     });
 
     useEffect(() => {
@@ -26,30 +25,23 @@ const AuctionListPage = () => {
         }
     }, [items.data]);
 
-    const buildQueryParams = (filters) => {
-        const params = {};
+    // 이건 서버에서 할지 고민해봐야겠는데
+    // const buildQueryParams = (filters) => {
+    //     const params = {};
 
-        const { category, priceRange, searchQuery, sort } = filters;
+    //     const { category, priceRange, searchQuery, sort } = filters;
 
-        // 각 필터가 유효한 경우에만 params에 추가
-        if (category && category !== '전체') params.category = category;
-        if (priceRange.minPrice) params.minPrice = priceRange.minPrice;
-        if (priceRange.maxPrice) params.maxPrice = priceRange.maxPrice;
-        if (searchQuery) params.search = searchQuery;
-        if (sort) params.sort = sort;
+    //     // 각 필터가 유효한 경우에만 params에 추가
+    //     if (category && category !== '전체') params.category = category;
+    //     if (priceRange.minPrice) params.minPrice = priceRange.minPrice;
+    //     if (priceRange.maxPrice) params.maxPrice = priceRange.maxPrice;
+    //     if (searchQuery) params.search = searchQuery;
+    //     if (sort) params.sort = sort;
 
-        return params;
-    };
+    //     return params;
+    // };
 
     // sort 정렬 기준 0: 좋아요순, 1: 최신순, 2: 낮은 가격순, 3: 높은 가격순
-
-    // 데이터 불러오는 예시
-    const fetchAuctions = async (filters) => {
-        const queryParams = buildQueryParams(filters);
-        const response = await axios.get('/auction/', { params: queryParams });
-        console.log('queryParams', queryParams);
-        return response.data;
-    };
 
     const handleSortChange = async (criteria) => {
         setFilters((prev) => ({
@@ -59,12 +51,12 @@ const AuctionListPage = () => {
     };
 
     // 비동기 업데이트가 완료되면 fetchAuctions를 수행하도록 수정
-    useEffect(() => {
-        const fetchFilteredAuctions = async () => {
-            const data = await fetchAuctions(filters);
-        };
-        fetchFilteredAuctions();
-    }, [filters]);
+    // useEffect(() => {
+    //     const fetchFilteredAuctions = async () => {
+    //         const data = await fetchAuctions(filters);
+    //     };
+    //     fetchFilteredAuctions();
+    // }, [filters]);
 
     return (
         <main

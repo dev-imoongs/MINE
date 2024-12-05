@@ -6,15 +6,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuctionItemVO {
-    private Integer actionItemId;
+    private Integer auctionItemId;
     private Integer userId;
-    private String actionItemName;
-    private String actionItemExplain;
-    private Integer actionItemStartPrice;
-    private Integer actionItemHighestPrice;
-    private String actionItemEndTime;
+    private String auctionItemName;
+    private String auctionItemExplain;
+    private Integer auctionItemStartPrice;
+    private Integer auctionItemHighestPrice;
+    private String auctionItemEndTime;
     private String createdAt;
     private Integer categoryId;
-    private Integer actionItemStatus;
+    private Integer auctionItemStatus;
     private Integer minBidAmount;
+    private String updatedAt;
 }

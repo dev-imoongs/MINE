@@ -8,15 +8,40 @@
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
     <!-- 경매 아이템 ID로 조회 -->
     <select id="findAuctionItemById" resultType="auctionItemVO">
-        /* 경매 아이템 ID로 조회 findAuctionItemById */
         select * from mine.tbl_auction_item
         where auction_item_id = #{auctionItemId}
     </select>
 
     <!-- 경매 아이템 전체 목록 조회 -->
-    <select id="findAllAuctionItems" resultType="auctionItemVO">
-        /* 경매 아이템 전체 목록 조회 findAllAuctionItems */
-        select * from mine.tbl_auction_item
+    <select id="findAuctionItems" resultType="com.app.mine.vo.AuctionItemVO">
+        SELECT * FROM mine.tbl_auction_item
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <!-- 카테고리 필터링 -->
+            <if test="category != null">
+                AND category_id = #{category}
+            </if>
+
+            <!-- 최소 가격 필터링 -->
+            <if test="minPrice != null">
+                AND auction_item_highest_price >= #{minPrice}
+            </if>
+
+            <!-- 최대 가격 필터링 -->
+            <if test="maxPrice != null">
+                AND auction_item_highest_price &lt;= #{maxPrice}
+            </if>
+
+            <!-- 검색어 필터링 (부분 검색) -->
+            <if test="searchQuery != null and searchQuery != ''">
+                AND auction_item_name LIKE CONCAT('%', #{searchQuery}, '%')
+            </if>
+        </trim>
+
+        <!-- 정렬 기준 (정렬 기준이 있을 경우만)
+        <if test="sort != null">
+            ORDER BY ${sort}
+        </if>-->
+
     </select>
 
 

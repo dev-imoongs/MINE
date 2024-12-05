@@ -9,7 +9,7 @@ import { tradeListFiltersAtom } from '../../recoil/atoms/tradeAtom';
 import AuctionListSortContainer from '../containers/Auction/AuctionListSortContainer';
 import { useRecoilState } from 'recoil';
 import { useQuery } from 'react-query';
-import { auctionItems } from '../../services/auctionApiService';
+import { getAuctionItems } from '../../services/auctionApiService';
 import AuctionListItemContainer from '../containers/Auction/AuctionListItemContainer';
 import AuctionListPaginationContainer from '../containers/Auction/AuctionListPaginationContainer';
 import axios from 'axios';
@@ -21,8 +21,8 @@ const TradeListPage = () => {
 
     // 중고거래 데이터에 맞게 가져와야함
     const items = useQuery({
-        queryKey: 'auctionItemsData',
-        queryFn: auctionItems,
+        queryKey: 'getAuctionItemsData',
+        queryFn: getAuctionItems,
     });
     //
 
