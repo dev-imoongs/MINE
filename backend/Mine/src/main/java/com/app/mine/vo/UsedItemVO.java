@@ -16,4 +16,6 @@ public class UsedItemVO {
     private String updatedAt;
     private Integer categoryId;
     private Integer userId;
+    private Integer usedItemBuyerId;
+
 }
