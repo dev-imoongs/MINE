@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mine.mapper.UsedItemMapper">
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 중고 물품 등록 insertUsedItem -->
+    <insert id="insertUsedItem" parameterType="usedItemVO">
+        /* 중고 물품 등록 insertUsedItem */
+        insert into tbl_used_item(used_item_name, used_item_explain, used_item_price, used_item_place, created_at, updated_at, category_id, user_id)
+        values(#{usedItemName}, #{usedItemExplain}, #{usedItemPrice}, #{usedItemPlace}, current_timestamp, current_timestamp, #{categoryId}, #{userId})
+    </insert>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 중고 물품 수정 updateUsedItem -->
+    <update id="updateUsedItem" parameterType="usedItemVO">
+        /* 중고 물품 수정 updateUsedItem */
+        update tbl_used_item
+        <set>
+            <if test='usedItemName != null and usedItemName != ""'>
+                used_item_name = #{usedItemName}
+            </if>
+            <if test='usedItemExplain != null and usedItemExplain != ""'>
+                used_item_explain = #{usedItemExplain}
+            </if>
+            <if test='usedItemPrice != null and usedItemPrice != ""'>
+                used_item_price = #{usedItemPrice}
+            </if>
+            <if test='usedItemPlace != null and usedItemPlace != ""'>
+                used_item_place = #{usedItemPlace}
+            </if>
+            <if test='categoryId != null and categoryId != ""'>
+                category_id = #{categoryId}
+            </if>
+            updated_at = current_timestamp
+        </set>
+        where used_item_id = #{usedItemId}
+    </update>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+</mapper>
