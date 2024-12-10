@@ -6,51 +6,57 @@
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
-    <select id="selectUser" resultType="usedItemVO">
-        select user_id, user_email, user_password, user_nickname, user_category, user_longitude, user_latitude, user_address, user_status
+    <select id="selectUser" resultType="userVO">
+        select user_id, user_email, user_password, user_nickname, user_category1, user_category2, user_category3, user_address, user_address_detail, user_point, user_trust_score, user_status
         from tbl_user
         where user_email = #{userEmail}
         <if test='userPassword != null and userPassword != ""'>
             and user_password = #{userPassword}
         </if>
-        and user_status = '사용'
+        and user_status = 'Y'
     </select>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
     <insert id="insertUser" parameterType="userVO">
-        insert into tbl_user(user_id, user_email, user_password, user_nickname, user_category, user_longitude, user_latitude, user_address, user_status)
-        values(0, #{userEmail}, #{userPassword}, #{userName}, #{userCategory}, #{userLongitude}, #{userLatitude}, #{userAddress}, '사용')
+        insert into tbl_user(user_email, user_password, user_nickname, user_category1, user_category2, user_category3, user_address, user_address_detail)
+        values(#{userEmail}, #{userPassword}, #{userNickname}, #{userCategory1}, #{userCategory2}, #{userCategory3}, #{userAddress}, #{userAddressDetail})
     </insert>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
     <update id="updateUser" parameterType="userVO">
         update tbl_user
         <set>
-            <if test='userId != null and userId != ""'>
-                user_id = #{userId}
-            </if>
-            <if test='userId != null and userId != ""'>
+            <if test='userEmail != null and userEmail != ""'>
                 user_email = #{userEmail}
             </if>
-            <if test='userId != null and userId != ""'>
+            <if test='userPassword != null and userPassword != ""'>
                 user_password = #{userPassword}
             </if>
-            <if test='userId != null and userId != ""'>
-                user_nickname = #{userName}
+            <if test='userNickname != null and userNickname != ""'>
+                user_nickname = #{userNickname}
             </if>
-            <if test='userId != null and userId != ""'>
-                user_category = #{userCategory}
+            <if test='userCategory1 != null and userCategory1 != ""'>
+                user_category1 = #{userCategory1}
             </if>
-            <if test='userId != null and userId != ""'>
-                user_longitude = #{userLongitude}
+            <if test='userCategory2 != null and userCategory2 != ""'>
+                user_category2 = #{userCategory2}
             </if>
-            <if test='userId != null and userId != ""'>
-                user_latitude = #{userLatitude}
+            <if test='userCategory3 != null and userCategory3 != ""'>
+                user_category3 = #{userCategory3}
             </if>
-            <if test='userId != null and userId != ""'>
+            <if test='userAddress != null and userAddress != ""'>
                 user_address = #{userAddress}
             </if>
-            <if test='userId != null and userId != ""'>
+            <if test='userAddressDetail != null and userAddressDetail != ""'>
+                user_address_detail = #{userAddressDetail}
+            </if>
+            <if test='userPoint != null and userPoint != ""'>
+                user_point = #{userPoint}
+            </if>
+            <if test='userTrustScore != null and userTrustScore != ""'>
+                user_trust_score = #{userTrustScore}
+            </if>
+            <if test='userStatus != null and userStatus != ""'>
                 user_status = #{userStatus}
             </if>
         </set>

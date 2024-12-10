@@ -7,12 +7,13 @@ import lombok.Setter;
 @Setter
 public class UsedItemVO {
     private Integer usedItemId;
-    private String Name;
-    private String Explain;
-    private Integer Price;
-    private String Place;
-    private String CreatedAt;
-    private String UpdatedAt;
-    private Integer CategoryId;
-    private Integer UserId;
+    private String usedItemName;
+    private String usedItemExplain;
+    private Integer usedItemPrice;
+    private String usedItemStatus;
+    private String usedItemPlace;
+    private String createdAt;
+    private String updatedAt;
+    private Integer categoryId;
+    private Integer userId;
 }
