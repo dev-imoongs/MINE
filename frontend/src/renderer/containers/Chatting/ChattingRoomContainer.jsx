@@ -4,20 +4,48 @@ import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import TextMessageComponent from '../../components/Chat/TextMessageComponent'
 import ImageMessageComponent from '../../components/Chat/ImageMessageComponent'
-
+import { getMessage } from '../../../services/chatService';
+import { processMessages } from '../../../recoil/selectors/chatSelector';
 const ChattingRoomContainer = () => {
+    // chatting room 번호
     const [chatId, setChatId] = useRecoilState(currentChatId);
     const [socket, setSocket] = useState(null); // 소켓 상태 관리
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState); // 드로어 상태
     const [message, setMessage] = useRecoilState(textMessageArray);
     const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
     const messageEndRef = useRef(null);
+    useEffect(() => {
+        const fetchMessage = async () => {
+            try {
+                // 1. 서버에서 메시지 요청
+                const message = await getMessage(chatId)
+
+                // 2. 메시지 가공
+                const processedMessage = processMessages(message, 1);
+
+                // 3. Recoil 상태 업데이트
+                setMessage(processedMessage)
+            } catch (error) {
+                console.error('ERROR : ', error)                
+            }
+        }
+        fetchMessage()
+
+    },[])
 
     useEffect(() => {
+        
+
         if(drawerVisible && chatId && !socket){
             const newSocket = io('http://localhost:3080/chat', {
                 extraHeaders: {
-                    userId: chatId
+                    // 임시로 만든 틀
+                    userId : 1,
+                    chattingRoom: chatId,
+                    sender : 1,
+                    receiver : 2,
+                    seller : 1,
+                    buyer: 2,
                 }
             });
             setSocket(newSocket)
@@ -48,11 +76,13 @@ const ChattingRoomContainer = () => {
             if (sndMsg.message === 'text') {
                 if (sndMsg.text && sndMsg.text.trim()) {
                     setMessage((prevMessages) => [...prevMessages, sndMsg]);
-                    socket.emit('message', sndMsg.text);
+                    console.log(sndMsg)
+                    socket.emit('message', sndMsg);
                 }
             } else {
                 setMessage((prevMessages) => [...prevMessages, sndMsg]);
             }
+
         }
     }, [sndMsg, socket]);
 
@@ -159,26 +189,68 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
     const [text, setText] = useState('');
 
     let imgObjArray = []
-    const handleFileUpload = async(e) => {
+    // const handleFileUpload = async(e) => {
+    //     const files = e.target.files;
+    //     if (files.length > 0) {
+    //         const formData = new FormData();
+    //       // 선택된 파일 배열을 처리하는 코드
+    //       for (let i = 0; i < files.length; i++) {
+    //         let imgObj = {};
+    //         imgObj.url = URL.createObjectURL(files[i]);
+    //         console.log(files[i])
+
+    //         imgObjArray.push(imgObj)
+    //         // 파일을 서버에 업로드하거나 미리보기 이미지로 처리하는 등의 작업
+    //       }
+        
+    //       console.log(imgObjArray)
+    //       await setSendMessage((prev) => ({
+    //         ...prev, // 이전 상태 유지
+    //         message: 'image',
+    //         time: new Date(),
+    //         image: imgObjArray, // 업데이트할 이미지 배열
+    //         }));
+    //     }
+    //   };
+    const handleFileUpload = async(e, chatRoomId) => {
         const files = e.target.files;
+        const formData = new FormData();
         if (files.length > 0) {
           // 선택된 파일 배열을 처리하는 코드
           for (let i = 0; i < files.length; i++) {
-            let imgObj = {};
-            imgObj.url = URL.createObjectURL(files[i]);
-            imgObj.width = files[i].width;
-            imgObj.height = files[i].height;
-
-            imgObjArray.push(imgObj)
-            // 파일을 서버에 업로드하거나 미리보기 이미지로 처리하는 등의 작업
+            formData.append('files', files[i]);
           }
 
-          await setSendMessage((prev) => ({
-            ...prev, // 이전 상태 유지
-            message: 'image',
-            time: new Date(),
-            image: imgObjArray, // 업데이트할 이미지 배열
-            }));
+          try {
+            const res = await fetch('http://localhost:3080/upload', {
+                method: 'POST',
+                body: formData,
+              });
+            const result = await res.json();
+
+            console.log(result)
+            if(result.success){
+                const updatedImages = result.urls.map((url) => ({url}));
+                console
+                setSendMessage((prev) => ({
+                    ...prev,
+                    message: 'image',
+                    time: new Date(),
+                    image: updatedImages,
+                }));
+
+            }
+          } catch (error) {
+            console.error('파일 업로드 실패:', error);
+          }
+        
+        //   console.log(imgObjArray)
+        //   await setSendMessage((prev) => ({
+        //     ...prev, // 이전 상태 유지
+        //     message: 'image',
+        //     time: new Date(),
+        //     image: imgObjArray, // 업데이트할 이미지 배열
+        //     }));
         }
       };
     const handleTextChange = (e) => {
