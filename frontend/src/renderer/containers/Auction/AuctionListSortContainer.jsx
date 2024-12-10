@@ -6,7 +6,18 @@ const AuctionListSortContainer = ({ onSortChange }) => {
   // i는 인덱스
   const handleClick = (i) => {
     setIsActive(i);
-    onSortChange(i);
+    switch (i) {
+      case 0:
+        return onSortChange("likes"); // 좋아요순
+      case 1:
+        return onSortChange("newest"); // 최신순
+      case 2:
+        return onSortChange("low-price"); // 낮은가격순
+      case 3:
+        return onSortChange("high-price"); // 높은가격순
+      default:
+        return onSortChange("likes");
+    }
   };
 
   // 정렬 버튼 배열

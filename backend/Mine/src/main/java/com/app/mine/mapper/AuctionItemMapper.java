@@ -2,7 +2,6 @@ package com.app.mine.mapper;
 
 import com.app.mine.vo.AuctionItemVO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public interface AuctionItemMapper {
 
     public AuctionItemVO findAuctionItemById(int id);
 
-    public List<AuctionItemVO> findAuctionItems(String category,
+    public List<AuctionItemVO> findAuctionItems(Integer category,
                                                 Integer minPrice,
                                                 Integer maxPrice,
                                                 String searchQuery,
