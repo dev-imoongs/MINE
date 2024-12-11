@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const mainProducts = async () => {
     try {
-        const res = await axios.get('http://localhost:8070/used-item/getItem')
+        const res = await axios.get('/api/used-item/getItem')
         
         // 임시 데이터 가공
         let type = ['recommend', 'recent', 'popular']

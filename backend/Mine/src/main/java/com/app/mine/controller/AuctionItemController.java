@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auction-items")
+@RequestMapping("/api/auction-items")
 @Slf4j
 public class AuctionItemController {
 
