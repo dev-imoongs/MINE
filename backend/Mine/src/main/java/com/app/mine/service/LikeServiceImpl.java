@@ -12,7 +12,11 @@ public class LikeServiceImpl implements LikeService{
     private final LikeMapper likeMapper;
 
     @Override
-    public LikeVO addLike(Integer auctionItemId, Integer userId, String destinationType) {
-        return likeMapper.insertLike(auctionItemId, userId, destinationType);
+    public void addLike(Integer usedItemId, Integer auctionItemId, Integer userId) {
+        likeMapper.insertLike(usedItemId, auctionItemId, userId);
+    }
+
+    public void deleteLike (Integer usedItemId, Integer auctionItemId, Integer userId) {
+
     }
 }

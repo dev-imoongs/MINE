@@ -51,8 +51,8 @@ public class AuctionItemController {
             searchQuery = "";  // 검색어가 null일 경우 빈 문자열로 설정
         }
 
-        List<AuctionItemVO> items = auctionItemService.getFilteredAuctionItems(category, minPrice, maxPrice, searchQuery, sort);
-        return ResponseEntity.ok(items);
+        List<AuctionItemVO> res = auctionItemService.getFilteredAuctionItems(category, minPrice, maxPrice, searchQuery, sort);
+        return ResponseEntity.ok(res);
     }
 
 }

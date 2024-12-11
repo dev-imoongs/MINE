@@ -1,6 +1,9 @@
 package com.app.mine.controller;
 
 import com.app.mine.service.LikeService;
+import com.app.mine.vo.LikeVO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,27 +12,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/like")
+@RequiredArgsConstructor
 public class LikeController {
     private final LikeService likeService;
-
-    public LikeController(LikeService likeService) {
-        this.likeService = likeService;
-    }
 
     @PostMapping
     public ResponseEntity<String> addLike(@RequestBody Map<String, Object> requestBody) {
         try {
-            Integer auctionItemId = (Integer) requestBody.get("auctionItemId");
+            Integer usedItemId = (Integer) requestBody.getOrDefault("usedItemId", 0);
+            Integer auctionItemId = (Integer) requestBody.getOrDefault("auctionItemId", 0);
             Integer userId = (Integer) requestBody.get("userId");
-            String destinationType = (String) requestBody.get("destinationType");
 
-            likeService.addLike(auctionItemId, userId, destinationType);
+            if (userId == null) {
+                throw new IllegalArgumentException("userId cannot be null");
+            }
 
-            return ResponseEntity.ok("Like added successfully");
+            likeService.addLike(usedItemId, auctionItemId, userId);
+
+            return ResponseEntity.ok("ok");
+        } catch (IllegalArgumentException e) {
+            log.error("IllegalArgumentException error: ", e);
+            return ResponseEntity.status(400).build();
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error adding like");
+            log.error("Exception error: ", e);
+            return ResponseEntity.status(500).build();
         }
     }
 }

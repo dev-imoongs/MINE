@@ -15,7 +15,7 @@ import AuctionListPaginationContainer from '../containers/Auction/AuctionListPag
 import axios from 'axios';
 
 const TradeListPage = () => {
-    const destinationType = 1;
+    const destinationType = "1";
     const [itemsInfo, setItemsInfo] = useState(null);
     const [filters, setFilters] = useRecoilState(tradeListFiltersAtom);
 
