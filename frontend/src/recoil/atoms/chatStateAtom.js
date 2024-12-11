@@ -17,6 +17,9 @@ export const chatDrawerState = atom({
       text: "",
       time: new Date(),
       userId: "2",
+      sender : '1',
+      receiver : '2',
+      itemId : '1',
       messageForFirstDate: false,
       image:[]
     },

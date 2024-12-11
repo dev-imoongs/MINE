@@ -1,5 +1,6 @@
 const socketIo = require('socket.io');
 const redisClient = require('../service/redisClient');
+const dbService = require('../service/postgresService');
 
 const chattingSocket = (server) => {
     const io = socketIo(server, {
@@ -14,12 +15,16 @@ const chattingSocket = (server) => {
 
     // 새로운 연결이 들어올 때
     chatNamespace.on('connection', async (chatSocket) => {
-        const userId = chatSocket.handshake.headers['userid']; // 헤더에서 유저 ID 가져옴
-        console.log('userId:', userId);
+        const headers = chatSocket.handshake.headers;
+        console.log('headers ::::: ', headers)
+        const chattingRoom = headers.chattingroom;
+        const sender = headers.sender;
+        const receiver = headers.receiver;
+        // console.log('userId:', userId);
         console.log('연결 유저: ' + chatSocket.id);
 
         try {
-            const messages = await redisClient.lRange(`chat_${userId}`, 0, -1);
+            const messages = await redisClient.lRange(`chat_${chattingRoom}`, 0, -1);
             console.log('이전 메시지:', messages);
             
             chatSocket.emit('previousMessages', messages);
@@ -29,15 +34,18 @@ const chattingSocket = (server) => {
 
         chatSocket.on('message', async (message) => {
             console.log('메세지 받음: ', message);
-
             try {
-                await redisClient.rPush(`chat_${userId}`, message);
+                dbService.insertChatting(message, chattingRoom)
+                const key = `chat_${chattingRoom}`;
+                await redisClient.rPush(key, JSON.stringify(message));
+
+                await redisClient.expire(key, 700);
                 console.log('메시지 Redis에 저장 성공');
             } catch (err) {
                 console.error('Redis에 메시지 저장 실패:', err);
             }
 
-            chatNamespace.emit('message', message);
+            chatNamespace.emit('message', message.text);
         });
 
         // 연결 해제 시 처리
