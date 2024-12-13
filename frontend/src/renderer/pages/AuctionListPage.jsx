@@ -25,7 +25,7 @@ const AuctionListPage = () => {
     );
 
     const { mutate } = useApiMutation(
-        '/like', // API endpoint
+        '/api/likes', // API endpoint
         'post' // HTTP method
         // { headers: { Authorization: `Bearer your-token-here` } } // 필요한 헤더나 config 추가
     );

@@ -17,7 +17,6 @@ const ItemComponent = ({
     destinationType,
 }) => {
     const [isLike, toggleLike] = useToggle();
-
     const StImg = {
         position: 'absolute',
         height: '100%',

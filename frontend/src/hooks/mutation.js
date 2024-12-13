@@ -1,11 +1,11 @@
 // hooks/mutation.js
+import axios from 'axios';
 import { useMutation } from 'react-query';
-import api from '../services/api';
 
 const useApiMutation = (endpoint, method = 'post', config = {}) => {
     const mutation = useMutation(
         (data) => {
-            return api({
+            return axios({
                 method: method,
                 url: endpoint,
                 data: data, // POST, PUT 요청 시 전송할 데이터

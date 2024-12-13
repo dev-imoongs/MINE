@@ -6,16 +6,28 @@
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
-
+    <select id="findByUserIdAndItemId" parameterType="LikeVO">
+        SELECT * FROM mine.tbl_like
+        WHERE user_id = #{userId}
+        AND used_item_id = #{usedItemId}
+        AND auction_item_id = #{auctionItemId}
+    </select>
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
     <!-- 좋아요 추가 insertLike -->
-    <insert id="insertLike" parameterType="LikeVO">
-        insert into mine.tbl_like
+    <insert id="insertLikeForItem" parameterType="LikeVO">
+        INSERT into mine.tbl_like
         (user_id, used_item_id, auction_item_id)
-        values(#{userId}, #{usedItemId}, #{auctionItemId})
+        VALUES (#{userId}, #{usedItemId}, #{auctionItemId})
     </insert>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <delete id="deleteByUserIdAndItemId" parameterType="LikeVO">
+        DELETE from mine.tbl_like
+        WHERE user_id = #{userId}
+        AND used_item_id = #{usedItemId}
+        AND auction_item_id = #{auctionItemId}
+    </delete>
+
 </mapper>

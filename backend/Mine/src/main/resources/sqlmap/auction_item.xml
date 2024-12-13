@@ -16,13 +16,13 @@
     <select id="findAuctionItems" resultType="AuctionItemVO">
         SELECT
         AI.*,
-        COALESCE(count(AJ.auction_join_id),0) AS bid_count,
-        COALESCE(count(tbl_like.auction_item_id),0) AS like_count
+        COALESCE(COUNT(DISTINCT(AJ.auction_join_id)),0) AS bid_count,
+        COALESCE(COUNT(DISTINCT(tbl_like.user_id)),0) AS like_count
         FROM tbl_auction_item AS AI
         LEFT JOIN tbl_auction_join AS AJ
-        ON AI.auction_item_id = AJ.auction_item_id
+            ON AI.auction_item_id = AJ.auction_item_id
         LEFT JOIN tbl_like
-        ON AI.auction_item_id = tbl_like.auction_item_id
+            ON AI.auction_item_id = tbl_like.auction_item_id
         group by AI.auction_item_id
 
         <trim prefix="WHERE" prefixOverrides="AND|OR">

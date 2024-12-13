@@ -1,7 +1,6 @@
 package com.app.mine.controller;
 
 import com.app.mine.service.LikeService;
-import com.app.mine.vo.LikeVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +13,13 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/like")
+@RequestMapping("/api/likes")
 @RequiredArgsConstructor
 public class LikeController {
     private final LikeService likeService;
 
     @PostMapping
-    public ResponseEntity<String> addLike(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<String> toggleLike(@RequestBody Map<String, Object> requestBody) {
         try {
             Integer usedItemId = (Integer) requestBody.getOrDefault("usedItemId", 0);
             Integer auctionItemId = (Integer) requestBody.getOrDefault("auctionItemId", 0);
@@ -30,7 +29,7 @@ public class LikeController {
                 throw new IllegalArgumentException("userId cannot be null");
             }
 
-            likeService.addLike(usedItemId, auctionItemId, userId);
+            likeService.toggleLike(userId, usedItemId, auctionItemId);
 
             return ResponseEntity.ok("ok");
         } catch (IllegalArgumentException e) {
@@ -41,4 +40,5 @@ public class LikeController {
             return ResponseEntity.status(500).build();
         }
     }
+
 }

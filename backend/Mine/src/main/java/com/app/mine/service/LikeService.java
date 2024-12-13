@@ -1,10 +1,7 @@
 package com.app.mine.service;
 
-import com.app.mine.vo.LikeVO;
-
 public interface LikeService {
 
-    void addLike(Integer usedItemId, Integer auctionItemId, Integer userId);
-
+    void toggleLike(Integer userId, Integer usedItemId, Integer auctionItemId);
 
 }
