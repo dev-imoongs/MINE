@@ -18,4 +18,7 @@ public class AuctionItemVO {
     private Integer auctionItemStatus;
     private Integer minBidAmount;
     private String updatedAt;
+
+    private String bidCount;
+    private String likeCount;
 }

@@ -8,16 +8,34 @@ import { getAuctionItems } from '../../services/auctionApiService';
 import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { auctionListFiltersAtom } from '../../recoil/atoms/auctionListAtom';
+import useApiMutation from '../../hooks/mutation';
 
 const AuctionListPage = () => {
-    const destinationType = 2;
+    const destinationType = '2';
     const [itemsInfo, setItemsInfo] = useState(null);
     const [filters, setFilters] = useRecoilState(auctionListFiltersAtom);
 
-    const items = useQuery({
-        queryKey: 'getAuctionItemsData',
-        queryFn: () => getAuctionItems(filters),
-    });
+    const items = useQuery(
+        {
+            queryKey: ['getAuctionItemsData', filters],
+            queryFn: () => getAuctionItems(filters),
+            refetchOnWindowFocus: false,
+        },
+        [filters]
+    );
+
+    const { mutate } = useApiMutation(
+        '/api/likes', // API endpoint
+        'post' // HTTP method
+        // { headers: { Authorization: `Bearer your-token-here` } } // 필요한 헤더나 config 추가
+    );
+
+    const handleLikeClick = (auctionItemId, userId) => {
+        mutate({
+            auctionItemId: auctionItemId,
+            userId: userId,
+        });
+    };
 
     useEffect(() => {
         if (items.data) {
@@ -25,38 +43,12 @@ const AuctionListPage = () => {
         }
     }, [items.data]);
 
-    // 이건 서버에서 할지 고민해봐야겠는데
-    // const buildQueryParams = (filters) => {
-    //     const params = {};
-
-    //     const { category, priceRange, searchQuery, sort } = filters;
-
-    //     // 각 필터가 유효한 경우에만 params에 추가
-    //     if (category && category !== '전체') params.category = category;
-    //     if (priceRange.minPrice) params.minPrice = priceRange.minPrice;
-    //     if (priceRange.maxPrice) params.maxPrice = priceRange.maxPrice;
-    //     if (searchQuery) params.search = searchQuery;
-    //     if (sort) params.sort = sort;
-
-    //     return params;
-    // };
-
-    // sort 정렬 기준 0: 좋아요순, 1: 최신순, 2: 낮은 가격순, 3: 높은 가격순
-
     const handleSortChange = async (criteria) => {
         setFilters((prev) => ({
             ...prev,
             sort: criteria,
         }));
     };
-
-    // 비동기 업데이트가 완료되면 fetchAuctions를 수행하도록 수정
-    // useEffect(() => {
-    //     const fetchFilteredAuctions = async () => {
-    //         const data = await fetchAuctions(filters);
-    //     };
-    //     fetchFilteredAuctions();
-    // }, [filters]);
 
     return (
         <main
@@ -77,7 +69,11 @@ const AuctionListPage = () => {
                         />
                         <AuctionListPriceInfoContainer />
                         <AuctionListSortContainer onSortChange={handleSortChange} />
-                        <AuctionListItemContainer itemsInfo={itemsInfo} destinationType={destinationType} />
+                        <AuctionListItemContainer
+                            itemsInfo={itemsInfo}
+                            destinationType={destinationType}
+                            handleLikeClick={handleLikeClick}
+                        />
                         <AuctionListPaginationContainer />
                     </div>
                 </div>

@@ -5818,6 +5818,10 @@ input::placeholder {
     width: fit-content;
 }
 
+.w-12 {
+    width: 3.0rem;
+}
+
 .w-10 {
     width: 2.5rem;
 }

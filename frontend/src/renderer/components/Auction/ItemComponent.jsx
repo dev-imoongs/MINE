@@ -4,9 +4,19 @@ import { Link } from 'react-router-dom';
 import '../../../styles/item.css';
 import useFormattedPrice from '../../../hooks/useFormattedPrice';
 
-const ItemComponent = ({ id, image, title, price, endTime, likes, chats, destinationType }) => {
+const ItemComponent = ({
+    id,
+    image,
+    title,
+    price,
+    endTime,
+    likes,
+    chats,
+    bidCount,
+    handleLikeClick,
+    destinationType,
+}) => {
     const [isLike, toggleLike] = useToggle();
-
     const StImg = {
         position: 'absolute',
         height: '100%',
@@ -52,18 +62,21 @@ const ItemComponent = ({ id, image, title, price, endTime, likes, chats, destina
                             loading="lazy"
                             style={StImg}
                         />
-                        <div className="absolute top-2 z-10 right-2 w-6 h-6">
+                        <div
+                            className="absolute top-2 z-10 right-2 w-12 h-6 flex justify-around bg-gray-400 rounded-md"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                toggleLike();
+                                handleLikeClick(id, 1);
+                            }}
+                        >
                             <svg
                                 width="32"
                                 height="32"
                                 viewBox="0 0 32 32"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="w-6 h-6 cursor-pointer"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    toggleLike();
-                                }}
+                                className="w-5 h-6 cursor-pointer"
                             >
                                 <path
                                     d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
@@ -73,6 +86,16 @@ const ItemComponent = ({ id, image, title, price, endTime, likes, chats, destina
                                 ></path>
                             </svg>
                             <input id=":r10:" type="checkbox" className="a11yHidden" />
+                            <span
+                                style={{
+                                    color: 'rgb(230 230 230)',
+                                    fontSize: '14px',
+                                    alignContent: 'center',
+                                    paddingRight: '2px',
+                                }}
+                            >
+                                {likes}
+                            </span>
                         </div>
                     </div>
                     <div className="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
@@ -98,7 +121,7 @@ const ItemComponent = ({ id, image, title, price, endTime, likes, chats, destina
                             <div className="item-info_wrap">
                                 <div>
                                     <span>입찰 </span>
-                                    <span>26회</span>
+                                    <span>{bidCount}회</span>
                                 </div>
                                 <span className="bar"></span>
                                 <div className="item-info time">
@@ -122,28 +145,6 @@ const ItemComponent = ({ id, image, title, price, endTime, likes, chats, destina
                 </Link>
             </div>
         </li>
-    );
-};
-
-const NaverPayBadge = () => {
-    return (
-        <div className="flex items-center [&amp;>*:not(:last-child)]:mr-1.5">
-            <svg width="30" height="17" viewBox="0 0 30 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect y="-0.00012207" width="30" height="16.2857" rx="2.25" fill="#0DCC5A"></rect>
-                <path
-                    d="M11.6626 6.31356V6.28956C11.6626 4.57356 10.4506 3.38556 8.44665 3.38556H5.01465V11.7856H6.86265V9.26556H8.26665C10.1506 9.26556 11.6626 8.25756 11.6626 6.31356ZM9.79065 6.34956C9.79065 7.06956 9.25065 7.62156 8.32665 7.62156H6.86265V5.05356H8.29065C9.21465 5.05356 9.79065 5.49756 9.79065 6.32556V6.34956Z"
-                    fill="white"
-                ></path>
-                <path
-                    d="M18.2531 11.7856V8.05356C18.2531 6.31356 17.3771 5.28156 15.3851 5.28156C14.2931 5.28156 13.5971 5.48556 12.8891 5.79756L13.3451 7.18956C13.9331 6.97356 14.4251 6.84156 15.1211 6.84156C16.0331 6.84156 16.5011 7.26156 16.5011 8.01756V8.12556C16.0451 7.96956 15.5771 7.86156 14.9291 7.86156C13.4051 7.86156 12.3371 8.50956 12.3371 9.91356V9.93756C12.3371 11.2096 13.3331 11.9056 14.5451 11.9056C15.4331 11.9056 16.0451 11.5816 16.4891 11.0896V11.7856H18.2531ZM16.5251 9.51756C16.5251 10.1776 15.9491 10.6456 15.0971 10.6456C14.5091 10.6456 14.1011 10.3576 14.1011 9.86556V9.84156C14.1011 9.26556 14.5811 8.95356 15.3611 8.95356C15.8051 8.95356 16.2131 9.04956 16.5251 9.19356V9.51756Z"
-                    fill="white"
-                ></path>
-                <path
-                    d="M25.7083 5.35356H23.8123L22.4083 9.73356L20.9443 5.35356H19.0123L21.5323 11.8096C21.3763 12.1336 21.2083 12.2296 20.8963 12.2296C20.6563 12.2296 20.3563 12.1216 20.1163 11.9776L19.5043 13.2976C19.9723 13.5736 20.4643 13.7416 21.1243 13.7416C22.2163 13.7416 22.7443 13.2496 23.2363 11.9416L25.7083 5.35356Z"
-                    fill="white"
-                ></path>
-            </svg>
-        </div>
     );
 };
 

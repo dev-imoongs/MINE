@@ -16,7 +16,7 @@ export const getAuctionItems = async (filters) => {
     return res.data;
 };
 
-export const auctionDetail = async () => {
+export const getAuctionDetail = async () => {
     const res = await axios.get('/data/auctionDetail.json');
     return res.data;
 };

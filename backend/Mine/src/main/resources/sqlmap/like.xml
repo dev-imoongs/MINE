@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mine.mapper.LikeMapper">
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <select id="findByUserIdAndItemId" parameterType="LikeVO">
+        SELECT * FROM mine.tbl_like
+        WHERE user_id = #{userId}
+        AND used_item_id = #{usedItemId}
+        AND auction_item_id = #{auctionItemId}
+    </select>
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 좋아요 추가 insertLike -->
+    <insert id="insertLikeForItem" parameterType="LikeVO">
+        INSERT into mine.tbl_like
+        (user_id, used_item_id, auction_item_id)
+        VALUES (#{userId}, #{usedItemId}, #{auctionItemId})
+    </insert>
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+
+    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <delete id="deleteByUserIdAndItemId" parameterType="LikeVO">
+        DELETE from mine.tbl_like
+        WHERE user_id = #{userId}
+        AND used_item_id = #{usedItemId}
+        AND auction_item_id = #{auctionItemId}
+    </delete>
+
+</mapper>
