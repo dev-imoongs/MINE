@@ -14,4 +14,6 @@ public interface UsedItemMapper {
 
     public List<UsedItemVO> findAllUsedItem(SearchDTO searchDTO);
 
+    public int getUsedItemCount(SearchDTO searchDTO);
+
 }

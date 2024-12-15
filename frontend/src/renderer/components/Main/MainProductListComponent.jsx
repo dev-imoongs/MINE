@@ -75,7 +75,7 @@ const ProductList = ({product}) => {
                         <div className="relative" key={i}>
                           <Link
                             className="ga4_main_recommend_product group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
-                            title={item.title}
+                            title={item.usedItemId ? item.usedItemId : item.auctionItemId}
                             to={`/product/${item.usedItemId ? item.usedItemId : item.auctionItemId}`}
                           >
                             <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">

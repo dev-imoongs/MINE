@@ -10,10 +10,14 @@ import LoadingSpinner from "../components/Common/LoadingSpinner";
 
 const MainPage = () => {
   const setProductList = useSetRecoilState(productListAtom); // atom 상태 업데이트
-  const { data, error, isLoading, isError } = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
-    queryKey: "productList", // 캐싱, 식별 고유값
-    queryFn: mainProducts // 서버에서 데이터 가져오는 함수
-  })
+  const { data, error, isLoading, isError } = useQuery( // useQuery hook : 서버에서 데이터를 가져옴
+   "productList", // 캐싱, 식별 고유값
+mainProducts, // 서버에서 데이터 가져오는 함수
+  {
+    staleTime: 1000 * 60 * 5, // 5분 동안 캐싱 데이터 유지
+    cacheTime: 1000 * 60 * 10 // 캐시가 메모리에 10분간 유지 (아무도 조회하지 않을 경우 삭제)
+    }
+  )
 
   useEffect(() => {
     if (data) {
