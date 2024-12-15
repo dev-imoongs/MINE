@@ -17,9 +17,11 @@ const MainContentContainer = () => {
         className="mx-auto px-4 md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px]"
         style={{ height: "auto" }}
       >
-         <MainProductListComponent product={productList[0]}/>
-         <MainProductListComponent product={productList[1]}/>
-         <MainProductListComponent product={productList[2]}/>
+        {
+          productList.map((data, i) => (
+            <MainProductListComponent key={i} product={data} />
+          ))
+        }
       </div>
     </>
   );

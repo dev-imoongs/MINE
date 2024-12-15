@@ -43,6 +43,35 @@ export const titleCheck = (type) => {
     }
   };
 
+  export const getTimeRemaining = (time) => {
+    const now = new Date().getTime();
+    const diff = new Date(time).getTime() - now;
+  
+    if (diff <= 0) {
+      return "경매 종료";
+    }
+  
+    const year = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+    const month = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+    const day = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hour = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minute = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  
+    if (year > 0) {
+      return `${year}년 남음`;
+    } else if (month > 0) {
+      return `${month}개월 남음`;
+    } else if (day > 0) {
+      return `${day}일 남음`;
+    } else if (hour > 0) {
+      return `${hour}시간 남음`;
+    } else if (minute > 0) {
+      return `${minute}분 남음`;
+    } else {
+      return "곧 종료";
+    }
+  }
+
 export const formatDateToYMD = (date) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear();

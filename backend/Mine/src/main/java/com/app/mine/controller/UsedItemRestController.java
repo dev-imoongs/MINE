@@ -1,5 +1,6 @@
 package com.app.mine.controller;
 
+import com.app.mine.dto.SearchDTO;
 import com.app.mine.service.UsedItemService;
 import com.app.mine.vo.UsedItemVO;
 import com.app.mine.vo.UserVO;
@@ -36,9 +37,6 @@ public class UsedItemRestController {
         usedItemService.saveUsedItem(usedItemVO);
     }
 
-    @GetMapping("/getItem")
-    public List<UsedItemVO> getAllUsedItems() {
-        return usedItemService.getAllUsedItems();
-    }
+
     
 }
