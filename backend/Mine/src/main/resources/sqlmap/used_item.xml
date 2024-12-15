@@ -43,11 +43,24 @@
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
-    <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: SELECT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
-    <select id="findAll" resultType="usedItemVO">  <!-- 동적 쿼리를 이용해서, where, order by, limit 등 유연하게 설계할 예정 -->
-        select used_item_id, used_item_name, used_item_explain, used_item_price, updated_at, created_at, used_item_place, category_id, user_id, used_item_buyer_id, used_item_status
-        from tbl_used_item 
-        order by used_item_id desc 
+    <!-- :::::::::::::::::::::::::::::::::::::::::com.app.mine.vo.LikeVO::::::::::::::::::::: SELECT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <select id="findAllUsedItem" parameterType="SearchDTO" resultType="usedItemVO">  <!-- 동적 쿼리를 이용해서, where, order by, limit 등 유연하게 설계할 예정 -->
+        select A.used_item_id, used_item_name, used_item_explain, used_item_price, updated_at, created_at, used_item_place, category_id, user_id, used_item_buyer_id, used_item_status
+        <choose>
+            <when test="orderBy == 'recent'">
+                from tbl_used_item A
+                order by used_item_id desc
+            </when>
+            <otherwise>
+                from tbl_used_item A
+                right outer join (
+                    select used_item_id, count(used_item_id) from tbl_like
+                    group by used_item_id
+                ) B
+                on A.used_item_id = B.used_item_id
+                order by count desc
+            </otherwise>
+        </choose>
         limit 12
     </select>
 </mapper>

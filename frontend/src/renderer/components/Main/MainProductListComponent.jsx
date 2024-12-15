@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from 'react-router-dom'
-import { titleCheck } from "../../../services/commonService";
-
+import { titleCheck, getTimeAgo, getTimeRemaining } from "../../../services/commonService";
 
 const MainProductListComponent = ({product}) => {
+  console.log("::::::::::: " + product)
   return (
     <>
       <div className="max-w-[1024px] min-[1600px]:max-w-[1280px] m-auto">
@@ -76,13 +76,13 @@ const ProductList = ({product}) => {
                           <Link
                             className="ga4_main_recommend_product group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
                             title={item.title}
-                            to={`/product/${item.id}`}
+                            to={`/product/${item.usedItemId ? item.usedItemId : item.auctionItemId}`}
                           >
                             <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
                               <img
                                 alt=""
                                 referrerPolicy="no-referrer"
-                                src={item.img}
+                                src={'src/assets/temp_product.png'}
                                 decoding="async"
                                 data-nimg="fill"
                                 className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
@@ -92,20 +92,20 @@ const ProductList = ({product}) => {
                             </div>
                             <div className="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
                               <h2 className="line-clamp-2 min-h-[2lh] text-sm md:text-base text-heading">
-                                {item.title}
+                                {item.usedItemName ? item.usedItemName : item.auctionItemName}
                               </h2>
                               <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                                {item.price}원
+                              {item.usedItemPrice ? item.usedItemPrice : item.auctionItemHighestPrice}원
                               </div>
                               <div className="my-1">
                                 <span className="text-sm text-gray-400">
-                                  {item.address}
+                                {item.usedItemPlace ? item.usedItemPlace : '입찰 '+ item.bidCount + '회'}
                                 </span>
                                 <span className="text-sm text-gray-400 mx-1">
                                   |
                                 </span>
                                 <span className="text-sm text-gray-400">
-                                  2시간 전
+                                  {item.auctionItemEndTime ? getTimeRemaining(item.auctionItemEndTime) : getTimeAgo(item.updatedAt)}
                                 </span>
                               </div>
                             </div>
