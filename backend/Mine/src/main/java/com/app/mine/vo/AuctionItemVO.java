@@ -21,4 +21,5 @@ public class AuctionItemVO {
 
     private String bidCount;
     private String likeCount;
+    private Boolean myFavoriteAuction;
 }
