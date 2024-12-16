@@ -24,8 +24,8 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     @Override
     public List<AuctionItemVO> getFilteredAuctionItems(Integer category, Integer minPrice, Integer maxPrice, String searchQuery, String sort) {
         log.info("=================serviceImpl=======================\nFilters received: category={}, minPrice={}, maxPrice={}, searchQuery={}, sort={}",category, minPrice, maxPrice, searchQuery, sort);
-
-            return auctionItemMapper.findAuctionItems(category, minPrice, maxPrice, searchQuery, sort);
+            Integer userId = 1;
+            return auctionItemMapper.findAuctionItems(category, minPrice, maxPrice, searchQuery, sort, userId);
     }
 
 
