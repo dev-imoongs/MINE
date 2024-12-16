@@ -17,5 +17,4 @@ public interface LikeMapper {
     // 중고 아이템 좋아요 삭제
     public void deleteByUserIdAndItemId(Integer userId, Integer usedItemId, Integer auctionItemId);
 
-
 }

@@ -13,10 +13,11 @@ const ItemComponent = ({
     likes,
     chats,
     bidCount,
+    myFavoriteAuction,
     handleLikeClick,
     destinationType,
 }) => {
-    const [isLike, toggleLike] = useToggle();
+    const [isLike, toggleLike] = useToggle(myFavoriteAuction);
     const StImg = {
         position: 'absolute',
         height: '100%',
@@ -67,6 +68,7 @@ const ItemComponent = ({
                             onClick={(e) => {
                                 e.preventDefault();
                                 toggleLike();
+                                console.log(myFavoriteAuction);
                                 handleLikeClick(id, 1);
                             }}
                         >

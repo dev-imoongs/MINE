@@ -28,7 +28,7 @@ public class LikeController {
             if (userId == null) {
                 throw new IllegalArgumentException("userId cannot be null");
             }
-
+            log.info("usedItemId={}, auctionItemId={}",usedItemId,auctionItemId);
             likeService.toggleLike(userId, usedItemId, auctionItemId);
 
             return ResponseEntity.ok("ok");

@@ -16,5 +16,6 @@ public interface AuctionItemMapper {
                                                 Integer minPrice,
                                                 Integer maxPrice,
                                                 String searchQuery,
-                                                String sort);
+                                                String sort,
+                                                Integer userId);
 }
