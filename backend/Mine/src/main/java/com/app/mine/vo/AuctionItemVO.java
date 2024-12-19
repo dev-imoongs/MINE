@@ -14,7 +14,7 @@ public class AuctionItemVO {
     private Integer auctionItemHighestPrice;
     private String auctionItemEndTime;
     private String createdAt;
-    private Integer categoryId;
+    private String categoryId;
     private Integer auctionItemStatus;
     private Integer minBidAmount;
     private String updatedAt;

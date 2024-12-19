@@ -29,7 +29,7 @@ public class UsedItemRestController {
         usedItemVO.setUsedItemPrice(usedItemPrice);
         usedItemVO.setUsedItemStatus(usedItemStatus);
         usedItemVO.setUsedItemPlace(usedItemPlace);
-        usedItemVO.setCategoryId(categoryId);
+        usedItemVO.setCategoryId(String.valueOf(categoryId));
 
         UserVO userInfo = (UserVO)session.getAttribute("userInfo");
         usedItemVO.setUserId(userInfo.getUserId());
@@ -37,6 +37,11 @@ public class UsedItemRestController {
         usedItemService.saveUsedItem(usedItemVO);
     }
 
+    @PostMapping("/getMyUsedItemList")
+    public List<UsedItemVO> getMyUsedItemList(UserVO userVO) {
+        userVO.setUserId(1);
 
+        return usedItemService.getMyUsedItemList(userVO);
+    }
     
 }
