@@ -79,7 +79,8 @@ const TrustRatingModal = ({open, setOpen}) => {
                 handleClose();
               },
             }}
-            fullWidth={"lg"}
+            fullWidth={true}
+            maxWidth="lg"
         >
           <DialogTitle>신뢰지수 평가하기</DialogTitle>
           <DialogContent>

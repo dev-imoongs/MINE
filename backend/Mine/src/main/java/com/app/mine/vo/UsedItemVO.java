@@ -14,8 +14,11 @@ public class UsedItemVO {
     private String usedItemPlace;
     private String createdAt;
     private String updatedAt;
-    private Integer categoryId;
+    private String categoryId;
     private Integer userId;
     private Integer usedItemBuyerId;
+    private String userEmail;
+    private String userNickname;
+    private String categoryIdVal;
 
 }

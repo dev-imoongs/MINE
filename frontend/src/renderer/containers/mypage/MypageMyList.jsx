@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js";
 import TrustRatingModal from '../../pages/modal/TrustRatingModal.jsx';
 import {Link, useNavigate, useNavigation} from 'react-router-dom';
+import tempProductImage from '../../../assets/temp_product.png'
 
 import styled from "styled-components";
 import {useRecoilState} from "recoil";
@@ -112,9 +113,9 @@ const MypageMyList = ({data,isProduct}) => {
                               {/*>*/}
                                   <div className="my-img-con relative w-full rounded-md overflow-hidden pt-[100%] mb-3 md:mb-3.5">
                                       <img
-                                          alt={item.USED_ITEM_NAME}
+                                          alt={item.usedItemName}
                                           // referrerPolicy="no-referrer"
-                                          src={item.IMG}
+                                          src={tempProductImage}
                                           decoding="async"
                                           data-nimg="fill"
                                           className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
@@ -139,15 +140,15 @@ const MypageMyList = ({data,isProduct}) => {
                                   </div>
                                   <div className="my-text-con w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
                                       <h2 className="line-clamp-2 min-h-[10h] text-sm md:text-base text-heading">
-                                          {item.USED_ITEM_NAME}
+                                          {item.usedItemName}
                                       </h2>
                                       <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                                          {item.USED_ITEM_PRICE}원
+                                          {item.usedItemPrice}원
                                       </div>
                                       <div className="my-1">
-                                          <span className="text-sm text-gray-400">{item.USED_ITEM_PLACE}</span>
+                                          <span className="text-sm text-gray-400">{item.usedItemPlace}</span>
                                           <span className="text-sm text-gray-400 mx-1">|</span>
-                                          <span className="text-sm text-gray-400">{item.USED_ITEM_REGISTER_TIME}</span>
+                                          <span className="text-sm text-gray-400">{item.createdAt}</span>
                                       </div>
                                   </div>
                               {/*</a>*/}
@@ -200,7 +201,7 @@ const MypageMyList = ({data,isProduct}) => {
                                   className="flex flex-col w-full lg:w-[160px] bg-white text-black rounded-lg border border-jnGray-300 overflow-hidden">
                                   <ul>
                                       <li className="font-semibold text-sm hover:bg-jnGray-200">
-                                          <button onClick={() => updateClick(item.USED_ITEM_ID)} className="w-full py-5">수정</button>
+                                          <button onClick={() => updateClick(item.usedItemId)} className="w-full py-5">수정</button>
                                       </li>
                                   </ul>
                               </Menu>

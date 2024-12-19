@@ -141,4 +141,28 @@
 <!--        </choose>-->
 <!--        limit 12-->
 <!--    </select>-->
+    <select id="getMyUsedItemList" parameterType="UserVo" resultType="UsedItemVo">
+        select
+            tui.used_item_id,
+            tui.used_item_name,
+            tui.used_item_explain,
+            tui.used_item_price,
+            tui.used_item_place,
+            tui.created_at,
+            tui.updated_at,
+            tui.category_id,
+            tui.user_id,
+            tui.used_item_buyer_id,
+            tui.used_item_status,
+            tu.user_email,
+            tu.user_nickname,
+            tc.category_value as category_id_val
+        from
+            tbl_used_item tui
+                LEFT JOIN tbl_user tu
+                          ON tu.user_id = tui.user_id
+                LEFT JOIN tbl_category tc
+                          ON tc.category_detail = tui.category_id
+        where tui.user_id = #{userId}
+    </select>
 </mapper>

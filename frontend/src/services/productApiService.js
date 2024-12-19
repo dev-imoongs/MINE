@@ -13,7 +13,7 @@ export const recommendProduct = async (type, page) => {
 }
 
 export const myProduct = async () => {
-    const response = await axios.get('/data/myProductData.json')
+    const response = await axios.post('/api/used-item/getMyUsedItemList')
     return response.data;
 }
 

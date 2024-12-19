@@ -4,6 +4,7 @@ import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.mapper.UsedItemMapper;
 import com.app.mine.vo.UsedItemVO;
+import com.app.mine.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,11 @@ public class UsedItemServiceImpl implements UsedItemService {
     }
 
     @Override
+    public List<UsedItemVO> getMyUsedItemList(UserVO userVO) {
+        return usedItemMapper.getMyUsedItemList(userVO);
+    }
+
+    @Override
     public PageDTO<UsedItemVO> getFilteredUsedItems(SearchDTO searchDTO) {
         //총 데이터 개수
         int totalCount = usedItemMapper.getUsedItemCount(searchDTO);
@@ -69,6 +75,5 @@ public class UsedItemServiceImpl implements UsedItemService {
         pageDTO.setItems(items);
         return pageDTO;
     }
-
 
 }

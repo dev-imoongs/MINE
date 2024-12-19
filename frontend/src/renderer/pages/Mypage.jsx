@@ -37,7 +37,7 @@ const MyPage = () => {
     })
 
     useEffect(() => {
-        if (myProductData) {
+        if (myProductData.data) {
             setMyData(myProductData.data);
         }
     }, [myProductData.data]);
