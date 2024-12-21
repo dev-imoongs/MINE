@@ -21,6 +21,8 @@
 		<typeAlias type="com.app.mine.vo.FileVO" alias="fileVO"/>
 		<typeAlias type="com.app.mine.vo.LikeVO" alias="LikeVO"/>
 		<typeAlias type="com.app.mine.dto.SearchDTO" alias="SearchDTO"/>
+		<typeAlias type="com.app.mine.dto.PageDTO" alias="pageDTO"/>
+		<typeAlias type="com.app.mine.vo.Criteria" alias="Criteria"/>
 	</typeAliases>
 
 </configuration>

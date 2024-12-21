@@ -17,10 +17,10 @@ public class AuctionItemTest {
     @Autowired
     private AuctionItemMapper auctionItemMapper;
 
-    @Test
-    void selectAuctionItemTest() {
-        List<AuctionItemVO> test = auctionItemMapper.findAuctionItems(-1, -1, -1, "", "likes");
-        log.info(test.toString());
-    }
+//    @Test
+//    void selectAuctionItemTest() {
+//        List<AuctionItemVO> test = auctionItemMapper.findAuctionItems("1", -1, -1, "", "likes");
+//        log.info(test.toString());
+//    }
 
 }

@@ -44,7 +44,7 @@
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: SELECT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
-    <select id="findAllUsedItem" parameterType="SearchDTO" resultType="usedItemVO">
+    <select id="findAllUsedItem" resultType="usedItemVO">
         SELECT
         A.used_item_id,
         A.used_item_name,
@@ -59,8 +59,8 @@
         A.used_item_status
         FROM tbl_used_item A
         <choose>
-            <when test="type == 'recent'">
-                <include refid="filterCondition" />
+            <when test="page.searchDTO.type == 'recent'">
+                <include refid="searchCondition" />
                 ORDER BY A.created_at DESC
             </when>
             <otherwise>
@@ -70,20 +70,19 @@
                 GROUP BY used_item_id
                 ) B
                 ON A.used_item_id = B.used_item_id
-                <include refid="filterCondition" />
+                <include refid="searchCondition" />
                 ORDER BY like_count DESC
             </otherwise>
         </choose>
-
-        LIMIT #{pageSize} OFFSET #{offset}
+        LIMIT #{page.criteria.amount} OFFSET #{page.criteria.offset}
     </select>
 
-    <select id="getUsedItemCount"  resultType="int">
+    <select id="getUsedItemCount" resultType="int">
         <choose>
-            <when test="type == 'recent'">
-                SELECT COUNT(A.*) totalCount
+            <when test="page.type == 'recent'">
+                SELECT COUNT(*) AS totalCount
                 FROM tbl_used_item A
-                <include refid="filterCondition" />
+                <include refid="searchCondition" />
             </when>
             <otherwise>
                 SELECT COUNT(*)
@@ -94,32 +93,38 @@
                 ) B
                 JOIN tbl_used_item A
                 ON A.used_item_id = B.used_item_id
-                <include refid="filterCondition" />
+                <include refid="searchCondition" />
             </otherwise>
         </choose>
     </select>
 
-    <sql id="filterCondition">
-        WHERE 1=1
-        <!-- 카테고리 조건 -->
-        <if test="category != null">
-            AND A.category_id = #{category}
-        </if>
-        <!-- 가격 필터 조건 -->
-        <if test="minPrice != null">
-            AND A.used_item_price &gt;= #{minPrice}
-        </if>
-        <if test="maxPrice != null">
-            AND A.used_item_price &lt;= #{maxPrice}
-        </if>
-        <!-- 검색어 조건 -->
-        <if test="searchQuery != null and searchQuery.length > 0">
-            AND (
-            <foreach collection="searchQuery" item="query" separator="OR">
-                A.used_item_name LIKE CONCAT('%', #{query}, '%')
-            </foreach>
-            )
-        </if>
+    <sql id="searchCondition">
+        <choose>
+            <when test="page.IS_SEARCH_DTO">
+                <bind name="dto" value="page"/>
+            </when>
+            <otherwise>
+                <bind name="dto" value="page.searchDTO"/>
+            </otherwise>
+        </choose>
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="dto.category != null ">
+                AND A.category_id = #{dto.category}
+            </if>
+            <if test="dto.minPrice != null">
+                AND A.used_item_price &gt;= #{dto.minPrice}
+            </if>
+            <if test="dto.maxPrice != null">
+                AND A.used_item_price &lt;= #{dto.maxPrice}
+            </if>
+            <if test="dto.searchQuery != null and searchQuery.length > 0">
+                AND (
+                <foreach collection="dto.searchQuery" item="query" separator=" OR ">
+                    A.used_item_name LIKE CONCAT('%', #{query}, '%')
+                </foreach>
+                )
+            </if>
+        </trim>
     </sql>
 
 <!--    <select id="findAllUsedItem" parameterType="SearchDTO" resultType="usedItemVO">  &lt;!&ndash; 동적 쿼리를 이용해서, where, order by, limit 등 유연하게 설계할 예정 &ndash;&gt;-->

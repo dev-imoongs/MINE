@@ -1,19 +1,18 @@
 package com.app.mine.vo;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Criteria {
-    private int page;
-    private int pageSize;
+@Builder
 
-    public Criteria() {
-        this.page = 1;
-        this.pageSize = 12;
-    }
+public class Criteria {
+    private final int page;
+    private final int amount;
+
     public int getOffset() {
-        return (page - 1) * pageSize;
+        return (page - 1) * amount;
     }
 }
