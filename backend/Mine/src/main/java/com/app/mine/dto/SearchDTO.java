@@ -1,8 +1,10 @@
 package com.app.mine.dto;
+;
 
-import com.app.mine.vo.Criteria;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * @author 황자현
@@ -11,15 +13,17 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SearchDTO extends Criteria {
-    private Integer category;       // 카테고리 ID
-    private String[] searchQuery;   // 검색어 배열 (복수 키워드 가능)
-    private String type;         // 정렬 조건 ('recent', 'like' 등)
-    private Long minPrice;          // 최소 가격 필터
-    private Long maxPrice;          // 최대 가격 필터
+public class SearchDTO {
+    private String category;
+    private List<String> searchQuery;
+    private String type;
+    private Long minPrice;
+    private Long maxPrice;
 
+    private final boolean IS_SEARCH_DTO = true;
 
-    public SearchDTO() {
-        this.type = "recent"; // 기본 정렬은 recent (최신순)
+    // 필요시 기본값 초기화 메서드
+    public void initializeDefaults() {
+        if (type == null) type = "recent";
     }
 }

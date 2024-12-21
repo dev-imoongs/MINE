@@ -24,8 +24,8 @@ const ProductListPage = () => {
     {
       getNextPageParam: (lastPage) => {
         // 마지막 페이지에서 다음 페이지 번호 계산
-        const { currentPage, totalPage } = lastPage;
-        return currentPage < totalPage ? currentPage + 1 : undefined;
+        const { currentPage, totalPages } = lastPage.pageNation;
+        return currentPage < totalPages ? currentPage + 1 : undefined;
       },
     }
   );
@@ -35,7 +35,7 @@ const ProductListPage = () => {
 
   // 데이터 병합
   const productList = data.pages.flatMap((page) => page.items);
-
+  // console.log(data.pages[0].flatMap((page) => page.items))
   return (
     <div className="border-t-1 border-borderBottom">
       <div className="mx-auto px-4 md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px]">
@@ -75,6 +75,7 @@ const ProductList = ({ productList }) => {
           className="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
           to={`/product/${item.usedItemId}`}
         >
+          {productList.item}
           <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
             <img
               alt={item.usedItemName}

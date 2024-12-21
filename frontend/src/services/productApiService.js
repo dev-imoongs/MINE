@@ -5,7 +5,7 @@ export const recommendProduct = async (type, page) => {
         params: {
             type: type,
             page: page, // 여기에 값이 설정되어야 함
-
+            amount: 10
         }
     });
     console.log(response.data)

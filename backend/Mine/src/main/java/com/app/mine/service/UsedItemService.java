@@ -2,6 +2,7 @@ package com.app.mine.service;
 
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
+import com.app.mine.vo.Criteria;
 import com.app.mine.vo.UsedItemVO;
 import com.app.mine.vo.UserVO;
 
@@ -12,9 +13,11 @@ public interface UsedItemService {
 
     public void saveUsedItem(UsedItemVO usedItemVO);
 
+    // 메인페이지 조회
     public List<Map<String, Object>> getAllUsedItems();
 
-    public PageDTO<UsedItemVO> getFilteredUsedItems(SearchDTO searchDTO);
+    // 메인페이지 -> 바로가기 (무한스크롤)
+    public Map<String, Object> getFilteredUsedItems(SearchDTO searchDTO, Criteria criteria);
 
     public List<UsedItemVO> getMyUsedItemList(UserVO userVO);
 }
