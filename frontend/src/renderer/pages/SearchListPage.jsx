@@ -14,10 +14,15 @@ const SearchListPage = () => {
     const param = new URLSearchParams(location.search) 
     const categoryParam = param.get('category');
     const productParam = param.get('product');
-    const condition = {category : categoryParam}
+    console.log(categoryParam +":::: " + productParam)
+    const condition = {category : categoryParam, searchKeyword : productParam}
     const { data, error, isLoading, isError } = useQuery(
         ['searchItemList', condition], // 캐싱, 식별 고유값
-        () => searchItems(condition), // 서버에서 데이터 가져오는 함수
+        () => searchItems(condition),
+        {
+            staleTime: 1000 * 60 * 5, // 5분 동안 캐싱 데이터 유지
+            cacheTime: 1000 * 60 * 10 // 캐시가 메모리에 10분간 유지 (아무도 조회하지 않을 경우 삭제)
+        }// 서버에서 데이터 가져오는 함수
     );
 
     let categoryList = ['디지털 기기', '생활 가전', '가구/인테리어', '생활/주방', '도서', '의류', '뷰티/미용', '스포츠/레저', '식물', '취미/게임/음반', '상품권/모바일티켓', '식품'];
@@ -41,10 +46,6 @@ const SearchListPage = () => {
     if(isLoading){
         return <LoadingSpinner />
     }
-
-    // 데이터가 없는 경우 처리
-    const itemInfo = data?.itemList || []; // 서버 응답 데이터에서 필요한 정보 추출
-    const summary = data?.summary || {}; // 서버 응답 데이터 요약
     const auctionItem = data.auction;
     const usedItem = data.usedItem;
 

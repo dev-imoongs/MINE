@@ -16,7 +16,7 @@ const SearchHeaderContainer = ({link, type, title, itemInfo}) => {
         <div className="relative">
             <div className="flex flex-col lg:flex-row lg:items-center gap-[6px] items-start mb-[10px] justify-between">
                 <h3 className="text-lg md:text-xl lg:text-2xl 2xl:text-3xl xl:leading-10 font-normal text-heading">
-                    <strong className="font-semibold">'{title}'</strong> {type} 검색 결과
+                    <strong className="font-semibold">{!title ? '' : title}   </strong> {type} 검색 결과
                     <span className="text-jnGray-700" style={{ fontSize: '20px', paddingLeft: '20px' }}> 총 {itemInfo.total_count}개</span>
                 </h3>
                 <Link
