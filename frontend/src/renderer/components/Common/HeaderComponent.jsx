@@ -261,7 +261,6 @@ const SearchForm = memo(() => {
                         onChange={handleSearch}
                         onKeyDown={(e) => handleSubmit(e)}
                     />
-                    {console.log(recentSearchValues)}
                     {searchValue && (
                         <button type="button" className="absolute top-0 flex items-center justify-center w-12 h-full text-2xl text-gray-400 transition duration-200 ease-in-out outline-none md:text-3xl end-0 md:w-14 hover:text-heading focus:outline-none" style={{ right: '0' }}
                          onClick={() => setSearchValue('')}
@@ -277,32 +276,41 @@ const SearchForm = memo(() => {
                     <div className="bg-white flex flex-col h-[528px] w-full z-10 px-5 pt-14 absolute h-auto shadow-header"
                         style={{ paddingTop: "1.5rem",/*  height: "248px"  */}}
                     >
-                        <div className="flex flex-col mb-12" >
+                        <div className="flex flex-col mb-12">
                             <div className="flex items-center justify-between">
                                 <p className="text-base font-semibold text-jnGray-900">최근 검색어</p>
                                 <button className="text-sm font-medium underline text-jnGray-500 decoration-solid"
-                                    onClick={() => setRecentSearchValues([])}
+                                        onClick={() => setRecentSearchValues([])}
                                 >
                                     전체삭제
                                 </button>
                             </div>
+                            {recentSearchValues.length === 0 && (
+                                <ul className="flex py-3 overflow-x-auto flex-nowrap">
+                                    <li><p className="text-sm font-normal text-jnGray-500">최근 검색어 내역이 없습니다.</p></li>
+                                </ul>
+                            )}
                             <ul className="flex py-3 overflow-x-auto flex-nowrap recent-search">
                                 {recentSearchValues.map((value, index) => {
-                                    return(
-                                        <li key={index} className=" flex items-center justify-center flex-shrink-0 max-w-full px-3 py-2 mr-2 text-sm capitalize truncate transition duration-200 ease-in-out border rounded-lg cursor-pointer group border-jnGray-300 text-heading hover:border-heading break-keep">
+                                    return (
+                                        <li key={index}
+                                            className=" flex items-center justify-center flex-shrink-0 max-w-full px-3 py-2 mr-2 text-sm capitalize truncate transition duration-200 ease-in-out border rounded-lg cursor-pointer group border-jnGray-300 text-heading hover:border-heading break-keep">
                                             <a className="flex" href={'/search?product=' + value}
                                             >
                                                 <p className="mx-1 text-center text-ellipsis">{value}</p>
                                             </a>
-                                            
+
                                             <button
-                                                onClick={(e) => setRecentSearchValues(prev => prev.filter((item) => item!== value))}
+                                                onClick={(e) => setRecentSearchValues(prev => prev.filter((item) => item !== value))}
                                             >
-                                                <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="14" width="14" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M289.94 256l95-95A24 24 0 00351 127l-95 95-95-95a24 24 0 00-34 34l95 95-95 95a24 24 0 1034 34l95-95 95 95a24 24 0 0034-34z"></path>
+                                                <svg stroke="currentColor" fill="currentColor" strokeWidth="0"
+                                                     viewBox="0 0 512 512" height="14" width="14"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M289.94 256l95-95A24 24 0 00351 127l-95 95-95-95a24 24 0 00-34 34l95 95-95 95a24 24 0 1034 34l95-95 95 95a24 24 0 0034-34z"></path>
                                                 </svg>
                                             </button>
-                                         </li>
+                                        </li>
                                     )
                                 })}
 
@@ -351,7 +359,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                 <Link 
                                     className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300" 
-                                    to={{ pathname: "/search", search: "?category=1" }}
+                                    to={{ pathname: "/search", search: "?category=101" }}
                                 >
                                     디지털 기기
                                 </Link>
@@ -359,7 +367,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=2" }}
+                                        to={{ pathname: "/search", search: "?category=102" }}
                                     >
                                         생활 가전
                                     </Link>
@@ -372,7 +380,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=3" }}
+                                        to={{ pathname: "/search", search: "?category=103" }}
                                     >
                                         가구/인테리어
                                     </Link>
@@ -380,7 +388,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=4" }}
+                                        to={{ pathname: "/search", search: "?category=104" }}
                                     >
                                         생활/주방
                                     </Link>
@@ -393,7 +401,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=5" }}
+                                        to={{ pathname: "/search", search: "?category=105" }}
                                     >
                                         도서
                                     </Link>
@@ -401,7 +409,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=6" }}
+                                        to={{ pathname: "/search", search: "?category=106" }}
                                     >
                                         의류
                                     </Link>
@@ -414,7 +422,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=7" }}
+                                        to={{ pathname: "/search", search: "?category=107" }}
                                     >
                                         뷰티/미용
                                     </Link>
@@ -422,7 +430,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=8" }}
+                                        to={{ pathname: "/search", search: "?category=108" }}
                                     >
                                         스포츠/레저
                                     </Link>
@@ -430,7 +438,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=9" }}
+                                        to={{ pathname: "/search", search: "?category=109" }}
                                     >
                                         식물
                                     </Link>
@@ -443,7 +451,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=10" }}
+                                        to={{ pathname: "/search", search: "?category=110" }}
                                     >
                                         취미/게임/음반
                                     </Link>
@@ -451,7 +459,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=11" }}
+                                        to={{ pathname: "/search", search: "?category=111" }}
                                     >
                                         상품권/모바일티켓
                                     </Link>
@@ -459,7 +467,7 @@ const CategoryComponent = memo(() => {
                                 <li className="">
                                     <Link
                                         className="block text-sm py-1.5 text-heading font-semibold px-5 xl:px-8 2xl:px-10 hover:text-heading hover:bg-gray-300"
-                                        to={{ pathname: "/search", search: "?category=12" }}
+                                        to={{ pathname: "/search", search: "?category=112" }}
                                     >
                                         식품
                                     </Link>

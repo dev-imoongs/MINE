@@ -2,6 +2,7 @@ package com.app.mine.controller;
 
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
+import com.app.mine.mapper.AuctionItemMapper;
 import com.app.mine.service.AuctionItemService;
 import com.app.mine.service.UsedItemService;
 import com.app.mine.vo.AuctionItemVO;
@@ -21,21 +22,11 @@ import java.util.Map;
 @Slf4j
 public class MainRestController {
     private final UsedItemService usedItemService;
-    private final AuctionItemService auctionItemService;
+//    private final AuctionItemService auctionItemService;
+    private final AuctionItemMapper auctionItemMapper;
     @GetMapping("getItem")
     public List<Map<String, Object>> getAllUsedItems() {
-        // 중고 물품 상품 조회
-        List<Map<String, Object>> result = usedItemService.getAllUsedItems();
-
-        // 추천 경매 상품 조회
-        List<AuctionItemVO> recommendAuction = auctionItemService.getFilteredAuctionItems(-1, -1, -1, "", "likes");
-        Map<String, Object> recommendAuctionMap = new HashMap<>();
-        recommendAuctionMap.put("type", "recommend");
-        recommendAuctionMap.put("data", recommendAuction);
-
-
-        result.add(recommendAuctionMap);
-        return result;
+        return usedItemService.findAllUsedItems();
     }
     @GetMapping("getFilterItem")
     public Map<String, Object> getFilteredUsedItems(@RequestParam(required = false) int page,
@@ -56,5 +47,12 @@ public class MainRestController {
 
 
         return usedItemService.getFilteredUsedItems(searchDTO, criteria);
+    }
+
+    @GetMapping("searchItem")
+    public Map<String, Object> getAllUsedItems(@RequestParam String category) {
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setCategory(category);
+        return usedItemService.findSearchUsedItem(searchDTO);
     }
 }

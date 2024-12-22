@@ -3,24 +3,27 @@ package com.app.mine.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 /**
  * @author 황자현
- * SearchDTO 임시 작성
- * 카테고리 검색, 페이징 처리 등에 구현 할 때 구체화 시킬 예정
+ * SearchDTO - 검색 조건을 담는 DTO 클래스
+ * 검색 조건 필요 시 추가하여 사용
  */
 @Getter
 @Setter
+@ToString
 public class SearchDTO {
-    private String category;
-    private List<String> searchQuery;
-    private String type;
-    private Long minPrice;
-    private Long maxPrice;
+    private String category; // category id
+    private List<String> searchQuery; // 검색어 리스트
+    private String type; // 정렬 방식
+    private Long minPrice; // 최소 가격
+    private Long maxPrice; // 최대 가격
 
     private final boolean IS_SEARCH_DTO = true;
+
 
     // 필요시 기본값 초기화 메서드
     public void initializeDefaults() {

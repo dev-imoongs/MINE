@@ -76,6 +76,59 @@
 
     </select>
 
+    <select id="selectAllAuctionItem" resultType="auctionItemVO">
+        SELECT
+        A.*,
+        COALESCE(B.like_count, 0) AS like_count
+        FROM tbl_auction_item A
+        LEFT JOIN (
+        SELECT
+        auction_item_id,
+        COUNT(auction_item_id) AS like_count
+        FROM tbl_like
+        GROUP BY auction_item_id
+        ) B
+        ON A.auction_item_id = B.auction_item_id
+        <include refid="searchCondition" />
+        <choose>
+            <when test="dto.type == 'recent'">
+                ORDER BY A.created_at DESC
+            </when>
+            <when test="dto.type == 'like'">
+                ORDER BY like_count DESC
+            </when>
+        </choose>
+        LIMIT #{page.criteria.amount} OFFSET #{page.criteria.offset}
+    </select>
+
+    <sql id="searchCondition" >
+        <choose>
+            <when test="page.IS_SEARCH_DTO">
+                <bind name="dto" value="page"/>
+            </when>
+            <otherwise>
+                <bind name="dto" value="page.searchDTO"/>
+            </otherwise>
+        </choose>
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="dto.category != null ">
+                AND A.category_id = #{dto.category}
+            </if>
+            <if test="dto.minPrice != null">
+                AND A.auction_item_highest_price &gt;= #{dto.minPrice}
+            </if>
+            <if test="dto.maxPrice != null">
+                AND auction_item_highest_price &lt;= #{dto.maxPrice}
+            </if>
+            <if test="dto.searchQuery != null and searchQuery.length > 0">
+                AND (
+                <foreach collection="dto.searchQuery" item="query" separator=" OR ">
+                    A.auction_item_name LIKE CONCAT('%', #{query}, '%')
+                </foreach>
+                )
+            </if>
+        </trim>
+    </sql>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
     <!-- 경매 물품 등록 insertAuctionItem -->
