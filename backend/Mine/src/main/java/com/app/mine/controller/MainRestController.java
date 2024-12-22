@@ -50,10 +50,13 @@ public class MainRestController {
     }
 
     @GetMapping("searchItem")
-    public Map<String, Object> getAllUsedItems(@RequestParam String category /*,@RequestParam List<String> searchQuery*/) {
+    public Map<String, Object> getAllUsedItems(@RequestParam(required = false)String category, @RequestParam(required = false)String searchKeyword /*,@RequestParam List<String> searchQuery*/) {
         Map<String, Object> result = new HashMap<>();
         SearchDTO searchDTO = new SearchDTO();
+        log.info("category={}, searchKeyword={}", category, searchKeyword);
+
         searchDTO.setCategory(category);
+        searchDTO.setSearchKeyword(searchKeyword);
 
         Map<String, Object> auction = auctionItemService.findSearchAuctionItem(searchDTO);
         Map<String, Object> usedItem = usedItemService.findSearchUsedItem(searchDTO);

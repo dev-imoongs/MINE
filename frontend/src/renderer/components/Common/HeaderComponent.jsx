@@ -201,13 +201,16 @@ const SearchForm = memo(() => {
     const { ref, isOpen, toggle, open, close }= useDropdown();
     const [searchValue, setSearchValue] = useState('');
     const [recentSearchValues, setRecentSearchValues] = useRecoilState(recentSearchesAtom);
-
+    const nav = useNavigate();
     const handleSubmit = (e) => {
         if(e.key === 'Enter') {
             e.preventDefault();
             if((recentSearchValues.indexOf(searchValue) < 0)){ // 중복 검색어 방지
                 setRecentSearchValues((prev) => [...prev, searchValue])
             }
+            console.log(searchValue)
+            close();
+            nav('/search?product='+searchValue);
         }
     }
 
@@ -215,7 +218,6 @@ const SearchForm = memo(() => {
     
     return (
         <>  
-        {console.log(searchValue)}
             <div ref={ref} className="relative hidden ms-7 me-7 xl:ms-9 lg:block flex-1">
                 <form
                     role="search"
@@ -295,10 +297,9 @@ const SearchForm = memo(() => {
                                     return (
                                         <li key={index}
                                             className=" flex items-center justify-center flex-shrink-0 max-w-full px-3 py-2 mr-2 text-sm capitalize truncate transition duration-200 ease-in-out border rounded-lg cursor-pointer group border-jnGray-300 text-heading hover:border-heading break-keep">
-                                            <a className="flex" href={'/search?product=' + value}
-                                            >
+                                            <Link className="flex" to={`/search?product=${value}`} onClick={() => close()}>
                                                 <p className="mx-1 text-center text-ellipsis">{value}</p>
-                                            </a>
+                                            </Link>
 
                                             <button
                                                 onClick={(e) => setRecentSearchValues(prev => prev.filter((item) => item !== value))}

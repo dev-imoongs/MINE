@@ -130,10 +130,13 @@
             <if test="dto.maxPrice != null">
                 AND auction_item_highest_price &lt;= #{dto.maxPrice}
             </if>
+            <if test="dto.searchKeyword != null">
+                AND A.auction_item_name LIKE CONCAT('%', #{dto.searchKeyword}, '%')
+            </if>
             <if test="dto.searchQuery != null and searchQuery.length > 0">
                 AND (
                 <foreach collection="dto.searchQuery" item="query" separator=" OR ">
-                    A.auction_item_name LIKE CONCAT('%', #{query}, '%')
+                    A.auction_item_name LIKE CONCAT('%', #{dto.query}, '%')
                 </foreach>
                 )
             </if>

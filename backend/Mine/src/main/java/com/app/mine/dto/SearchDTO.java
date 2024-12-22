@@ -21,6 +21,7 @@ public class SearchDTO {
     private String type; // 정렬 방식
     private Long minPrice; // 최소 가격
     private Long maxPrice; // 최대 가격
+    private String searchKeyword;
 
     private final boolean IS_SEARCH_DTO = true;
 
