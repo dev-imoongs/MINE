@@ -101,6 +101,16 @@
         LIMIT #{page.criteria.amount} OFFSET #{page.criteria.offset}
     </select>
 
+    <select id="selectItemStatisticsByCondition" resultType="map">
+        select
+        round(avg(auction_item_highest_price),0) as avg_price,
+        max(auction_item_highest_price) as max_price,
+        min(auction_item_highest_price) as min_price,
+        count(*) as total_count
+        from tbl_auction_item A
+        <include refid="searchCondition" />
+    </select>
+
     <sql id="searchCondition" >
         <choose>
             <when test="page.IS_SEARCH_DTO">

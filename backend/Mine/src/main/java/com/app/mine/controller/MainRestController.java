@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 public class MainRestController {
     private final UsedItemService usedItemService;
-//    private final AuctionItemService auctionItemService;
+    private final AuctionItemService auctionItemService;
     private final AuctionItemMapper auctionItemMapper;
     @GetMapping("getItem")
     public List<Map<String, Object>> getAllUsedItems() {
@@ -50,9 +50,16 @@ public class MainRestController {
     }
 
     @GetMapping("searchItem")
-    public Map<String, Object> getAllUsedItems(@RequestParam String category) {
+    public Map<String, Object> getAllUsedItems(@RequestParam String category /*,@RequestParam List<String> searchQuery*/) {
+        Map<String, Object> result = new HashMap<>();
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCategory(category);
-        return usedItemService.findSearchUsedItem(searchDTO);
+
+        Map<String, Object> auction = auctionItemService.findSearchAuctionItem(searchDTO);
+        Map<String, Object> usedItem = usedItemService.findSearchUsedItem(searchDTO);
+
+        result.put("auction", auction);
+        result.put("usedItem", usedItem);
+        return result;
     }
 }

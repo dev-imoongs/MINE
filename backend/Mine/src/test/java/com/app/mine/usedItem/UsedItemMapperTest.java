@@ -79,6 +79,5 @@ public class UsedItemMapperTest {
         System.out.println("총 개수: " + result.get("total_count"));
 
         assertThat(result).isNotNull();
-
     }
 }

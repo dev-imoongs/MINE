@@ -53,8 +53,5 @@ public class UsedItemServiceTest {
 //        queryTest.add("37");
 //       searchDTO.setSearchQuery(queryTest);
         Map<String, Object> searchUsedItem = usedItemService.findSearchUsedItem(searchDTO);
-
-
-
     }
 }
