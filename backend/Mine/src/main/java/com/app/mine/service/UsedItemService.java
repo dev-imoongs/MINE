@@ -14,10 +14,13 @@ public interface UsedItemService {
     public void saveUsedItem(UsedItemVO usedItemVO);
 
     // 메인페이지 조회
-    public List<Map<String, Object>> getAllUsedItems();
+    public List<Map<String, Object>> findAllUsedItems();
 
     // 메인페이지 -> 바로가기 (무한스크롤)
     public Map<String, Object> getFilteredUsedItems(SearchDTO searchDTO, Criteria criteria);
+
+    // 카테고리 페이지
+    public Map<String, Object> findSearchUsedItem(SearchDTO searchDTO);
 
     public List<UsedItemVO> getMyUsedItemList(UserVO userVO);
 }

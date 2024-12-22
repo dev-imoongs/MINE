@@ -14,3 +14,8 @@ export const myProductListAtom = atom({
     key : 'myProductListAtom',
     default : [],
 })
+
+export const searchItemList = atom({
+    key : 'searchItemList',
+    default : []
+})

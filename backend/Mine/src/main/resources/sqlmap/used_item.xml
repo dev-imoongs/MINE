@@ -44,7 +44,7 @@
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: SELECT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
-    <select id="findAllUsedItem" resultType="usedItemVO">
+    <select id="selectAllUsedItem" resultType="usedItemVO">
         SELECT
         A.used_item_id,
         A.used_item_name,
@@ -56,25 +56,27 @@
         A.category_id,
         A.user_id,
         A.used_item_buyer_id,
-        A.used_item_status
+        A.used_item_status,
+        COALESCE(B.like_count, 0) AS like_count
         FROM tbl_used_item A
+        LEFT JOIN (
+        SELECT
+        used_item_id,
+        COUNT(used_item_id) AS like_count
+        FROM tbl_like
+        GROUP BY used_item_id
+        ) B
+        ON A.used_item_id = B.used_item_id
+        <include refid="searchCondition" />
         <choose>
-            <when test="page.searchDTO.type == 'recent'">
-                <include refid="searchCondition" />
+            <when test="dto.type == 'recent'">
                 ORDER BY A.created_at DESC
             </when>
-            <otherwise>
-                JOIN (
-                SELECT used_item_id, COUNT(used_item_id) AS like_count
-                FROM tbl_like
-                GROUP BY used_item_id
-                ) B
-                ON A.used_item_id = B.used_item_id
-                <include refid="searchCondition" />
+            <when test="dto.type == 'like'">
                 ORDER BY like_count DESC
-            </otherwise>
+            </when>
         </choose>
-        LIMIT #{page.criteria.amount} OFFSET #{page.criteria.offset}
+        LIMIT #{page.criteria.amount} OFFSET #{page.criteria.offset};
     </select>
 
     <select id="getUsedItemCount" resultType="int">
@@ -98,7 +100,42 @@
         </choose>
     </select>
 
-    <sql id="searchCondition">
+    <select id="selectUsedItemByCondition" resultType="usedItemVO">
+        SELECT
+        coalesce(cnt, 0) as like_count,
+        A.used_item_id,
+        A.used_item_name,
+        A.used_item_explain,
+        A.used_item_price,
+        A.updated_at,
+        A.created_at,
+        A.used_item_place,
+        A.category_id,
+        A.user_id,
+        A.used_item_buyer_id,
+        A.used_item_status
+        FROM tbl_used_item A
+        LEFT JOIN  (
+            SELECT used_item_id, count(*) cnt
+            FROM tbl_like
+            GROUP BY used_item_id ) B
+        ON A.used_item_id = B.used_item_id
+        <include refid="searchCondition" />
+        ORDER BY like_count DESC;
+    </select>
+
+    <select id="selectItemStatisticsByCondition" resultType="map">
+        select
+            round(avg(used_item_price),0) as avg_price,
+            max(used_item_price) as max_price,
+            min(used_item_price) as min_price,
+            count(*) as total_count
+        from tbl_used_item A
+        <include refid="searchCondition" />
+    </select>
+
+    <!--페이징 처리 및 조건-->
+    <sql id="searchCondition" >
         <choose>
             <when test="page.IS_SEARCH_DTO">
                 <bind name="dto" value="page"/>
@@ -120,32 +157,13 @@
             <if test="dto.searchQuery != null and searchQuery.length > 0">
                 AND (
                 <foreach collection="dto.searchQuery" item="query" separator=" OR ">
-                    A.used_item_name LIKE CONCAT('%', #{query}, '%')
+                    A.used_item_name LIKE CONCAT('%', #{dto.query}, '%')
                 </foreach>
                 )
             </if>
         </trim>
     </sql>
 
-<!--    <select id="findAllUsedItem" parameterType="SearchDTO" resultType="usedItemVO">  &lt;!&ndash; 동적 쿼리를 이용해서, where, order by, limit 등 유연하게 설계할 예정 &ndash;&gt;-->
-<!--        select A.used_item_id, used_item_name, used_item_explain, used_item_price, updated_at, created_at, used_item_place, category_id, user_id, used_item_buyer_id, used_item_status-->
-<!--        <choose>-->
-<!--            <when test="orderBy == 'recent'">-->
-<!--                from tbl_used_item A-->
-<!--                order by used_item_id desc-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                from tbl_used_item A-->
-<!--                join (-->
-<!--                select used_item_id, count(used_item_id) from tbl_like-->
-<!--                group by used_item_id-->
-<!--                ) B-->
-<!--                on A.used_item_id = B.used_item_id-->
-<!--                order by count desc-->
-<!--            </otherwise>-->
-<!--        </choose>-->
-<!--        limit 12-->
-<!--    </select>-->
     <select id="getMyUsedItemList" parameterType="UserVo" resultType="UsedItemVo">
         select
             tui.used_item_id,

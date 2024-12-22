@@ -1,6 +1,10 @@
 package com.app.mine.usedItem;
 
+import com.app.mine.dto.PageDTO;
+import com.app.mine.dto.SearchDTO;
 import com.app.mine.service.UsedItemService;
+import com.app.mine.vo.Criteria;
+import com.app.mine.vo.UsedItemVO;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,7 +24,7 @@ public class UsedItemServiceTest {
 
     @Test
     void selectTest() {
-        List<Map<String, Object>> result = usedItemService.getAllUsedItems();
+        List<Map<String, Object>> result = usedItemService.findAllUsedItems();
 
         Assertions.assertThat(result)
                 .isNotNull() // null이 아님
@@ -35,5 +39,22 @@ public class UsedItemServiceTest {
 
         // 로그 출력으로 결과 확인
         log.info("Test result: {}", result);
+    }
+
+    @Test
+    void findSearchUsedItem() {
+       SearchDTO searchDTO = new SearchDTO();
+       searchDTO.setCategory("101");
+       searchDTO.setMaxPrice(7000L);
+       searchDTO.setMinPrice(5000L);
+//       searchDTO.setMaxPrice();
+//       List<String> queryTest = new ArrayList<>();
+//       queryTest.add("test");
+//        queryTest.add("37");
+//       searchDTO.setSearchQuery(queryTest);
+        Map<String, Object> searchUsedItem = usedItemService.findSearchUsedItem(searchDTO);
+
+
+
     }
 }

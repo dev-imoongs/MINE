@@ -99,7 +99,7 @@ const ProductList = ({product}) => {
                               </div>
                               <div className="my-1">
                                 <span className="text-sm text-gray-400">
-                                {item.usedItemPlace ? item.usedItemPlace : '입찰 '+ item.bidCount + '회'}
+                                {item.usedItemPlace ? item.usedItemPlace : '입찰 '+ (item.bidCount ? item.bidCount  : '0')  + '회'}
                                 </span>
                                 <span className="text-sm text-gray-400 mx-1">
                                   |

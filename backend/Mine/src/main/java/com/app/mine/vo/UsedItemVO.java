@@ -21,4 +21,7 @@ public class UsedItemVO {
     private String userNickname;
     private String categoryIdVal;
 
+    // likeCount 추가
+    private int likeCount;
+
 }
