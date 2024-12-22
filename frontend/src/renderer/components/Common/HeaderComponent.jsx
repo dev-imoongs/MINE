@@ -50,7 +50,7 @@ const RightSideMenu = memo(() => {
     const nav = useNavigate()
     return (
         <>
-            <div className="hidden lg:flex relative w-[300px]">
+            <div className="hidden lg:flex relative w-[355px]">
                 <ul className="flex w-full text-sm font-medium list-none text-jnGray-900 break-keep">
                     <li className="flex items-center justify-center pr-3">
                         <button className="ga4_main_top_menu flex items-center justify-center"
@@ -142,15 +142,30 @@ const RightSideMenu = memo(() => {
                                     strokeLinejoin="round"
                                 ></path>
                             </svg>
-                            <p id="판매하기">판매하기</p>
+                            <p id="판매하기">판매</p>
+                        </Link>
+                    </li>
+                    <li className='after:contents-[""] after:absolute after:w-[1px] after:h-4 after:bg-jnGray-300 after:right-0 before:contents-[""] before:absolute before:w-[1px] before:h-4 before:bg-jnGray-300 before:left-0 ga4_main_top_menu relative flex items-center justify-center px-3'>
+                        <Link className="flex items-center justify-center [&amp;>p]:ml-1" to="auctionRegister">
+                            <svg fill="#000000" height="25px" width="25px"  version="1.1" id="Layer_1"
+                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 viewBox="0 0 511.996 511.996" xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier"> <g> <g> <g> <path
+                                    d="M318.866,404.713c5.653,0,11.093-2.261,15.083-6.251l120.683-120.704c4.011-3.989,6.251-9.408,6.251-15.083 c0-5.653-2.24-11.072-6.251-15.083l-60.331-60.331c-8.341-8.32-21.845-8.32-30.165,0l-15.092,15.092l-90.515-90.515 l15.082-15.082c4.011-4.011,6.251-9.429,6.251-15.083c0-5.653-2.24-11.093-6.251-15.083L213.279,6.24 c-8.341-8.32-21.845-8.32-30.165,0L62.431,126.923c-8.341,8.341-8.341,21.824,0,30.165l60.331,60.352 c4.011,3.989,9.429,6.251,15.083,6.251c5.653,0,11.093-2.261,15.083-6.251l15.094-15.094l30.171,30.171L1.347,429.361 l30.165,30.165l196.845-196.845l30.179,30.179l-15.084,15.084c-8.341,8.341-8.341,21.824,0,30.165l60.331,60.352 C307.794,402.451,313.213,404.713,318.866,404.713z M107.679,142.005l90.517-90.517l30.165,30.187L213.417,96.62 c-0.046,0.045-0.098,0.083-0.144,0.129l-42.352,42.367l-33.076,33.076L107.679,142.005z M198.19,172.183l9.088-9.095 l21.084-21.084l90.51,90.51l-15.083,15.093l-15.088,15.088L198.19,172.183z M303.683,308.045 c0.034-0.034,0.072-0.062,0.107-0.096l30.079-30.09l45.349-45.349l30.165,30.165l-90.517,90.539l-30.165-30.187L303.683,308.045z "></path>
+                                    <path
+                                        d="M489.315,469.329h-192c-11.776,0-21.333,9.557-21.333,21.333s9.557,21.333,21.333,21.333h192 c11.776,0,21.333-9.557,21.333-21.333S501.091,469.329,489.315,469.329z"></path>
+                                    <path
+                                        d="M361.315,405.329c-11.776,0-21.333,9.557-21.333,21.333s9.557,21.333,21.333,21.333h64 c11.776,0,21.333-9.557,21.333-21.333s-9.557-21.333-21.333-21.333H361.315z"></path> </g> </g> </g> </g></svg>
+                            <p id="경매하기">경매</p>
                         </Link>
                     </li>
                     <li className="relative flex flex-1 pl-3"
                         ref={ref}
                     >
                         <button className="flex items-center justify-center [&amp;>p]:ml-1"
-                            onClick={() => userId ? open() : nav('/login')}
-                            
+                                onClick={() => userId ? open() : nav('/login')}
+
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -178,13 +193,14 @@ const RightSideMenu = memo(() => {
                                 </li>
                                 <li className="pt-2 pb-3">
                                     <button className="cursor-pointer disabled:text-stone-400"
-                                        onClick={() => {
-                                            setUserId(null)
-                                            close()
-                                            nav('/')
+                                            onClick={() => {
+                                                setUserId(null)
+                                                close()
+                                                nav('/')
 
-                                        }}
-                                    >로그아웃</button>
+                                            }}
+                                    >로그아웃
+                                    </button>
                                 </li>
                             </ul>
                         )}
@@ -198,26 +214,26 @@ const RightSideMenu = memo(() => {
 
 const SearchForm = memo(() => {
     // dropdown 
-    const { ref, isOpen, toggle, open, close }= useDropdown();
+    const {ref, isOpen, toggle, open, close} = useDropdown();
     const [searchValue, setSearchValue] = useState('');
     const [recentSearchValues, setRecentSearchValues] = useRecoilState(recentSearchesAtom);
     const nav = useNavigate();
     const handleSubmit = (e) => {
-        if(e.key === 'Enter') {
+        if (e.key === 'Enter') {
             e.preventDefault();
-            if((recentSearchValues.indexOf(searchValue) < 0)){ // 중복 검색어 방지
+            if ((recentSearchValues.indexOf(searchValue) < 0)) { // 중복 검색어 방지
                 setRecentSearchValues((prev) => [...prev, searchValue])
             }
             console.log(searchValue)
             close();
-            nav('/search?product='+searchValue);
+            nav('/search?product=' + searchValue);
         }
     }
 
     const handleSearch = (e) => setSearchValue(e.target.value)
-    
+
     return (
-        <>  
+        <>
             <div ref={ref} className="relative hidden ms-7 me-7 xl:ms-9 lg:block flex-1">
                 <form
                     role="search"
