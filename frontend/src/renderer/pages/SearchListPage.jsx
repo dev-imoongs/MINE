@@ -45,6 +45,9 @@ const SearchListPage = () => {
     // 데이터가 없는 경우 처리
     const itemInfo = data?.itemList || []; // 서버 응답 데이터에서 필요한 정보 추출
     const summary = data?.summary || {}; // 서버 응답 데이터 요약
+    const auctionItem = data.auction;
+    const usedItem = data.usedItem;
+
 
     return (
         <main
@@ -56,12 +59,12 @@ const SearchListPage = () => {
                 style={{ height: 'auto !important' }}
             >
                 <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important' }}>
-                    <SearchHeaderContainer link={'/product'} type={'중고'} title={search} itemInfo={summary}/>
-                    <SearchListItemContainer itemInfo={itemInfo} />
+                    <SearchHeaderContainer link={'/product'} type={'중고'} title={search} itemInfo={usedItem.summary}/>
+                    <SearchListItemContainer itemInfo={usedItem.itemList} />
                 </div>
                 <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important', marginTop:'70px' }}>
-                    <SearchHeaderContainer link={'/auction'} type={'경매'} title={search} itemInfo={summary}/>
-                    <SearchListItemContainer itemInfo={itemInfo} />
+                    <SearchHeaderContainer link={'/auction'} type={'경매'} title={search} itemInfo={auctionItem.summary}/>
+                    <SearchListItemContainer itemInfo={auctionItem.itemList} />
                 </div>
 
             </div>
