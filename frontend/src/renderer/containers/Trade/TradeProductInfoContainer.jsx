@@ -9,14 +9,16 @@ import { ToastContainer, toast } from 'react-toastify';
 import ChattingRoomContainer from '../Chatting/ChattingRoomContainer'
 
 import 'react-toastify/dist/ReactToastify.css';
+import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
 
 
 const TradeProductInfoContainer = ({ StImg }) => {
     const countRef = useRef(0);
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
     const [,setChatId] = useRecoilState(currentChatId);
-    const productInfo = tradeProductInfo.productInfo;
-    const sellerInfo = tradeProductInfo.sellerInfo;
+    // const productInfo = tradeProductInfo.productInfo;
+    // const sellerInfo = tradeProductInfo.sellerInfo;
+    const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
     useEffect(() => {
         console.log('mount')
@@ -24,7 +26,7 @@ const TradeProductInfoContainer = ({ StImg }) => {
     return (
         <>
             <div>
-                {console.log(tradeProductInfo)}
+                {/*{console.log(productInfo, sellerInfo}*/}
                 <ProductInfo stImg={StImg} productInfo={productInfo} />
                 <SellerInfo sellerInfo={sellerInfo}/>
                 <div className="flex items-center space-s-4 pt-9 max-[479px]:fixed max-[479px]:bottom-0 max-[479px]:left-0 max-[479px]:z-20 max-[479px]:w-full max-[479px]:px-4 max-[479px]:pb-4 max-[479px]:bg-white">

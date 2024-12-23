@@ -1,9 +1,11 @@
 import React from 'react';
 import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
 import { useRecoilValue } from 'recoil';
+import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
 const ProductDetailContainer = () => {
-    const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
-    const productInfo = tradeProductInfo.productInfo;
+    // const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
+    // const productInfo = tradeProductInfo.productInfo;
+    const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
     return (
         <div className="block lg:flex lg:min-h-[591px] space-y-12 lg:space-y-0 mb-12">
             <div name="product-description" className="w-full lg:mr-[72px] lg:w-[680px] flex flex-col flex-auto false">

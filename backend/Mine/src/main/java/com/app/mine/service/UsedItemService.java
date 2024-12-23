@@ -23,4 +23,6 @@ public interface UsedItemService {
     public Map<String, Object> findSearchUsedItem(SearchDTO searchDTO);
 
     public List<UsedItemVO> getMyUsedItemList(UserVO userVO);
+
+    public Map<String, Object> findUsedItemById(Integer usedItemId);
 }

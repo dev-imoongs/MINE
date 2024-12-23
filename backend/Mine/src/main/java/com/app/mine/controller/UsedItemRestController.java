@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/used-item/*")
 @RequiredArgsConstructor
@@ -42,6 +44,12 @@ public class UsedItemRestController {
         userVO.setUserId(1);
 
         return usedItemService.getMyUsedItemList(userVO);
+    }
+
+    // 중고거래 상세 페이지
+    @GetMapping("/getItem")
+    public Map<String, Object> getUsedItemById(Integer usedItemId) {
+        return usedItemService.findUsedItemById(usedItemId);
     }
     
 }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,5 +80,13 @@ public class UsedItemMapperTest {
         System.out.println("총 개수: " + result.get("total_count"));
 
         assertThat(result).isNotNull();
+    }
+
+    @Test
+    void selectUsedItemByIdTest(){
+        Integer id = 31;
+        Map<String, Object> result = new HashMap<>();
+        result.put("usedItem", usedItemMapper.selectUsedItemById(id));
+        Assertions.assertThat(result).isNotNull();
     }
 }

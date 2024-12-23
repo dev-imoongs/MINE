@@ -19,3 +19,4 @@ export const searchItemList = atom({
     key : 'searchItemList',
     default : []
 })
+
