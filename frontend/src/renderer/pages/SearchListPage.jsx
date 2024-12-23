@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSetRecoilState } from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import SearchHeaderContainer from '../containers/Search/SearchHeaderContainer';
 import SearchListItemContainer from '../containers/Search/SearchListItemContainer';
 import { searchItemList } from '../../recoil/atoms/productListAtom.js';
@@ -7,11 +7,13 @@ import { searchItems } from "../../services/mainApiService.js"
 import { useLocation } from 'react-router-dom';
 import {useQuery} from "react-query";
 import LoadingSpinner from "../components/Common/LoadingSpinner.jsx";
+import { modifyData } from '../../recoil/selectors/searchPageSelector';
 const SearchListPage = () => {
     const setProductList = useSetRecoilState(searchItemList)
+    const { auction, used } = useRecoilValue(modifyData); // Selector 데이터 가져오기
     const location = useLocation();
     const [search, setSearch] = useState();
-    const param = new URLSearchParams(location.search) 
+    const param = new URLSearchParams(location.search)
     const categoryParam = param.get('category');
     const productParam = param.get('product');
     console.log(categoryParam +":::: " + productParam)
@@ -43,11 +45,9 @@ const SearchListPage = () => {
         }
     }, [data]);
 
-    if(isLoading){
+    if(!data || (!auction.itemList.length && !used.itemList.length)){
         return <LoadingSpinner />
     }
-    const auctionItem = data.auction;
-    const usedItem = data.usedItem;
 
 
     return (
@@ -60,12 +60,12 @@ const SearchListPage = () => {
                 style={{ height: 'auto !important' }}
             >
                 <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important' }}>
-                    <SearchHeaderContainer link={'/product'} type={'중고'} title={search} itemInfo={usedItem.summary}/>
-                    <SearchListItemContainer itemInfo={usedItem.itemList} />
+                    <SearchHeaderContainer link={'/product'} type={'중고'} title={search} itemInfo={used.summary}/>
+                    <SearchListItemContainer itemInfo={used.itemList} />
                 </div>
                 <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important', marginTop:'70px' }}>
-                    <SearchHeaderContainer link={'/auction'} type={'경매'} title={search} itemInfo={auctionItem.summary}/>
-                    <SearchListItemContainer itemInfo={auctionItem.itemList} />
+                    <SearchHeaderContainer link={'/auction'} type={'경매'} title={search} itemInfo={auction.summary}/>
+                    <SearchListItemContainer itemInfo={auction.itemList} />
                 </div>
 
             </div>

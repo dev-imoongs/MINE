@@ -134,6 +134,29 @@
         <include refid="searchCondition" />
     </select>
 
+    <select id="selectUsedItemById" resultType="map">
+        select
+            c.used_item_id,
+            c.used_item_name,
+            c.used_item_explain,
+            c.used_item_price,
+            c.used_item_place,
+            c.updated_at,
+            c.created_at,
+            c.category_value as category,
+            c.user_id,
+            c.used_item_status,
+            d.user_email,
+            d.user_trust_score
+        from (
+                 select b.*, category_value
+                 from tbl_category a, tbl_used_item b
+                 where a.category_detail = b.category_id
+             ) c join tbl_user d
+                      on c.user_id = d.user_id
+        where c.used_item_id = #{id};
+    </select>
+
     <!--페이징 처리 및 조건-->
     <sql id="searchCondition" >
         <choose>

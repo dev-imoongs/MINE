@@ -1,5 +1,11 @@
 import dayjs from 'dayjs';
 
+/**
+ * selector 구성으로 변경할 예정
+ * @param messages
+ * @param userId
+ * @returns {*}
+ */
 export const processMessages = (messages, userId) => {
     let lastDate = null; // 마지막 메시지의 날짜를 추적
     return messages.map((message, index) => {

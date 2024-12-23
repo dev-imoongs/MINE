@@ -27,4 +27,7 @@ public interface UsedItemMapper {
     public List<UsedItemVO> selectUsedItemByCondition(@Param("page") SearchDTO searchDTO);
 
     public Map<String, Object> selectItemStatisticsByCondition(@Param("page") SearchDTO searchDTO);
+
+    //
+    public Map<String, Object> selectUsedItemById(@Param("id") Integer usedItemId);
 }

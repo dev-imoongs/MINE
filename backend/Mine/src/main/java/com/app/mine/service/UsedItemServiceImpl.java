@@ -90,15 +90,19 @@ public class UsedItemServiceImpl implements UsedItemService {
 
     @Override
     public Map<String, Object> findSearchUsedItem(SearchDTO searchDTO) {
-        Map<String, Object> recentUsedItemsMap = new HashMap<>();
+        Map<String, Object> usedItemsMap = new HashMap<>();
         Criteria criteria = Criteria.builder().page(1).amount(10).build();
         PageDTO pageDTO = new PageDTO(criteria, 0, searchDTO,0);
         Map<String,Object> summary = usedItemMapper.selectItemStatisticsByCondition(searchDTO);
         List<UsedItemVO> itemList = usedItemMapper.selectAllUsedItem(pageDTO);
-        recentUsedItemsMap.put("summary", summary);
-        recentUsedItemsMap.put("itemList", itemList);
+        usedItemsMap.put("summary", summary);
+        usedItemsMap.put("itemList", itemList);
 
-        return recentUsedItemsMap;
+        return usedItemsMap;
     }
 
+    @Override
+    public Map<String, Object> findUsedItemById(Integer usedItemId) {
+        return usedItemMapper.selectUsedItemById(usedItemId);
+    }
 }

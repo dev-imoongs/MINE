@@ -148,7 +148,7 @@ const RightSideMenu = memo(() => {
                     <li className='after:contents-[""] after:absolute after:w-[1px] after:h-4 after:bg-jnGray-300 after:right-0 before:contents-[""] before:absolute before:w-[1px] before:h-4 before:bg-jnGray-300 before:left-0 ga4_main_top_menu relative flex items-center justify-center px-3'>
                         <Link className="flex items-center justify-center [&amp;>p]:ml-1" to="auctionRegister">
                             <svg fill="#000000" height="25px" width="25px"  version="1.1" id="Layer_1"
-                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                                  viewBox="0 0 511.996 511.996" xmlSpace="preserve"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                                 <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                                 <g id="SVGRepo_iconCarrier"> <g> <g> <g> <path

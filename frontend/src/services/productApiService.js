@@ -18,6 +18,10 @@ export const myProduct = async () => {
 }
 
 export const getProductDetail = async (productId) => {
-    const response = await axios.post('/data/productDetail.json', productId)
+    const response = await axios.get('/api/used-item/getItem', {
+        params : {
+            usedItemId : productId
+        }
+    })
     return response.data;
 }

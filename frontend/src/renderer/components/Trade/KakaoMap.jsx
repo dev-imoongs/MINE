@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
 import { useRecoilValue } from 'recoil';
 import marker2 from '../../../assets/marker.png';
+import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
 const KakaoMap = () => {
-    const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
-    const productInfo = tradeProductInfo.productInfo;
+    // const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
+    // const productInfo = tradeProductInfo.productInfo;
+    const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
     const [map, setMap] = useState(null);
 
     useEffect(() => {

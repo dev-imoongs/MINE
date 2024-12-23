@@ -2,7 +2,8 @@ import { atom } from 'recoil';
 import tempImgFile from '../../assets/temp_product.png';
 export const tradeDetailProductAtom = atom({
     key: 'tradeDetailProductAtom',
-    default: {
+    default: []
+    /*{
         productInfo: {
             category: '남성의류',
             price: 80000,
@@ -24,7 +25,7 @@ export const tradeDetailProductAtom = atom({
             userProfile: 'https://img2.joongna.com/common/Profile/Default/profile_f.png',
             trustScore: 879,
         },
-    },
+    },*/
 });
 
 export const tradeListFiltersAtom = atom({
