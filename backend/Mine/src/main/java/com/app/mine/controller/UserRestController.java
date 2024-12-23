@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user/*")
+@RequestMapping("/api/user/*")
 @RequiredArgsConstructor
 @Slf4j
 public class UserRestController {
@@ -27,6 +27,13 @@ public class UserRestController {
         session.setAttribute("userInfo", loginUser);
 
         return true;
+    }
+
+    @PostMapping("check-email")
+    public boolean checkEmail(String userEmail) {
+        UserVO userInfo = userService.getUserInfo(userEmail, null);
+
+        return (userInfo == null ? true : false);
     }
 
     @PostMapping("join")

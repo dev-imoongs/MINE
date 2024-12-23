@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from "react-query";
 import styles from '../../../styles/login/index.module.css';
+
+import { login } from "../../../services/userApiService.js";
 
 const Index = () => {
     const navigate = useNavigate();
@@ -8,6 +11,23 @@ const Index = () => {
     const [input, setInput] = useState({
         email: "",
         password: "",
+    });
+
+    const loginCheck = useQuery({
+        queryKey: "loginCheck",
+        queryFn: () => login(input),
+        enabled: false, // 초기에는 쿼리를 자동 실행하지 않음
+        onSuccess: (result) => {
+            if (result == true) {
+                navigate("/"); // 성공 시 페이지 이동
+            } else {
+                alert("이메일 또는 비밀번호를 확인하세요.");
+            }
+        },
+        onError: (error) => {
+            console.error("Error during login:", error);
+            alert("로그인 도중 오류가 발생했습니다.");
+        },
     });
 
     const onChange = (e) => {
@@ -29,7 +49,7 @@ const Index = () => {
             return;
         }
 
-        navigate('/');
+        loginCheck.refetch();
     }
 
     return (
