@@ -8,6 +8,7 @@ import { productListAtom } from "../../recoil/atoms/productListAtom";
 import { mainProducts } from "../../services/mainApiService.js"
 import MainContentContainer from "../containers/Main/MainContentContainer.jsx";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
+import Slider from "../components/Common/Slider.jsx";
 
 const MainPage = () => {
   const setProductList = useSetRecoilState(productListAtom); // atom 상태 업데이트
@@ -40,7 +41,8 @@ mainProducts, // 서버에서 데이터 가져오는 함수
   }
   return (
     <>
-        <MainSlideComponent />
+
+        {/*<MainSlideComponent />*/}
         <MainContentContainer/>
     </>
   );
