@@ -1,9 +1,12 @@
 import {formatDateToYMD, formatDateToTime } from '../../../services/commonService';
 const TextMessageComponent = ({data}) => {
+
+
     return (
         <>
             <div>
                 <div>
+                    {/*{console.log(data.text)}*/}
                 {data.messageForFirstDate && (<p className="text-center text-[14px] py-4">{formatDateToYMD(data.time)}</p>)}
                 </div>
                 <div>
@@ -13,7 +16,7 @@ const TextMessageComponent = ({data}) => {
                                 <p className="break-all whitespace-pre-wrap [&amp;>a]:text-jngreen [&amp;>a]:underline">{data.text}</p>
                             </div>
                             <div className="flex flex-col">
-                                <p className="mb-0 text-right text-[13px]">읽음</p>
+                                <p className="mb-0 text-right text-[13px]">{data.read ? '읽음' : ''}</p>
                                 <span className="block text-[13px] uppercase text-end">{formatDateToTime(data.time)}</span>
                             </div>
                         </div>

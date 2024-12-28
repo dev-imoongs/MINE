@@ -5,6 +5,26 @@ export const chatDrawerState = atom({
     default: false,  
   });
 
+export const chatListAndRoomState = atom({
+    key : 'chatListAndRoomState',
+    default : 'listContainer'
+})
+
+export const connectChatData = atom({
+    key : 'connectChat',
+    default : {
+        buyerId : '',
+        sellerId : '',
+        chatId : '',
+        itemId : '',
+        itemType : 'Used'
+    }
+})
+export const chattingRoomSeller = atom({
+    key : 'chatSeller',
+    default : []
+})
+
   export const currentChatId = atom({
     key: 'currentChatId',
     default: null,
@@ -24,6 +44,8 @@ export const chatDrawerState = atom({
       image:[]
     },
   })
+
+
 
   export const textMessageArray = atom ({
     key: 'textMessageArray',

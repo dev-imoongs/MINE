@@ -1,51 +1,51 @@
-import { currentChatId, textMessageArray, sendMessage,chatDrawerState } from '../../../recoil/atoms/chatStateAtom'
-import { useRecoilState } from 'recoil';
+import {
+    currentChatId,
+    textMessageArray,
+    sendMessage,
+    chatDrawerState,
+    chatListAndRoomState,
+    chattingRoomSeller
+} from '../../../recoil/atoms/chatStateAtom'
+import {useRecoilState, useRecoilValue} from 'recoil';
 import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import TextMessageComponent from '../../components/Chat/TextMessageComponent'
 import ImageMessageComponent from '../../components/Chat/ImageMessageComponent'
-import { getMessage } from '../../../services/chatService';
-import { processMessages } from '../../../recoil/selectors/chatSelector';
+import {userState} from "../../../recoil/atoms/loginUserAtom.js";
 const ChattingRoomContainer = () => {
     // chatting room 번호
-    const [chatId, setChatId] = useRecoilState(currentChatId);
+    const loginUser = useRecoilValue(userState)
+    const [chatContainerState,setChatContainerState] = useRecoilState(chatListAndRoomState);
     const [socket, setSocket] = useState(null); // 소켓 상태 관리
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState); // 드로어 상태
-    const [message, setMessage] = useRecoilState(textMessageArray);
+    const [messageTEST, setMessage] = useRecoilState(textMessageArray);
     const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
+    const roomData = useRecoilValue(chattingRoomSeller);
     const messageEndRef = useRef(null);
-    useEffect(() => {
-        const fetchMessage = async () => {
-            try {
-                // 1. 서버에서 메시지 요청
-                const message = await getMessage(chatId)
-
-                // 2. 메시지 가공
-                const processedMessage = processMessages(message, 1);
-
-                // 3. Recoil 상태 업데이트
-                setMessage(processedMessage)
-            } catch (error) {
-                console.error('ERROR : ', error)                
-            }
-        }
-        fetchMessage()
-
-    },[])
 
     useEffect(() => {
-        
+        console.log('mount')
+        console.log(roomData)
+        setSocket(null);
+    }, [chatContainerState, drawerVisible]);
 
-        if(drawerVisible && chatId && !socket){
+    useEffect(() => {
+
+        console.log('drawerVisible : ', drawerVisible)
+        console.log('roomId : ', roomData.roomId)
+        console.log('chatContainerState : ', chatContainerState)
+        console.log('socket' + socket)
+
+        console.log("roomData.roomId"+ roomData.roomId)
+        console.log("sender"+ loginUser)
+        console.log("roomData.receive"+ roomData.receive)
+
+        if(drawerVisible && roomData.roomId && socket == null){
             const newSocket = io('http://localhost:3080/chat', {
                 extraHeaders: {
-                    // 임시로 만든 틀
-                    userId : 1,
-                    chattingRoom: chatId,
-                    sender : 1,
-                    receiver : 2,
-                    seller : 1,
-                    buyer: 2,
+                    chattingRoom: roomData.roomId,
+                    sender : loginUser,
+                    receiver : roomData.receive,
                 }
             });
             setSocket(newSocket)
@@ -54,37 +54,88 @@ const ChattingRoomContainer = () => {
             newSocket.on('connect', () => {
                 console.log('연결: ' + newSocket.id);
             });
-    
+            newSocket.emit('joinRoom', {
+                userId: loginUser, // 로그인한 사용자 ID
+                roomId: roomData.roomId, // 현재 방 ID
+            })
+
             // 서버에서 메시지를 받으면 콘솔에 출력
             newSocket.on('message', (message) => {
-                console.log('서버로 부터 받은 메세지:', message);
+                console.log("message.text ::::; ", JSON.stringify(message))
+                // console.log(messageTEST)
+                if (message && message.text && message.sender) { // 유효성 검사
+                    setMessage((prev) => [
+                        ...prev,
+                        {
+                            chatting_id : message.chatting_id,
+                            message: message.message || 'text', // 기본값 설정
+                            text: message.text,
+                            type: message.sender === loginUser ? "send" : "receive",
+                            time: message.time,
+                            read: message.read
+
+                        }
+                    ]);
+                } else {
+                    console.error('유효하지 않은 메시지:', message);
+                }
             });
-    
+
             // 연결이 끊겼을 때
             newSocket.on('disconnect', (err) => {
                 console.error('Disconnected 에러: ' + err);
             });
-    
-            return () => {
-                // socket.disconnect(); // 컴포넌트가 언마운트될 때 소켓 연결 해제
-            };
+
         }
-    }, [drawerVisible, chatId, socket]);
+    }, [chatContainerState, drawerVisible /*socket, , chatId, loginUser, roomData, setMessage*/]);
 
     useEffect(() => {
-        if(socket){
+        if(!drawerVisible){
+            if(socket != null){
+                socket.disconnect();
+            }
+        }
+    }, [drawerVisible]);
+
+    useEffect(() => {
+        if (socket) {
+            // 읽음 상태 업데이트 이벤트 수신
+            socket.on('read', ({ chatting_ids, reader_id }) => {
+                console.log('읽음 상태 업데이트 수신:', chatting_ids);
+                console.log(":마 들어오나")
+                // 읽음 상태 업데이트
+                setMessage((prevMessages) =>
+                    prevMessages.map((msg) =>
+                        chatting_ids.includes(msg.chatting_id)
+                            ? { ...msg, read: true }
+                            : msg
+                    )
+                );
+            });
+        }
+
+        return () => {
+            if (socket) {
+                socket.off('messageRead');
+            }
+        };
+    }, [socket, loginUser, roomData.roomId, setMessage]);
+
+    useEffect(() => {
+        console.log(socket)
+        if(socket != null){
             if (sndMsg.message === 'text') {
                 if (sndMsg.text && sndMsg.text.trim()) {
-                    setMessage((prevMessages) => [...prevMessages, sndMsg]);
-                    console.log(sndMsg)
+                    // setMessage((prevMessages) => [...prevMessages, sndMsg]);
                     socket.emit('message', sndMsg);
                 }
             } else {
                 setMessage((prevMessages) => [...prevMessages, sndMsg]);
             }
-
+        }else{
         }
-    }, [sndMsg, socket]);
+    }, [sndMsg/*, socket*/]);
+
 
     
 
@@ -94,14 +145,20 @@ const ChattingRoomContainer = () => {
     // message 배열이 업데이트될 때마다 스크롤 내림
     useEffect(() => {
         scrollToBottom();
-    }, [message]);
+    }, [messageTEST]);
 
     return (
         <>
             <div className="flex flex-col w-full h-full justify-between">
                 <div className="min-h-[70px] basis-[70px] flex justify-center items-center px-[20px]">
                     <button className="w-10 h-10 basis-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                        onClick={() => setChatId(null)}
+                        // onClick={() => setChatId(null)}
+                        onClick={() => {
+                            if(socket != null) {
+                                socket.disconnect()
+                            }
+                            setChatContainerState("listContainer")
+                        }}
                     >
                             <path stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="m12.5 19.5-8.075-7.125a.5.5 0 0 1 0-.75L12.5 4.5"></path>
                         </svg>
@@ -109,8 +166,9 @@ const ChattingRoomContainer = () => {
                     <h2 className="flex flex-col md:flex-row justify-center items-center md:space-x-2 flex-1 text-lg font-semibold text-center text-jnGray-900 cursor-pointer">
                         <p className="mb-0">
                             <span className="flex items-center justify-center space-x-2">
-                                <span>문킥</span>
-                                <span className="text-[11px] text-[#0CB650] border border-jngreen px-2 rounded-2xl h-5 leading-5">691점</span>
+                                {console.log(roomData.nickName)}
+                                <span>{roomData.nickName}</span>
+                                <span className="text-[11px] text-[#0CB650] border border-jngreen px-2 rounded-2xl h-5 leading-5">{roomData.trust}</span>
                             </span>
                         </p>
                         <p className="text-[12px] text-gray-400 h-4">보통 2시간 이내 응답</p>
@@ -143,10 +201,10 @@ const ChattingRoomContainer = () => {
                                 </div>
                                 <div>
                                     <div className="flex items-center">
-                                        <span className="font-semibold text-[15px] text-jnGray-900">6,000원</span>
+                                        <span className="font-semibold text-[15px] text-jnGray-900">{roomData.itemPrice}</span>
                                         <span className="text-[12px] text-jnGray-500 ml-2">배송비 별도</span>
                                     </div>
-                                    <span className="block text-[12px]">닌텐도 wii 북미판 게임 2장</span>
+                                    <span className="block text-[12px]">{roomData.itemName}</span>
                                 </div>
                             </a>
                             </div>
@@ -156,19 +214,20 @@ const ChattingRoomContainer = () => {
                                 <div>
 
                                     {
-                                        message.map((data, i) => {
+                                        messageTEST.map((data, i) => {
                                             return (
                                                 <div key={i}>
                                                     {data.message == 'text' ? (
-                                                            <TextMessageComponent data={data}/>
+                                                            <TextMessageComponent data={data.text ? data : { ...data, text: '내용 없음' }} />
                                                         ) : (
                                                             <ImageMessageComponent data={data}/>
                                                         )
                                                     }
-                                                    
+
                                                 </div>
                                             )
-                                        })
+                                            })
+
                                     }
                                     <div ref={messageEndRef} />
                                 </div>
@@ -187,31 +246,8 @@ export default ChattingRoomContainer;
 
 const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
     const [text, setText] = useState('');
-
-    let imgObjArray = []
-    // const handleFileUpload = async(e) => {
-    //     const files = e.target.files;
-    //     if (files.length > 0) {
-    //         const formData = new FormData();
-    //       // 선택된 파일 배열을 처리하는 코드
-    //       for (let i = 0; i < files.length; i++) {
-    //         let imgObj = {};
-    //         imgObj.url = URL.createObjectURL(files[i]);
-    //         console.log(files[i])
-
-    //         imgObjArray.push(imgObj)
-    //         // 파일을 서버에 업로드하거나 미리보기 이미지로 처리하는 등의 작업
-    //       }
-        
-    //       console.log(imgObjArray)
-    //       await setSendMessage((prev) => ({
-    //         ...prev, // 이전 상태 유지
-    //         message: 'image',
-    //         time: new Date(),
-    //         image: imgObjArray, // 업데이트할 이미지 배열
-    //         }));
-    //     }
-    //   };
+    const loginUser = useRecoilValue(userState)
+    const roomData = useRecoilValue(chattingRoomSeller);
     const handleFileUpload = async(e, chatRoomId) => {
         const files = e.target.files;
         const formData = new FormData();
@@ -219,10 +255,11 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
           // 선택된 파일 배열을 처리하는 코드
           for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i]);
+            console.log(files[i])
           }
 
           try {
-            const res = await fetch('http://localhost:3080/upload', {
+            const res = await fetch('/chat/upload', {
                 method: 'POST',
                 body: formData,
               });
@@ -231,26 +268,18 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
             console.log(result)
             if(result.success){
                 const updatedImages = result.urls.map((url) => ({url}));
-                console
                 setSendMessage((prev) => ({
                     ...prev,
                     message: 'image',
                     time: new Date(),
                     image: updatedImages,
+                    itemId : roomData.itemId
                 }));
 
             }
           } catch (error) {
             console.error('파일 업로드 실패:', error);
           }
-        
-        //   console.log(imgObjArray)
-        //   await setSendMessage((prev) => ({
-        //     ...prev, // 이전 상태 유지
-        //     message: 'image',
-        //     time: new Date(),
-        //     image: imgObjArray, // 업데이트할 이미지 배열
-        //     }));
         }
       };
     const handleTextChange = (e) => {
@@ -261,11 +290,14 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
         e.preventDefault();
 
         if (!text.trim()) return;
-
+        console.log(roomData.itemId)
         await setSendMessage(prev => ({
             ...prev,
+            sender: loginUser,
+            receiver: roomData.receive,
             message: 'text',
             text: text,
+            itemId : roomData.itemId,
             time: new Date(),
         }));
         
@@ -273,6 +305,7 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
     };
     const handleKeyUp = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
+            console.log(":::::::::::::::::::::::::::::: 렌더링 되고 이거 바로 나가나?")
             e.preventDefault();
             handleSubmit(e);
         }

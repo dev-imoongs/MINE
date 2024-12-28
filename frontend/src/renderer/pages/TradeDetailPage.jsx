@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import {useSetRecoilState, useRecoilValue, useRecoilState} from "recoil";
 import { tradeDetailProductAtom } from "../../recoil/atoms/tradeAtom";
 import {tradeItemDetail} from '../../recoil/selectors/tradeItemSelector'
 import { useQuery } from 'react-query';
@@ -10,10 +10,14 @@ import TradeProductInfoContainer from '../containers/Trade/TradeProductInfoConta
 import TradeProductDetailContainer from '../containers/Trade/TradeProductDetailContainer';
 import KakaoMap from '../components/Trade/KakaoMap';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import {connectChatData} from "../../recoil/atoms/chatStateAtom.js";
+import {userState} from "../../recoil/atoms/loginUserAtom.js";
 
 const TradeDetailPage = () => {
     const  { productId }  = useParams();
+    const loginUser = useRecoilValue(userState)
     const setTradeDetailProduct = useSetRecoilState(tradeDetailProductAtom);
+    const [connectData,setConnectData] = useRecoilState(connectChatData);
     const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
     const { data : productDetail, error, isLoading, isError } = useQuery(['productDetail', productId], // query key(productDetail) :  동일한 키로 요청을 보내면 React Query는 기존에 캐시된 데이터를 반환하고, 새로운 API 요청을 하지 않는다
         () => getProductDetail(productId),
@@ -21,12 +25,17 @@ const TradeDetailPage = () => {
             enabled : !!productId, // productId 있을 때만 호출
             onSuccess : (data) => {
                 setTradeDetailProduct(data) // 성공 시, Recoil 상태에 데이터 저장
+                setConnectData(prev => ({
+                    ...prev,
+                    sellerId : sellerInfo.userId,
+                    buyerId: loginUser,
+                    itemId: productInfo.usedItemId,
+                    itemType: 'Used'
+                }))
             },
             onError : (error) => {
                 console.error("데이터를 가져오는 중 오류 발생:", error);
             },
-            staleTime : 5 * 60 * 1000, // 5분동안 캐시 재사용
-            cacheTime : 10 * 60 * 1000 // 10분 동안 캐시 보관
         }
     )
 

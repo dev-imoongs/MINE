@@ -8,7 +8,7 @@ import App from './App.jsx';
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            // retry: 0, // 재요청 하지 않는다는 설정
+            retry: 0, // 재요청 하지 않는다는 설정
         },
     },
 });
