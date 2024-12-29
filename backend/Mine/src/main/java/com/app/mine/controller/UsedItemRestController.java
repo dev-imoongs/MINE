@@ -39,11 +39,11 @@ public class UsedItemRestController {
         usedItemService.saveUsedItem(usedItemVO);
     }
 
+//    마이페이지 내 중고 아이템
     @PostMapping("/getMyUsedItemList")
-    public List<UsedItemVO> getMyUsedItemList(UserVO userVO) {
-        userVO.setUserId(1);
-
-        return usedItemService.getMyUsedItemList(userVO);
+    public List<UsedItemVO> getMyUsedItemList(HttpSession session) {
+        UserVO userInfo = (UserVO)session.getAttribute("userInfo");
+        return usedItemService.getMyUsedItemList(userInfo);
     }
 
     // 중고거래 상세 페이지

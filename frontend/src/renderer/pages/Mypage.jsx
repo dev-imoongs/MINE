@@ -43,7 +43,7 @@ const MyPage = () => {
     }, [myProductData.data]);
 
     useEffect(() => {
-        if (myInfoData) {
+        if (myInfoData.data) {
             setMyInfo(myInfoData.data);
         }
     }, [myInfoData.data]);
