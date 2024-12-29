@@ -43,6 +43,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectUser(userEmail, hash(userPassword));
     }
 
+    public UserVO getMyInfo(UserVO userVO) {
+        return userMapper.selectMyInfo(userVO);
+    }
+
     public void saveUser(UserVO userVO) {
         userVO.setUserPassword(hash(userVO.getUserPassword()));
 

@@ -18,4 +18,7 @@ public class UserVO {
     public Integer userPoint;
     public Integer userTrustScore;
     public String userStatus;
+    public Integer buyCount;
+    public Integer sellCount;
+    public Integer successBidCount;
 }
