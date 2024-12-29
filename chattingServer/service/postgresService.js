@@ -76,22 +76,24 @@ const selectChattingList = async (userId) => {
 
     const query = `
         SELECT
-            room.room_id,
-            room.seller_id,
-            seller.user_nickname AS seller_nickname,
-            room.buyer_id,
-            buyer.user_nickname AS buyer_nickname,
-            room.item_id,
-            room.item_type,
+            room.room_id AS roomId,
+            room.seller_id AS sellerId,
+            seller.user_nickname AS sellerNickname,
+            room.buyer_id AS buyerId,
+            buyer.user_nickname AS buyerNickname,
+            room.item_id AS itemId,
+            room.item_type AS itemType,
             CASE
                 WHEN room.item_type = 'Auction' THEN auction.auction_item_name
                 WHEN room.item_type = 'Used' THEN used.used_item_name
                 ELSE NULL
-                END AS item_name,
-            chat.chatting_content AS last_message,
-            chat.created_at AS last_message_time,
-            chat.chatting_receive_user_id,
-            chat.chatting_sending_user_id
+            END AS itemName ,
+            chat.chatting_content AS lastMessage,
+            chat.created_at AS lastMessageTime,
+            CASE
+                WHEN room.seller_id = ${userId} THEN room.buyer_id
+                ELSE room.seller_id
+            END AS receiver
         FROM
             tbl_chatting_room AS room
                 LEFT JOIN tbl_user AS seller ON room.seller_id = seller.user_id
@@ -119,8 +121,21 @@ const selectChattingList = async (userId) => {
 
     try {
         const result = await pool.query(query);
-        // console.log('대화 내용:', result.rows);
-        return result.rows;
+        const chattingList = result.rows.map((prev) => ({
+            sellerId : prev.sellerid,
+            buyerId : prev.buyerid,
+            sellerNickname : prev.sellernickname,
+            buyerNickname : prev.buyernickname,
+            itemId : prev.itemid,
+            itemType : prev.itemtype,
+            itemName : prev.itemname,
+            lastMessage : prev.lastmessage,
+            lastMessageTime : prev.lastmessagetime,
+            receiver : prev.receiver,
+            sender : userId
+        }))
+        // console.log('대화 내용:', chattingList);
+        return chattingList;
     } catch (error) {
         console.error('대화 내용 조회 실패:', error);
         throw error;
@@ -206,7 +221,12 @@ const selectOrInsertChattingRoom = async (data) => {
                 updated_at,
                 room_id,
                 item_id,
-                item_type
+                item_type,
+                COALESCE(images, '[]'::jsonb) AS images, -- JSONB 형식 기본값 설정
+                CASE
+                    WHEN COALESCE(images, '[]'::jsonb) = '[]'::jsonb THEN 'text' -- 빈 배열인 경우 'text' 반환
+                    ELSE 'images'
+                    END AS message
             FROM 
                 tbl_chatting    
             WHERE 
@@ -259,7 +279,12 @@ const selectOrInsertChattingRoom = async (data) => {
                                 updated_at,
                                 room_id,
                                 item_id,
-                                item_type
+                                item_type,
+                                COALESCE(images, '[]'::jsonb) AS images, -- JSONB 형식 기본값 설정
+                                CASE
+                                    WHEN COALESCE(tc.images, '[]'::jsonb) = '[]'::jsonb THEN 'text' -- 빈 배열인 경우 'text' 반환
+                                    ELSE 'images'
+                                    END AS message,
                             FROM 
                                 tbl_chatting    
                             WHERE 
@@ -295,6 +320,11 @@ const selectChatting = async (data) => {
                 tc.room_id,
                 tc.item_id,
                 tc.item_type,
+                COALESCE(images, '[]'::jsonb) AS images, -- JSONB 형식 기본값 설정
+                CASE
+                    WHEN COALESCE(tc.images, '[]'::jsonb) = '[]'::jsonb THEN 'text' -- 빈 배열인 경우 'text' 반환
+                    ELSE 'images'
+                    END AS message,
                 tcr.chatting_read_id,
                 tcr.user_id AS reader_user_id,
                 tcr.chatting_read_status,
@@ -329,6 +359,11 @@ const selectChatting = async (data) => {
                 tc.room_id,
                 tc.item_id,
                 tc.item_type,
+                COALESCE(images, '[]'::jsonb) AS images, -- JSONB 형식 기본값 설정
+                CASE
+                    WHEN COALESCE(tc.images, '[]'::jsonb) = '[]'::jsonb THEN 'text' -- 빈 배열인 경우 'text' 반환
+                    ELSE 'images'
+                    END AS message,
                 tcr.chatting_read_id,
                 tcr.user_id AS reader_user_id,
                 tcr.chatting_read_status,
@@ -388,9 +423,10 @@ const insertChatting = async (chatData) => {
                 room_id,
                 is_deleted,
                 created_at,
-                updated_at
+                updated_at,
+                images
             )
-            VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+            VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW(), $7)
             RETURNING *;
         `;
         const chatValues = [
@@ -400,6 +436,7 @@ const insertChatting = async (chatData) => {
             chatData.chatting_content,
             chatData.room_id,
             chatData.is_deleted,
+            chatData.images
         ];
         const chatResult = await client.query(chatQuery, chatValues);
         const savedChat = chatResult.rows[0];
@@ -446,6 +483,67 @@ const unReadMsgCount = async (userId) => {
     }
 }
 
+const selectRoomData = async (data) => {
+    console.log(data)
+    const query = `
+        SELECT
+            item.used_item_name,
+            item.used_item_price,
+            item.used_item_id,
+            receive.user_id AS receive_id,
+            receive.user_nickname AS receive_nickname,
+            receive.user_trust_score AS receive_trust_score,
+            sender.user_id AS sender_id,
+            sender.user_nickname AS sender_nickname,
+            sender.user_trust_score AS sender_trust_score
+        FROM
+            (
+                SELECT
+                    used_item_name,
+                    used_item_price,
+                    used_item_id
+                FROM tbl_used_item
+                WHERE used_item_id = ${data.itemId}
+            ) item,
+            (
+                SELECT
+                    user_id,
+                    user_nickname,
+                    user_trust_score
+                FROM tbl_user
+                WHERE user_id = ${data.receive}
+            ) receive,
+            (
+                SELECT
+                    user_id,
+                    user_nickname,
+                    user_trust_score
+                FROM tbl_user
+                WHERE user_id = ${data.sender}
+            ) sender
+    `
+    try {
+        const result = await pool.query(query);
+        console.log(result)
+        const roomData = {
+            itemName : result.rows[0].used_item_name,
+            itemPrice : result.rows[0].used_item_price,
+            itemId : result.rows[0].used_item_id,
+            receive : result.rows[0].receive_id,
+            receiveNickName : result.rows[0].receive_nickname,
+            receiveTrustScore : result.rows[0].receive_trust_score,
+            sender : result.rows[0].sender_id,
+            senderNickName: result.rows[0].sender_nickname,
+            senderTrustScore:  result.rows[0].sender_trust_score
+        }
+
+        console.log(roomData)
+        return roomData;
+    } catch (error) {
+        console.error('::', error);
+        throw error;
+    }
+}
 module.exports = {
     pool:pool,
     selectChatting : selectChatting,
@@ -456,5 +554,6 @@ module.exports = {
     selectUserByBuyerId : selectUserByBuyerId,
     selectOrInsertChattingRoom : selectOrInsertChattingRoom,
     selectRoomId : selectRoomId,
-    unReadMsgCount : unReadMsgCount
+    unReadMsgCount : unReadMsgCount,
+    selectRoomData : selectRoomData
 }

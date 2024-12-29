@@ -2,12 +2,10 @@ import React, { useCallback, useEffect, useState, useRef, memo } from 'react';
 import { useToggle } from '../../../hooks/useToggle';
 import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
 import {
-    currentChatId,
     textMessageArray,
     sendMessage,
     chatDrawerState,
     chatListAndRoomState,
-    connectChatData,
     chattingRoomSeller
 } from '../../../recoil/atoms/chatStateAtom'
 import { userState } from '../../../recoil/atoms/loginUserAtom'
@@ -16,13 +14,11 @@ import { useRecoilValue } from 'recoil';
 import { getTimeAgo } from '../../../services/commonService';
 import { useRecoilState } from 'recoil';
 import {useNavigate} from "react-router-dom";
-import ChattingRoomContainer from '../Chatting/ChattingRoomContainer'
 import 'react-toastify/dist/ReactToastify.css';
 import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
 
 import { getMessage } from '../../../services/chatService';
 import { processMessages } from '../../../recoil/selectors/chatSelector';
-import LoadingSpinner from "../../components/Common/LoadingSpinner.jsx";
 
 
 const TradeProductInfoContainer = ({ StImg }) => {
@@ -30,8 +26,6 @@ const TradeProductInfoContainer = ({ StImg }) => {
     const nav = useNavigate();
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
     const userId = useRecoilValue(userState);
-    const [,setChatId] = useRecoilState(currentChatId);
-    const [connectData,setConnectData] = useRecoilState(connectChatData);
     const [,setChatContainerState] = useRecoilState(chatListAndRoomState);
     const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
@@ -44,7 +38,9 @@ const TradeProductInfoContainer = ({ StImg }) => {
                 sellerId : sellerInfo.userId,
                 buyerId : userId,
                 itemId : productInfo.usedItemId,
-                itemType : 'Used'
+                itemType : 'Used',
+                sender : userId,
+                receive : sellerInfo.userId
             })
             try {
                 // 1. 서버에서 메시지 요청
@@ -54,7 +50,7 @@ const TradeProductInfoContainer = ({ StImg }) => {
                     itemId : productInfo.usedItemId,
                     itemType : 'Used',
                     sender : userId,
-                    receiver : sellerInfo.userId
+                    receive : sellerInfo.userId
                 });
                 // // 2. 메시지 가공
                 const processedMessage = processMessages(message.chat, userId);
@@ -62,25 +58,18 @@ const TradeProductInfoContainer = ({ StImg }) => {
                 await setRoomData({
                     roomId : message.roomId,
                     itemId : productInfo.usedItemId,
-                    nickName : userId !== message.itemSeller.userId ? message.itemBuyer.user_nickname : message.itemSeller.user_nickname,
-                    itemName : message.itemSeller.used_item_name,
-                    itemPrice : message.itemSeller.used_item_price,
-                    sender : userId,
-                    receive : userId === message.itemBuyer.user_id ? message.itemSeller.user_id : message.itemBuyer.user_id,
-                    sellerTrust : message.itemSeller.user_trust_score,
-                    buyerTrust : message.itemBuyer.user_trust_score,
-                    trust : userId === message.itemSeller.userId ? message.itemBuyer.user_trust_score : message.itemSeller.user_trust_score
+                    nickName : message.roomData.receiveNickName,
+                    itemName : message.roomData.itemName,
+                    itemPrice : message.roomData.itemPrice,
+                    sender : message.roomData.sender,
+                    receive : message.roomData.receive,
+                    trust : message.roomData.receiveTrustScore
                 })
                 setMessage(processedMessage);
             } catch (error) {
                 console.error('ERROR : ', error);
             }
         };
-
-         // fetchMessage();
-    // };
-
-
 
     return (
         <>

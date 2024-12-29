@@ -10,42 +10,23 @@ export const chatListAndRoomState = atom({
     default : 'listContainer'
 })
 
-export const connectChatData = atom({
-    key : 'connectChat',
-    default : {
-        buyerId : '',
-        sellerId : '',
-        chatId : '',
-        itemId : '',
-        itemType : 'Used'
-    }
-})
 export const chattingRoomSeller = atom({
     key : 'chatSeller',
     default : []
 })
-
-  export const currentChatId = atom({
-    key: 'currentChatId',
-    default: null,
-  })
-  export const sendMessage = atom({
+export const sendMessage = atom({
     key: 'sendMessage',
     default: {
       message : "text",
       type: "send",
       text: "",
       time: new Date(),
-      userId: "2",
-      sender : '1',
-      receiver : '2',
-      itemId : '1',
-      messageForFirstDate: false,
-      image:[]
+      sender : '',
+      receiver : '',
+      itemId : '',
+      images:[]
     },
-  })
-
-
+})
 
   export const textMessageArray = atom ({
     key: 'textMessageArray',

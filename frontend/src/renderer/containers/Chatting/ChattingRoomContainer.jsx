@@ -1,5 +1,4 @@
 import {
-    currentChatId,
     textMessageArray,
     sendMessage,
     chatDrawerState,
@@ -17,9 +16,9 @@ const ChattingRoomContainer = () => {
     const loginUser = useRecoilValue(userState)
     const [chatContainerState,setChatContainerState] = useRecoilState(chatListAndRoomState);
     const [socket, setSocket] = useState(null); // 소켓 상태 관리
-    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState); // 드로어 상태
-    const [messageTEST, setMessage] = useRecoilState(textMessageArray);
+    const [message, setMessage] = useRecoilState(textMessageArray);
     const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
+    const drawerVisible = useRecoilValue(chatDrawerState); // 드로어 상태
     const roomData = useRecoilValue(chattingRoomSeller);
     const messageEndRef = useRef(null);
 
@@ -30,10 +29,7 @@ const ChattingRoomContainer = () => {
     }, [chatContainerState, drawerVisible]);
 
     useEffect(() => {
-
-        console.log('drawerVisible : ', drawerVisible)
         console.log('roomId : ', roomData.roomId)
-        console.log('chatContainerState : ', chatContainerState)
         console.log('socket' + socket)
 
         console.log("roomData.roomId"+ roomData.roomId)
@@ -62,8 +58,7 @@ const ChattingRoomContainer = () => {
             // 서버에서 메시지를 받으면 콘솔에 출력
             newSocket.on('message', (message) => {
                 console.log("message.text ::::; ", JSON.stringify(message))
-                // console.log(messageTEST)
-                if (message && message.text && message.sender) { // 유효성 검사
+                if (message && message.sender) { // 유효성 검사
                     setMessage((prev) => [
                         ...prev,
                         {
@@ -72,8 +67,8 @@ const ChattingRoomContainer = () => {
                             text: message.text,
                             type: message.sender === loginUser ? "send" : "receive",
                             time: message.time,
-                            read: message.read
-
+                            read: message.read,
+                            images : message.images
                         }
                     ]);
                 } else {
@@ -83,7 +78,7 @@ const ChattingRoomContainer = () => {
 
             // 연결이 끊겼을 때
             newSocket.on('disconnect', (err) => {
-                console.error('Disconnected 에러: ' + err);
+                console.error(newSocket.id+ ' Disconnected: ' + err);
             });
 
         }
@@ -127,17 +122,20 @@ const ChattingRoomContainer = () => {
             if (sndMsg.message === 'text') {
                 if (sndMsg.text && sndMsg.text.trim()) {
                     // setMessage((prevMessages) => [...prevMessages, sndMsg]);
+                    console.log("text sndMsg" + JSON.stringify(sndMsg))
                     socket.emit('message', sndMsg);
                 }
             } else {
-                setMessage((prevMessages) => [...prevMessages, sndMsg]);
+                console.log("image sndMsg" + JSON.stringify(sndMsg))
+                // setMessage((prevMessages) => [...prevMessages, sndMsg]);
+                socket.emit('message', sndMsg)
             }
         }else{
         }
     }, [sndMsg/*, socket*/]);
 
 
-    
+
 
     const scrollToBottom = () => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -145,14 +143,13 @@ const ChattingRoomContainer = () => {
     // message 배열이 업데이트될 때마다 스크롤 내림
     useEffect(() => {
         scrollToBottom();
-    }, [messageTEST]);
+    }, [message]);
 
     return (
         <>
             <div className="flex flex-col w-full h-full justify-between">
                 <div className="min-h-[70px] basis-[70px] flex justify-center items-center px-[20px]">
                     <button className="w-10 h-10 basis-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                        // onClick={() => setChatId(null)}
                         onClick={() => {
                             if(socket != null) {
                                 socket.disconnect()
@@ -175,20 +172,20 @@ const ChattingRoomContainer = () => {
                     </h2>
                     <div>
                         <div className="flex gap-[8px]">
-                            <button>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
-                                    <path stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M9.095 12.116A8.05 8.05 0 0 0 2.2 20.082h12.506M10.254 12.029q-.594 0-1.16.087"></path>
-                                    <path fill="#fff" stroke="#141313" strokeMiterlimit="10" strokeWidth="1.6" d="M13.583 7.264a3.464 3.464 0 1 0-6.929 0v1.303a3.464 3.464 0 1 0 6.929 0z"></path>
-                                    <path fill="#fff" d="M15.942 12.386a4.41 4.41 0 0 1 4.404 4.403 4.4 4.4 0 0 1-4.404 4.404 4.4 4.4 0 0 1-4.403-4.404 4.4 4.4 0 0 1 4.403-4.403m0 7.262a2.864 2.864 0 0 0 2.858-2.859 2.864 2.864 0 0 0-2.858-2.858 2.864 2.864 0 0 0-2.858 2.858 2.864 2.864 0 0 0 2.858 2.859m0-8.517a5.667 5.667 0 0 0-5.659 5.658c0 3.12 2.54 5.66 5.66 5.66 3.118 0 5.658-2.54 5.658-5.66s-2.54-5.659-5.659-5.659m0 7.261a1.605 1.605 0 0 1-1.603-1.603 1.6 1.6 0 0 1 1.603-1.603 1.6 1.6 0 0 1 1.603 1.603 1.6 1.6 0 0 1-1.603 1.603"></path>
-                                    <path fill="#fff" stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M15.944 20.41a3.627 3.627 0 0 0 3.63-3.63 3.627 3.627 0 0 0-3.63-3.631 3.627 3.627 0 0 0-3.632 3.63 3.627 3.627 0 0 0 3.632 3.632"></path>
-                                    <path stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="m21.062 21.743-2.569-2.337"></path>
-                                </svg>
-                            </button>
-                            <button>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">
-                                    <path fill="#141313" stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25" d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M12 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2M12 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2"></path>
-                                </svg>
-                            </button>
+                            {/*<button>*/}
+                            {/*    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">*/}
+                            {/*        <path stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M9.095 12.116A8.05 8.05 0 0 0 2.2 20.082h12.506M10.254 12.029q-.594 0-1.16.087"></path>*/}
+                            {/*        <path fill="#fff" stroke="#141313" strokeMiterlimit="10" strokeWidth="1.6" d="M13.583 7.264a3.464 3.464 0 1 0-6.929 0v1.303a3.464 3.464 0 1 0 6.929 0z"></path>*/}
+                            {/*        <path fill="#fff" d="M15.942 12.386a4.41 4.41 0 0 1 4.404 4.403 4.4 4.4 0 0 1-4.404 4.404 4.4 4.4 0 0 1-4.403-4.404 4.4 4.4 0 0 1 4.403-4.403m0 7.262a2.864 2.864 0 0 0 2.858-2.859 2.864 2.864 0 0 0-2.858-2.858 2.864 2.864 0 0 0-2.858 2.858 2.864 2.864 0 0 0 2.858 2.859m0-8.517a5.667 5.667 0 0 0-5.659 5.658c0 3.12 2.54 5.66 5.66 5.66 3.118 0 5.658-2.54 5.658-5.66s-2.54-5.659-5.659-5.659m0 7.261a1.605 1.605 0 0 1-1.603-1.603 1.6 1.6 0 0 1 1.603-1.603 1.6 1.6 0 0 1 1.603 1.603 1.6 1.6 0 0 1-1.603 1.603"></path>*/}
+                            {/*        <path fill="#fff" stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M15.944 20.41a3.627 3.627 0 0 0 3.63-3.63 3.627 3.627 0 0 0-3.63-3.631 3.627 3.627 0 0 0-3.632 3.63 3.627 3.627 0 0 0 3.632 3.632"></path>*/}
+                            {/*        <path stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="m21.062 21.743-2.569-2.337"></path>*/}
+                            {/*    </svg>*/}
+                            {/*</button>*/}
+                            {/*<button>*/}
+                            {/*    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none">*/}
+                            {/*        <path fill="#141313" stroke="#141313" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25" d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2M12 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2M12 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2"></path>*/}
+                            {/*    </svg>*/}
+                            {/*</button>*/}
                         </div>
                     </div>
                 </div>
@@ -214,7 +211,7 @@ const ChattingRoomContainer = () => {
                                 <div>
 
                                     {
-                                        messageTEST.map((data, i) => {
+                                        message.map((data, i) => {
                                             return (
                                                 <div key={i}>
                                                     {data.message == 'text' ? (
@@ -255,7 +252,6 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
           // 선택된 파일 배열을 처리하는 코드
           for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i]);
-            console.log(files[i])
           }
 
           try {
@@ -264,16 +260,18 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
                 body: formData,
               });
             const result = await res.json();
-
-            console.log(result)
             if(result.success){
                 const updatedImages = result.urls.map((url) => ({url}));
+                console.log(updatedImages)
                 setSendMessage((prev) => ({
                     ...prev,
                     message: 'image',
+                    images: updatedImages,
+                    sender: loginUser,
+                    receiver: roomData.receive,
+                    text: '',
+                    itemId : roomData.itemId,
                     time: new Date(),
-                    image: updatedImages,
-                    itemId : roomData.itemId
                 }));
 
             }
@@ -299,6 +297,7 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
             text: text,
             itemId : roomData.itemId,
             time: new Date(),
+            images : ''
         }));
         
         setText('');  // 전송 후 초기화

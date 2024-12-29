@@ -43,11 +43,8 @@ const chattingSocket = (server) => {
                         SET chatting_read_status = TRUE, updated_at = NOW()
                         WHERE chatting_id = ANY($1) AND user_id = $2;
                     `;
-                    const test2 = await dbService.pool.query(updateQuery, [unreadMessageIds, userId]);
-                    console.log(test2)
+                    await dbService.pool.query(updateQuery, [unreadMessageIds, userId]);
 
-                    console.log(unreadMessageIds)
-                    console.log(userId)
                     // 읽음 상태 업데이트 브로드캐스트
                     chatNamespace.to(chattingroom).emit('read', {
                         chatting_ids: unreadMessageIds,
@@ -81,7 +78,8 @@ const chattingSocket = (server) => {
                     item_id: message.itemId,
                     chatting_content: message.text,
                     room_id: chattingroom,
-                    is_deleted: false
+                    is_deleted: false,
+                    images: JSON.stringify(message.images || [])
                 });
 
                 // console.log("메시지 저장 완료:", savedChat);
@@ -97,7 +95,11 @@ const chattingSocket = (server) => {
                     await dbService.pool.query(readQuery, [savedChat.chatting_id, message.receiver]);
                     console.log('읽음 상태 업데이트 완료');
                 }
-
+                console.log({
+                    ...message,
+                    chatting_id: savedChat.chatting_id,
+                    read: isReceiverConnected
+                })
                 // 동일한 채팅방(room)에 있는 클라이언트에게 메시지 전달
                 chatNamespace.to(chattingroom).emit('message', {
                     ...message,
@@ -111,8 +113,39 @@ const chattingSocket = (server) => {
         });
 
         // 연결 해제 처리
-        chatSocket.on('disconnect', (reason) => {
-            console.log(`클라이언트 연결 해제: ${chatSocket.id}, 이유: ${reason}`);
+        chatSocket.on('disconnect', async (reason) => {
+            console.log(`클라이언트 연결 해제: ${chatSocket.id}, 이유: ${reason}, roomId :${chattingroom}`);
+            try {
+                let roomClients = chatNamespace.adapter.rooms.get(chattingroom) || new Set();
+
+                // 상대방이 방에 접속해 있는지 확인
+                if(roomClients.size === 0){
+                    const query = `
+                    SELECT COUNT(*) AS message_count
+                    FROM tbl_chatting
+                    WHERE room_id = $1 
+                    `;
+                    const result = await dbService.pool.query(query, [chattingroom]);
+                    const messageCount = result.rows[0].message_count;
+                    console.log(typeof messageCount)
+
+                    if (parseInt(messageCount) === 0) {
+                        // 3. 메시지가 없으면 방 삭제
+                        const deleteQuery = `
+                        DELETE FROM tbl_chatting_room
+                        WHERE room_id = $1
+                        `;
+                            await dbService.pool.query(deleteQuery, [chattingroom]);
+                            console.log(`빈 채팅방 삭제 완료: ${chattingroom}`);
+                    }else{
+                        console.log(`방에 메시지가 있어 삭제하지 않음: ${chattingroom}`);
+                    }
+                }else{
+                    console.log(`다른 사용자가 방에 남아있음: ${chattingroom}`);
+                }
+            }catch (e) {
+                console.error(`방 삭제 처리 실패: ${e}`);
+            }
         });
 
         chatSocket.on('error', (err) => {

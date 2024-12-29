@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 import {
-    currentChatId,
     chatDrawerState,
     chatListAndRoomState,
     chattingRoomSeller, textMessageArray
 } from '../../../recoil/atoms/chatStateAtom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userState } from '../../../recoil/atoms/loginUserAtom';
 import {getChattingList, getMessage} from '../../../services/chatService';
 import { useQuery } from 'react-query';
 import LoadingSpinner from '../../components/Common/LoadingSpinner.jsx';
 import {processMessages} from "../../../recoil/selectors/chatSelector.js";
 
+
 const ChattingListContainer = () => {
-    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
+    const setDrawerVisible = useSetRecoilState(chatDrawerState);
     const userId = useRecoilValue(userState);
 
     // React Query를 사용하여 채팅 리스트 가져오기
@@ -70,7 +70,8 @@ const ChattingListContainer = () => {
                     </div>
                     <ul className="flex flex-col h-full overflow-auto bg-white overscroll-contain">
                         {list.map((chat) => (
-                            <ChattingListComponent key={chat.room_id} chat={chat} />
+
+                            <ChattingListComponent key={chat.roomId} chat={chat} />
                         ))}
                         <div className="min-h-[5px]"></div>
                     </ul>
@@ -81,42 +82,36 @@ const ChattingListContainer = () => {
 };
 
 const ChattingListComponent = ({ chat }) => {
-    const [chatId, setChatId] = useRecoilState(currentChatId);
-    const [,setChatContainerState] = useRecoilState(chatListAndRoomState);
-    const [,setRoomData] = useRecoilState(chattingRoomSeller);
+    const setChatContainerState = useSetRecoilState(chatListAndRoomState);
+    const setRoomData = useSetRecoilState(chattingRoomSeller);
     const userId = useRecoilValue(userState);
     const [message, setMessage] = useRecoilState(textMessageArray);
-    // const handleFetchMessages = () => {
     const fetchMessage = async () => {
 
         try {
-            console.log(chat)
-            console.log(userId)
             // 1. 서버에서 메시지 요청
             const message = await getMessage({
-                roomId : chat.room_id,
-                sellerId : chat.seller_id,
-                buyerId : chat.buyer_id,
-                itemId : chat.item_id,
-                itemType : 'Used',
-                sender : userId,
-                receive : userId === chat.buyer_id ? chat.seller_id : chat.buyer_id
+                roomId : chat.roomId,
+                sellerId : chat.sellerId,
+                buyerId : chat.buyerId,
+                itemId : chat.itemId,
+                itemType : chat.itemType,
+                sender : chat.sender,
+                receive : chat.receiver
+                // receive : userId === chat.buyer_id ? chat.seller_id : chat.buyer_id
             });
             console.log(message)
             // // 2. 메시지 가공
             const processedMessage = processMessages(message.chat, userId);
-            // setRoomData(message.itemSeller)
             setRoomData({
                 roomId : message.roomId,
-                itemId : chat.item_id,
-                nickName : userId !== message.itemSeller.userId ? chat.buyer_nickname : chat.seller_nickname,
-                itemName : message.itemSeller.used_item_name,
-                itemPrice : message.itemSeller.used_item_price,
-                sender : userId,
-                receive : userId === chat.buyer_id ? chat.seller_id : chat.buyer_id,
-                sellerTrust : message.itemSeller.user_trust_score,
-                buyerTrust : message.itemBuyer.user_trust_score,
-                trust : userId === message.itemSeller.userId ? message.itemBuyer.user_trust_score : message.itemSeller.user_trust_score
+                itemId : chat.itemId,
+                nickName : message.roomData.receiveNickName,
+                itemName : message.roomData.itemName,
+                itemPrice : message.roomData.itemPrice,
+                sender : message.roomData.sender,
+                receive : message.roomData.receive,
+                trust : message.roomData.receiveTrustScore
             })
 
             // // 3. Recoil 상태 업데이트
@@ -146,8 +141,6 @@ const ChattingListComponent = ({ chat }) => {
             className="flex justify-between px-5 gap-5 w-full cursor-pointer bg-white"
             onClick={async () => {
                     await fetchMessage()
-                    setChatId(chat.room_id)
-                    // handleFetchMessages()
                     setChatContainerState("roomContainer")
             }}
         >
@@ -168,12 +161,12 @@ const ChattingListComponent = ({ chat }) => {
                 <div className="flex w-[calc(100%-56px)] flex-col justify-around ml-4">
                     <div className="flex gap-2">
                         <div className="flex gap-2">
-                            <h4 className="font-semibold">{chat.item_name} ({chat.buyer_id === userId ? chat.seller_nickname : chat.buyer_nickname})</h4>
+                            <h4 className="font-semibold">{chat.itemName} ({chat.receiver === chat.sellerId ? chat.sellerNickname : chat.buyerNickname})</h4>
                         </div>
-                        <p className="text-[12px] mt-[2px]">{new Date(chat.last_message_time).toLocaleDateString()}</p>
+                        <p className="text-[12px] mt-[2px]">{chat.lastMessageTime && new Date(chat.lastMessageTime).toLocaleDateString()}</p>
                     </div>
                     <span className="text-sm text-ellipsis overflow-hidden whitespace-nowrap min-[1024px]:max-w-[300px]">
-                        {chat.last_message}
+                        {chat.lastMessage}
                     </span>
                 </div>
             </div>

@@ -60,7 +60,7 @@ const RightSideMenu = memo(() => {
 
             eventSource.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log('SSE message received:', data);
+                // console.log('SSE message received:', data);
                 setUnreadCount(data.unread.count || 0); // 읽지 않은 메시지 수 업데이트
             };
 

@@ -12,15 +12,16 @@ export const processMessages = (messages, userId) => {
         const messageDate = dayjs(message.created_at).format('YYYY-MM-DD'); // 메시지 날짜만 추출
         const isFirstDate = messageDate !== lastDate; // 날짜가 바뀌었는지 확인
         if (isFirstDate) lastDate = messageDate; // 마지막 날짜 업데이트
-
+        console.log(message)
         return {
             chatting_id : message.chatting_id,
-            message: 'text', // 고정값 (텍스트 메시지)
+            message: message.message, // 고정값 (텍스트 메시지)
             type: message.chatting_sending_user_id === userId ? 'send' : 'receive', // 보낸 사람과 받은 사람 구분
             text: message.chatting_content, // 메시지 내용
             time: message.created_at, // 생성 시간
             userId: message.chatting_sending_user_id, // 메시지를 보낸 사람의 ID
             read : message.chatting_read_status,
+            images : message.images,
             messageForFirstDate: isFirstDate, // 날짜 표시 여부
         };
     });
