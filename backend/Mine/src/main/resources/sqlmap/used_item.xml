@@ -147,7 +147,8 @@
             c.user_id,
             c.used_item_status,
             d.user_email,
-            d.user_trust_score
+            d.user_trust_score,
+            d.user_nickname
         from (
                  select b.*, category_value
                  from tbl_category a, tbl_used_item b
