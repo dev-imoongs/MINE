@@ -12,7 +12,7 @@
     <insert id="insertFile" parameterType="fileVO">
         /* 파일 등록 insertFile */
         insert into
-            tbl_file(file_name, file_path, file_type, file_size, created_at, updated_at,
+            tbl_file(file_uuid, file_name, file_path, file_size,
                  <if test='usedItemId != null and usedItemId != ""'>
                      used_item_id
                  </if>
@@ -20,7 +20,7 @@
                      auction_item_id
                  </if>
                  )
-        values('', '', '', 0, current_timestamp, current_timestamp,
+        values(#{fileUuid}, #{fileName}, #{filePath}, #{fileSize},
             <if test='usedItemId != null and usedItemId != ""'>
                 #{usedItemId}
             </if>

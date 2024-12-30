@@ -3,11 +3,9 @@ package com.app.mine.service;
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.mapper.AuctionItemMapper;
+import com.app.mine.mapper.FileMapper;
 import com.app.mine.mapper.UsedItemMapper;
-import com.app.mine.vo.AuctionItemVO;
-import com.app.mine.vo.Criteria;
-import com.app.mine.vo.UsedItemVO;
-import com.app.mine.vo.UserVO;
+import com.app.mine.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,10 +22,17 @@ public class UsedItemServiceImpl implements UsedItemService {
 
     private final UsedItemMapper usedItemMapper;
     private final AuctionItemMapper auctionItemMapper;
+    private final FileMapper fileMapper;
 
     @Override
-    public void saveUsedItem(UsedItemVO usedItemVO) {
+    public void saveUsedItem(UsedItemVO usedItemVO, List<FileVO> fileVOList) {
         usedItemMapper.insertUsedItem(usedItemVO);
+
+        fileVOList.forEach(fileVO -> {
+            fileVO.setUsedItemId(usedItemMapper.selectLastUsedItem());
+
+            fileMapper.insertFile(fileVO);
+        });
     }
 
     @Override

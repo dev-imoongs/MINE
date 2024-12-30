@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from "react-query";
 import plusIcon from '../../../assets/plus.png';
 import minusIcon from '../../../assets/minus.png';
 import styles from "../../../styles/register/product-register.module.css";
@@ -7,8 +8,24 @@ import Category from "../../components/login/CategoryComponent";
 import InputForm from "../../components/login/LoginComponent";
 import RegisterImage from "../../components/register/RegisterImageComponent";
 
+import { getCategory } from "../../../services/commonService.js";
+import { saveProduct } from "../../../services/productApiService.js";
+import { saveImages } from "../../../services/commonService.js";
+
 const ProductRegister = () => {
     const navigate = useNavigate();
+
+    const category = useQuery({
+        queryKey: 'getCategory',
+        queryFn: getCategory,
+        onSuccess: (data) => {
+            console.log('카테고리 데이터 로딩 성공:', data);
+        },
+        onError: (error) => {
+            console.error('카테고리 데이터 로딩 중 에러 발생:', error);
+            alert('카테고리 데이터를 불러오는 중 오류가 발생했습니다.');
+        }
+    });
 
     const [input, setInput] = useState({
         name: "",
@@ -119,6 +136,20 @@ const ProductRegister = () => {
         setSelectedPlaces(prevPlaces => prevPlaces.filter((_, i) => i !== index));
     };
 
+    const productRegisterAction = useQuery({
+        queryKey: "productRegister",
+        queryFn: () => saveProduct(input, images),
+        enabled: false,
+        onSuccess: () => {
+            alert('상품 등록이 완료되었습니다.');
+            navigate('/mypage');
+        },
+        onError: (error) => {
+            console.error("Error during productRegister:", error);
+            alert('상품 등록 도중 오류가 발생했습니다.');
+        },
+    });
+
     const submitOnclick = () => {
         if (!input.name) {
             alert("상품명을 입력해주세요.");
@@ -155,8 +186,7 @@ const ProductRegister = () => {
             return;
         }
     
-        alert('폼 제출이 완료되었습니다.');
-        navigate('/mypage');
+        productRegisterAction.refetch();
     }
 
     return (
@@ -218,11 +248,14 @@ const ProductRegister = () => {
 
                 <div className={styles['form-group']}>
                     <label>카테고리</label>
-                    <Category
-                        onChange={setInputState}
-                        input={input.category}
-                        name={'category'}
-                    />
+                    {category.data && (
+                        <Category
+                            onChange={setInputState}
+                            input={input.category}
+                            name={'category'}
+                            categoryData={category.data}
+                        />
+                    )}
                 </div>
 
                 <div className={styles['form-group']}>

@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from "react-query";
 import styles from '../../../styles/login/join.module.css';
 import InputForm from "../../components/login/LoginComponent";
 import Category from "../../components/login/CategoryComponent";
 
 import { myInfoAtom } from "../../../recoil/atoms/userAtom.js"
 import {useRecoilState} from "recoil";
+import { checkDuplicateEmail } from "../../../services/userApiService.js";
+import { getCategory } from "../../../services/commonService.js";
+import { join } from "../../../services/userApiService.js";
 
 import { useLocation } from 'react-router-dom';
 
@@ -13,6 +17,20 @@ const Join = () => {
     const [myInfo, setMyInfo] = useRecoilState(myInfoAtom);
     const location = useLocation();
     const navigate = useNavigate();
+
+    const [emailValid, setEmailValid] = useState(true);
+
+    const category = useQuery({
+        queryKey: 'getCategory',
+        queryFn: getCategory,
+        onSuccess: (data) => {
+            console.log('카테고리 데이터 로딩 성공:', data);
+        },
+        onError: (error) => {
+            console.error('카테고리 데이터 로딩 중 에러 발생:', error);
+            alert('카테고리 데이터를 불러오는 중 오류가 발생했습니다.');
+        }
+    });
 
     const [input, setInput] = useState({
         email: "",
@@ -25,6 +43,34 @@ const Join = () => {
         category1: "",
         category2: "",
         category3: ""
+    });
+
+    const emailCheck = useQuery({
+        queryKey: "emailCheck",
+        queryFn: () => checkDuplicateEmail(input),
+        enabled: false, // 초기에는 쿼리를 자동 실행하지 않음
+        onSuccess: (result) => {
+            setEmailValid(result);
+        },
+        onError: (error) => {
+            console.error("Error during login:", error);
+            alert('로그인 도중 오류가 발생했습니다.');
+            setEmailValid(false);
+        },
+    });
+
+    const joinAction = useQuery({
+        queryKey: "join",
+        queryFn: () => join(input),
+        enabled: false, // 초기에는 쿼리를 자동 실행하지 않음
+        onSuccess: () => {
+            alert('회원가입이 완료되었습니다.');
+            navigate('/');
+        },
+        onError: (error) => {
+            console.error("Error during login:", error);
+            alert('회원가입 도중 오류가 발생했습니다.');
+        },
     });
 
     useEffect(() => {
@@ -76,8 +122,7 @@ const Join = () => {
     const onClick = () => {
         if (validateForm()) {
             if(location.pathname === '/join') {
-                alert('회원가입 성공');
-                navigate('/');
+                joinAction.refetch();
             } else {
                 alert('수정되었습니다.');
             }
@@ -91,9 +136,15 @@ const Join = () => {
         const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[~?!@#$%^&*_-]).{8,}$/;
 
         if (!input.email) {
-            errors.emailError = '이메일을 입력하세요';
+            errors.emailError = '이메일을 입력하세요.';
         } else if (!emailRegex.test(input.email)) {
-            errors.emailError = '이메일 형식이 맞지 않습니다';
+            errors.emailError = '이메일 형식이 맞지 않습니다.';
+        }
+
+        emailCheck.refetch();
+
+        if(!emailValid) {
+            errors.emailError = '사용중인 이메일입니다.';
         }
 
         if (myInfo.USER_PASSWORD) {
@@ -104,41 +155,41 @@ const Join = () => {
 
         if (location.pathname === "/join") {
             if (!input.password) {
-                errors.passwordError = '비밀번호를 입력하세요';
+                errors.passwordError = '비밀번호를 입력하세요.';
             } else if (!passwordRegex.test(input.password)) {
-                errors.passwordError = '비밀번호는 8자 이상, 영어 대/소문자, 특수문자가 포함되어야합니다';
+                errors.passwordError = '비밀번호는 8자 이상, 영어 대/소문자, 특수문자가 포함되어야합니다.';
             }
         } else {
             // 새 비밀번호가 빈값일 때 비밀번호는 set 하지 않기
             if (input.password && !passwordRegex.test(input.password)) {
-                errors.passwordError = '비밀번호는 8자 이상, 영어 대/소문자, 특수문자가 포함되어야합니다';
+                errors.passwordError = '비밀번호는 8자 이상, 영어 대/소문자, 특수문자가 포함되어야합니다.';
             }
         }
 
         if (location.pathname === "/join") {
             if (!input.passwordCheck) {
-                errors.passwordCheckError = '비밀번호를 다시 한번 적어주세요';
+                errors.passwordCheckError = '비밀번호를 다시 한번 적어주세요.';
             } else if (input.passwordCheck !== input.password) {
-                errors.passwordCheckError = '비밀번호가 동일하지 않습니다';
+                errors.passwordCheckError = '비밀번호가 동일하지 않습니다.';
             }
         } else {
             if (input.passwordCheck !== input.password) {
-                errors.passwordCheckError = '비밀번호가 동일하지 않습니다';
+                errors.passwordCheckError = '비밀번호가 동일하지 않습니다.';
             }
         }
 
         if (!input.nickname) {
-            errors.nicknameError = '닉네임을 입력하세요';
+            errors.nicknameError = '닉네임을 입력하세요.';
         } else if (input.nickname.length > 10) {
-            errors.nicknameError = '닉네임은 10자 이하여야합니다';
+            errors.nicknameError = '닉네임은 10자 이하여야합니다.';
         }
 
         if (!input.address) {
-            errors.addressError = '주소를 선택하세요';
+            errors.addressError = '주소를 선택하세요.';
         }
 
         if (input.address && !input.addressDetail) {
-            errors.addressError = '상세주소를 입력하세요';
+            errors.addressError = '상세주소를 입력하세요.';
         }
 
         setError(errors);
@@ -257,21 +308,28 @@ const Join = () => {
 
                         <div className={styles['form-group']}>
                             <label>관심 카테고리</label>
-                            <Category
-                                onChange={onChange}
-                                input={input.category1}
-                                name={'category1'}
-                            />
-                            <Category
-                                onChange={onChange}
-                                input={input.category2}
-                                name={'category2'}
-                            />
-                            <Category
-                                onChange={onChange}
-                                input={input.category3}
-                                name={'category3'}
-                            />
+                            {category.data && (
+                                <>      
+                                    <Category
+                                        onChange={onChange}
+                                        input={input.category1}
+                                        name={'category1'}
+                                        categoryData={category.data}
+                                    />
+                                    <Category
+                                        onChange={onChange}
+                                        input={input.category2}
+                                        name={'category2'}
+                                        categoryData={category.data}
+                                    />
+                                    <Category
+                                        onChange={onChange}
+                                        input={input.category3}
+                                        name={'category3'}
+                                        categoryData={category.data}
+                                    />
+                                </>
+                            )}
                         </div>
                         <button type="button" onClick={onClick} className={styles['submit-button']}>{location.pathname === "/join" ? "제출하기" : "수정하기"}</button>
                     </form>
