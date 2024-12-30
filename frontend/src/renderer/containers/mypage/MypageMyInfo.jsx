@@ -10,9 +10,14 @@ import TrustRating from "../../components/Layout/TrustRating.jsx"
 import { myInfoAtom } from "../../../recoil/atoms/userAtom.js"
 
 const MypageMyInfo = () => {
-    const box = ["구매횟수", "판매횟수", "입찰중", "포인트"];
     const [myInfo, setMyInfo] = useRecoilState(myInfoAtom);
     const navigate = useNavigate();
+    const box = [
+        { title: "구매횟수", count: myInfo.buyCount },
+        { title: "판매횟수", count: myInfo.sellCount },
+        { title: "낙찰성공횟수", count: myInfo.successBidCount },
+        { title: "포인트", count: myInfo.userPoint }
+    ];
 
     const handleTrade = () => {
         navigate('/product');
@@ -26,7 +31,7 @@ const MypageMyInfo = () => {
                       <div className="w-full">
                           <div className="w-full lg:flex lg:items-center">
                               <h2 className="mr-3 text-[22px] lg:text-[28px] leading-[39px] font-semibold cursor-pointer inline-block lg:block">
-                                  {myInfo && myInfo.USER_NICKNAME}({myInfo && myInfo.USER_EMAIL})
+                                  {myInfo && myInfo.userNickname}({myInfo && myInfo.userEmail})
                               </h2>
                           </div>
                       </div>
@@ -69,7 +74,7 @@ const MypageMyInfo = () => {
                       </button>
                   </div>
               </MyNameInfo>
-              <TrustRating trust={myInfo && myInfo.trustScore}></TrustRating>
+              <TrustRating trust={myInfo && myInfo.userTrustScore}></TrustRating>
               <CountBox box={box}></CountBox>
               <MyProductRegister>
                   <div className="flex-auto">

@@ -6,6 +6,8 @@ public interface UserService {
 
     public UserVO getUserInfo(String userEmail, String userPassword);
 
+    public UserVO getMyInfo(UserVO userVO);
+
     public void saveUser(UserVO userVO);
 
     public void updateUser(UserVO userVO);

@@ -8,6 +8,8 @@ public interface UserMapper {
 
     public UserVO selectUser(String userEmail, String userPassword);
 
+    public UserVO selectMyInfo(UserVO userVO);
+
     public void insertUser(UserVO userVO);
 
     public void updateUser(UserVO userVO);

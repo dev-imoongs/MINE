@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getMyInfo = async () => {
-    const response = await axios.get('/data/myInfoData.json')
+    const response = await axios.post('/api/user/getMyInfo')
     console.log(response.data)
     return response.data;
 }
