@@ -6,13 +6,18 @@
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 파일 등록을 위한 최근 중고 물품 가져오기 selectLastUsedItem -->
+    <select id="selectLastUsedItem">
+        /* 파일 등록을 위한 최근 중고 물품 가져오기 selectLastUsedItem */
+        select used_item_id from tbl_used_item order by used_item_id desc limit 1
+    </select>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
     <!-- 중고 물품 등록 insertUsedItem -->
     <insert id="insertUsedItem" parameterType="usedItemVO">
         /* 중고 물품 등록 insertUsedItem */
-        insert into tbl_used_item(used_item_name, used_item_explain, used_item_price, used_item_place, created_at, updated_at, category_id, user_id)
-        values(#{usedItemName}, #{usedItemExplain}, #{usedItemPrice}, #{usedItemPlace}, current_timestamp, current_timestamp, #{categoryId}, #{userId})
+        insert into tbl_used_item(used_item_name, used_item_explain, used_item_price, used_item_place, used_item_status, category_id, user_id)
+        values(#{usedItemName}, #{usedItemExplain}, #{usedItemPrice}, #{usedItemPlace}, #{usedItemStatus}, #{categoryId}, #{userId})
     </insert>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->

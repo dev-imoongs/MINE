@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * 
  * @param {*} type 
@@ -93,4 +95,23 @@ export const formatDateToTime = (date) => {
   }
   
   return `${hour}:${minute}`;
+}
+
+export const getCategory = async () => {
+  const response = await axios.post('/api/category/get-category');
+  
+  return response.data;
+}
+
+export const saveImages = async () => {
+  const formData = new FormData();
+    files.forEach(file => {
+        formData.append('file', file);
+    });
+
+    return axios.post('/api/files/upload', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }

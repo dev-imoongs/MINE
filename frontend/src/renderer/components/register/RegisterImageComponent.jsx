@@ -17,7 +17,11 @@ const RegisterImageComponent = ({ images, setImages }) => {
             return;
         }
 
-        const newImages = files.map((file) => URL.createObjectURL(file));
+        const newImages = files.map(file => ({
+            url: URL.createObjectURL(file),
+            name: file.name,
+            type: file.type.split('/')[1] // MIME 타입에서 파일 확장자만 추출 (예: image/jpeg -> jpeg)
+        }));
         setImages((prevImages) => [...prevImages, ...newImages]);
 
         fileInputRef.current.value = null;  // 동일 파일 재선택 가능하게 함
@@ -25,6 +29,8 @@ const RegisterImageComponent = ({ images, setImages }) => {
 
     const deleteImage = (index) => {
         setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+        // Revoke the blob URL to free up resources
+        URL.revokeObjectURL(images[index].url);
     };
 
     return (
@@ -52,9 +58,9 @@ const RegisterImageComponent = ({ images, setImages }) => {
                 </button>
             </div>
             <div className={styles['select-image-container']}>
-                {images.map((imgSrc, index) => (
+                {images.map((image, index) => (
                     <div key={index} className={styles['select-image']}>
-                        <img src={imgSrc} alt={`image-${index}`} />
+                        <img src={image.url} alt={`image-${index}`} />
                         <button
                             type="button"
                             className={styles['absolute-top-right']}
