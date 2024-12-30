@@ -1,48 +1,103 @@
 import React, { useCallback, useEffect, useState, useRef, memo } from 'react';
 import { useToggle } from '../../../hooks/useToggle';
 import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
+import {
+    textMessageArray,
+    sendMessage,
+    chatDrawerState,
+    chatListAndRoomState,
+    chattingRoomSeller
+} from '../../../recoil/atoms/chatStateAtom'
+import { userState } from '../../../recoil/atoms/loginUserAtom'
+import { ToastContainer, toast } from 'react-toastify';
 import { useRecoilValue } from 'recoil';
 import { getTimeAgo } from '../../../services/commonService';
 import { useRecoilState } from 'recoil';
-import { chatDrawerState, currentChatId } from '../../../recoil/atoms/chatStateAtom';
-import { ToastContainer, toast } from 'react-toastify';
-import ChattingRoomContainer from '../Chatting/ChattingRoomContainer'
-
+import {useNavigate} from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
+
+import { getMessage } from '../../../services/chatService';
+import { processMessages } from '../../../recoil/selectors/chatSelector';
 
 
 const TradeProductInfoContainer = ({ StImg }) => {
     const countRef = useRef(0);
+    const nav = useNavigate();
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
-    const [,setChatId] = useRecoilState(currentChatId);
-    // const productInfo = tradeProductInfo.productInfo;
-    // const sellerInfo = tradeProductInfo.sellerInfo;
+    const userId = useRecoilValue(userState);
+    const [,setChatContainerState] = useRecoilState(chatListAndRoomState);
     const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
-    useEffect(() => {
-        console.log('mount')
-    },[])
+    const [,setRoomData] = useRecoilState(chattingRoomSeller);
+    const [message, setMessage] = useRecoilState(textMessageArray);
+
+    // const handleFetchMessages = async () => {
+        const fetchMessage = async () => {
+            console.log({
+                sellerId : sellerInfo.userId,
+                buyerId : userId,
+                itemId : productInfo.usedItemId,
+                itemType : 'Used',
+                sender : userId,
+                receive : sellerInfo.userId
+            })
+            try {
+                // 1. 서버에서 메시지 요청
+                const message = await getMessage({
+                    sellerId : sellerInfo.userId,
+                    buyerId : userId,
+                    itemId : productInfo.usedItemId,
+                    itemType : 'Used',
+                    sender : userId,
+                    receive : sellerInfo.userId
+                });
+                // // 2. 메시지 가공
+                const processedMessage = processMessages(message.chat, userId);
+                // 3. Recoil 상태 업데이트
+                await setRoomData({
+                    roomId : message.roomId,
+                    itemId : productInfo.usedItemId,
+                    nickName : message.roomData.receiveNickName,
+                    itemName : message.roomData.itemName,
+                    itemPrice : message.roomData.itemPrice,
+                    sender : message.roomData.sender,
+                    receive : message.roomData.receive,
+                    trust : message.roomData.receiveTrustScore
+                })
+                setMessage(processedMessage);
+            } catch (error) {
+                console.error('ERROR : ', error);
+            }
+        };
+
     return (
         <>
             <div>
-                {/*{console.log(productInfo, sellerInfo}*/}
-                <ProductInfo stImg={StImg} productInfo={productInfo} />
+                <ProductInfo stImg={StImg} productInfo={productInfo}/>
                 <SellerInfo sellerInfo={sellerInfo}/>
                 <div className="flex items-center space-s-4 pt-9 max-[479px]:fixed max-[479px]:bottom-0 max-[479px]:left-0 max-[479px]:z-20 max-[479px]:w-full max-[479px]:px-4 max-[479px]:pb-4 max-[479px]:bg-white">
                     <LikeButton countRef={countRef}/>
-                    <button
-                        data-variant="slim"
-                        className="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack"
-                        onClick={() => 
-                            {
-                                setDrawerVisible(true)
-                                setChatId(1)
+                    {(userId !== sellerInfo.userId) && (
+                        <button
+                            data-variant="slim"
+                            className="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack"
+                            onClick={async () => {
+                                    if(userId) {
+                                        await fetchMessage()
+                                        // await handleFetchMessages()
+                                        setDrawerVisible(true)
+                                        setChatContainerState("roomContainer")
+                                    }else {
+                                        nav('/login')
+                                    }
+                                }
                             }
-                        }
-                    >
-                        채팅하기
-                    </button>
+                        >
+                            채팅하기
+                        </button>
+                    ) }
+
                 </div>
             </div>
         </>

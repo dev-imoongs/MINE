@@ -14,6 +14,7 @@ export const tradeItemDetail = selector({
 
         const productInfo = {
                 category: data.category,
+                usedItemId : data.used_item_id,
                 price: data.used_item_price,
                 productPicture: [tempImgFile, tempImgFile, tempImgFile],
                 title: data.used_item_name,
@@ -33,6 +34,8 @@ export const tradeItemDetail = selector({
             userEmail: data.user_email,
             userProfile: 'https://img2.joongna.com/common/Profile/Default/profile_f.png',
             trustScore: data.user_trust_score,
+            userId : data.user_id,
+            userNickname: data.user_nickname
         }|| {};
 
         console.log("productInfo 데이터:", productInfo);

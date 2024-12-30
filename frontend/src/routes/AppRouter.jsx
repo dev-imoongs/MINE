@@ -6,7 +6,7 @@ import MainPage from '../renderer/pages/MainPage';
 import Mypage from '../renderer/pages/Mypage.jsx';
 import ChattingPage from '../renderer/pages/ChattingPage.jsx';
 import { useRecoilState } from 'recoil';
-import { chatDrawerState, currentChatId } from '../recoil/atoms/chatStateAtom.js'
+import { chatDrawerState } from '../recoil/atoms/chatStateAtom.js'
 
 import HeaderComponent from '../renderer/components/Common/HeaderComponent';
 import FooterComponent from '../renderer//components/Common/FooterComponent';
@@ -53,7 +53,6 @@ const AppRouter = () => {
 
 const Layout = React.memo(() => {
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
-    const [, setChatId] = useRecoilState(currentChatId);
     return (
         <>
             <HeaderComponent />
@@ -66,7 +65,6 @@ const Layout = React.memo(() => {
                 open={drawerVisible}
                 onClose={() => {
                     setDrawerVisible(false)
-                    setChatId(null)
                 }}
                 width={600}
                 handler={false}

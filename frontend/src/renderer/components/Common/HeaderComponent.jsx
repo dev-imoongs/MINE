@@ -5,13 +5,15 @@ import logo from '../../../assets/mine.png';
 import { useDropdown } from '../../../hooks/useDropdown';
 import { useRecoilState } from 'recoil';
 import { recentSearchesAtom } from '../../../recoil/atoms/recentSearchAtom';
-import { chatDrawerState } from '../../../recoil/atoms/chatStateAtom';
-
+import { chatDrawerState, chatListAndRoomState } from '../../../recoil/atoms/chatStateAtom';
+import { useRecoilValue } from "recoil";
+import {userState} from '../../../recoil/atoms/loginUserAtom.js'
 /**
  * 로그인 유무에 따라 마이페이지 드롭다운 설정
  */
 
 const HeaderComponent = () => {
+
     useEffect(()=>{
         console.log('HeaderComponent mounted');
     },[])
@@ -45,16 +47,45 @@ export default memo(HeaderComponent);
 
 const RightSideMenu = memo(() => {
     const [, setDrawerVisible] = useRecoilState(chatDrawerState);
+    const [, setChatContainerState] = useRecoilState(chatListAndRoomState)
     const { ref, isOpen, toggle, open, close }= useDropdown();
-    const [userId, setUserId] = useState(1)
+    // const [userId, setUserId] = useState(null)
     const nav = useNavigate()
+    const [userId, setUserId] = useRecoilState(userState);
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    useEffect(() => {
+        if(userId){
+            const eventSource = new EventSource(`/chat/unread-messages?userId=${userId}`);
+
+            eventSource.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                // console.log('SSE message received:', data);
+                setUnreadCount(data.unread.count || 0); // 읽지 않은 메시지 수 업데이트
+            };
+
+            eventSource.onerror = (err) => {
+                console.error('SSE error:', err);
+                eventSource.close();
+            };
+
+            return () => {
+                eventSource.close(); // 컴포넌트 언마운트 시 연결 종료
+            };
+        }
+    }, [userId]);
+
     return (
         <>
             <div className="hidden lg:flex relative w-[355px]">
                 <ul className="flex w-full text-sm font-medium list-none text-jnGray-900 break-keep">
                     <li className="flex items-center justify-center pr-3">
                         <button className="ga4_main_top_menu flex items-center justify-center"
-                            onClick={() => setDrawerVisible(true)}
+                            onClick={() => {
+                                (userId ? setDrawerVisible(true) : nav('/login')
+                                )
+                                setChatContainerState("listContainer");
+                            }}
                         >
                             <div className="relative cursor-pointer" id="채팅하기">
                                 <svg
@@ -84,7 +115,7 @@ const RightSideMenu = memo(() => {
                                     className="absolute text-xs leading-[18px] -top-2 -right-1 w-[18px] h-[18px] font-semibold rounded-[50%] bg-jngreen text-center"
                                     id="채팅하기"
                                 >
-                                    0
+                                    {unreadCount}
                                 </div>
                             </div>
 
@@ -194,6 +225,7 @@ const RightSideMenu = memo(() => {
                                 <li className="pt-2 pb-3">
                                     <button className="cursor-pointer disabled:text-stone-400"
                                             onClick={() => {
+                                                // setUserId(null)
                                                 setUserId(null)
                                                 close()
                                                 nav('/')

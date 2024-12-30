@@ -3,8 +3,6 @@ import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
 import { useRecoilValue } from 'recoil';
 import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
 const ProductDetailContainer = () => {
-    // const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
-    // const productInfo = tradeProductInfo.productInfo;
     const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
     return (
         <div className="block lg:flex lg:min-h-[591px] space-y-12 lg:space-y-0 mb-12">

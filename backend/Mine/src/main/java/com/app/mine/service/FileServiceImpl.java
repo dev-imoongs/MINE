@@ -25,21 +25,30 @@ public class FileServiceImpl implements FileService {
         Map<String, Object> result = new HashMap<>();
         List<String> uuids = new ArrayList<>();
         List<String> filePaths = new ArrayList<>();
-
+        String os = System.getProperty("os.name").toLowerCase();
+        if(os.contains("mac")){
+            uploadFilePath = System.getProperty("user.home") + "/react_project/MINE/upload/";
+        }
         String path = uploadFilePath + getCurrentDatePath();
+
+
         File directory = new File(path);
 
         if (!directory.exists()) {
             directory.mkdirs();
         }
-
+        log.info("::::::::::::::::::::::::::::::::::::::::::::::::::::: {} ::::::::::::::::: ", getCurrentDatePath());
+        log.info("::::::::::::::::::::::::::::::::::::::::::::::::::::: {} ::::::::::::::::: ", files);
         for (MultipartFile file : files) {
+            log.info("::::::::::::::::::::::::::::::::::::::::::::::::::::: {} ::::::::::::::::: ", file.getOriginalFilename());
             String uuid = UUID.randomUUID().toString();
             String fileName = uuid + "_" + file.getOriginalFilename();
             File destFile = new File(path, fileName);
+            log.info("::::::::::::::::::::::::::::::::::::::::::::::::::::: {} ::::::::::::::::: ", destFile);
             file.transferTo(destFile);
 
             uuids.add(uuid);
+
             filePaths.add(getCurrentDatePath() + "/" + fileName);
         }
 

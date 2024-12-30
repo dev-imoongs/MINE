@@ -3,7 +3,8 @@ const http = require('http');
 const app = express();
 const chattingSocket = require('./router/chattingSocket');
 const chattingHandler = require('./router/chattingHandler');
-const helmet = require('helmet'); 
+const sseHandler = require('./router/sseHandler');
+const helmet = require('helmet');
 const cors = require('cors');
 const port = 3080;
 app.use(cors())
@@ -15,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const webApp = http.createServer(app);
-app.use('/', chattingHandler);
+app.use('/chat', chattingHandler,sseHandler);
 chattingSocket(webApp)
 
 webApp.listen((port), () => {

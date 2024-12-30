@@ -2,10 +2,10 @@
 import React, {memo} from "react";
 import ChattingListContainer from '../containers/Chatting/ChattingListContainer'
 import ChattingRoomContainer from '../containers/Chatting/ChattingRoomContainer'
-import {currentChatId } from '../../recoil/atoms/chatStateAtom'
-import { useRecoilState,useRecoilValue } from 'recoil';
+import { chatListAndRoomState } from '../../recoil/atoms/chatStateAtom'
+import { useRecoilValue } from 'recoil';
 const ChattingPage = () => {
-  const chatId = useRecoilValue(currentChatId);
+  const containerState = useRecoilValue(chatListAndRoomState);
     const chatStyle = {
         width: "0px",
         height: "0px",
@@ -22,7 +22,7 @@ const ChattingPage = () => {
             style={chatStyle}
           >
           </div>
-            {chatId === null ? (
+            {containerState === 'listContainer' ? (
                 <ChattingListContainer />
             ) : (
                 <ChattingRoomContainer />
@@ -37,5 +37,5 @@ const ChattingPage = () => {
   );
 };
 
-export default memo(ChattingPage);
+export default ChattingPage;
 

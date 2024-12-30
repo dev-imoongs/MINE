@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/user/*")
 @RequiredArgsConstructor
@@ -17,16 +20,29 @@ public class UserRestController {
 
     private final UserService userService;
 
+//    @PostMapping("login")
+//    public boolean login(String userEmail, String userPassword, HttpSession session) {
+//        UserVO loginUser = userService.getUserInfo(userEmail, userPassword);
+//
+//        if(loginUser == null) {
+//            return false;
+//        }
+//        session.setAttribute("userInfo", loginUser);
+//
+//        return true;
+//    }
     @PostMapping("login")
-    public boolean login(String userEmail, String userPassword, HttpSession session) {
+    public Map<String, Object> login(String userEmail, String userPassword, HttpSession session) {
         UserVO loginUser = userService.getUserInfo(userEmail, userPassword);
-
+        HashMap<String, Object> result = new HashMap<>();
         if(loginUser == null) {
-            return false;
+
+            result.put("login", null);
+            return result;
         }
         session.setAttribute("userInfo", loginUser);
-
-        return true;
+        result.put("login", loginUser.userId);
+        return result;
     }
 
     @PostMapping("check-email")

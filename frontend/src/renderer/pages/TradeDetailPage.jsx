@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import {useSetRecoilState, useRecoilValue, useRecoilState} from "recoil";
 import { tradeDetailProductAtom } from "../../recoil/atoms/tradeAtom";
 import {tradeItemDetail} from '../../recoil/selectors/tradeItemSelector'
 import { useQuery } from 'react-query';
@@ -25,8 +25,6 @@ const TradeDetailPage = () => {
             onError : (error) => {
                 console.error("데이터를 가져오는 중 오류 발생:", error);
             },
-            staleTime : 5 * 60 * 1000, // 5분동안 캐시 재사용
-            cacheTime : 10 * 60 * 1000 // 10분 동안 캐시 보관
         }
     )
 

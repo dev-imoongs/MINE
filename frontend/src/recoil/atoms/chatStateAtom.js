@@ -5,25 +5,28 @@ export const chatDrawerState = atom({
     default: false,  
   });
 
-  export const currentChatId = atom({
-    key: 'currentChatId',
-    default: null,
-  })
-  export const sendMessage = atom({
+export const chatListAndRoomState = atom({
+    key : 'chatListAndRoomState',
+    default : 'listContainer'
+})
+
+export const chattingRoomSeller = atom({
+    key : 'chatSeller',
+    default : []
+})
+export const sendMessage = atom({
     key: 'sendMessage',
     default: {
       message : "text",
       type: "send",
       text: "",
       time: new Date(),
-      userId: "2",
-      sender : '1',
-      receiver : '2',
-      itemId : '1',
-      messageForFirstDate: false,
-      image:[]
+      sender : '',
+      receiver : '',
+      itemId : '',
+      images:[]
     },
-  })
+})
 
   export const textMessageArray = atom ({
     key: 'textMessageArray',

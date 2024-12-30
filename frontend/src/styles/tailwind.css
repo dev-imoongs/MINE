@@ -528,7 +528,7 @@
 
 .swiper .swiper-button-next,
 .swiper .swiper-button-prev {
-    display: none;
+    /*display: none;*/
 }
 
 .carouselWrapper .swiper-button-disabled {

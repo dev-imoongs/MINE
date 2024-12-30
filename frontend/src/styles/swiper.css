@@ -646,3 +646,74 @@ button.swiper-pagination-bullet {
     backface-visibility: hidden;
     overflow: hidden;
 }
+
+
+
+.swiper-button-next {
+    right: 10px;
+}
+
+.swiper-button-prev {
+    left: 10px;
+}
+
+/* Swiper 페이지네이션 */
+.swiper-pagination-bullet {
+    background: white;
+    width: 12px;
+    height: 12px;
+    opacity: 0.8;
+    margin: 0 5px;
+    border-radius: 50%;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.swiper-pagination-bullet-active {
+    background: #4D6161FF;
+    width: 12px;
+    height: 12px;
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* 모달 배경 및 정렬 */
+.modal-root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-root button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 1);
+}
+
+/* Swiper 네비게이션 버튼 */
+.swiper-button-next,
+.swiper-button-prev {
+    color: white; /* 화살표 색상 */
+    background-color: rgba(0, 0, 0, 1); /* 반투명 배경 */
+    border-radius: 50%; /* 둥근 화살표 */
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    position: absolute;
+    top: 50%; /* 화면 중앙 정렬 */
+    transform: translateY(-50%);
+    z-index: 10;
+    cursor: pointer;
+}
+
+.swiper-button-next {
+    right: 10px; /* 오른쪽 화살표 위치 */
+}
+
+.swiper-button-prev {
+    left: 10px; /* 왼쪽 화살표 위치 */
+}
