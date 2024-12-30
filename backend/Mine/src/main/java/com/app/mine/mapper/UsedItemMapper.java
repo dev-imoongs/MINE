@@ -13,6 +13,8 @@ import java.util.Map;
 @Mapper
 public interface UsedItemMapper {
 
+    public Integer selectLastUsedItem();
+
     public void insertUsedItem(UsedItemVO usedItemVO);
 
     public void updateUsedItem(UsedItemVO usedItemVO);

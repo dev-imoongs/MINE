@@ -67,4 +67,10 @@ public class UserRestController {
 
         userService.saveUser(userVO);
     }
+
+    @PostMapping("getMyInfo")
+    public UserVO getMyInfo(HttpSession session) {
+        UserVO userInfo = (UserVO)session.getAttribute("userInfo");
+        return userService.getMyInfo(userInfo);
+    }
 }

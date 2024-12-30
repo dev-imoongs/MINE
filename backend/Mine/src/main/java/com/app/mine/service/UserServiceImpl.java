@@ -40,7 +40,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserVO getUserInfo(String userEmail, String userPassword) {
-        return userMapper.selectUser(userEmail, hash(userPassword));
+        return userMapper.selectUser(userEmail, userPassword != null ? hash(userPassword) : null);
+    }
+
+    public UserVO getMyInfo(UserVO userVO) {
+        return userMapper.selectMyInfo(userVO);
     }
 
     public void saveUser(UserVO userVO) {

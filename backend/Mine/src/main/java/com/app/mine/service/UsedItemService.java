@@ -3,6 +3,7 @@ package com.app.mine.service;
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.vo.Criteria;
+import com.app.mine.vo.FileVO;
 import com.app.mine.vo.UsedItemVO;
 import com.app.mine.vo.UserVO;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public interface UsedItemService {
 
-    public void saveUsedItem(UsedItemVO usedItemVO);
+    public void saveUsedItem(UsedItemVO usedItemVO, List<FileVO> fileVOList);
 
     // 메인페이지 조회
     public List<Map<String, Object>> findAllUsedItems();

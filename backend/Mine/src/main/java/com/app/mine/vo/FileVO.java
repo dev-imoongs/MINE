@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FileVO {
-    private Integer fileUuid;
+    private String fileUuid;
     private String fileName;
     private String filePath;
     private String fileType;
