@@ -54,26 +54,26 @@ const RightSideMenu = memo(() => {
     const [userId, setUserId] = useRecoilState(userState);
     const [unreadCount, setUnreadCount] = useState(0);
 
-    useEffect(() => {
-        if(userId){
-            const eventSource = new EventSource(`/chat/unread-messages?userId=${userId}`);
-
-            eventSource.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                // console.log('SSE message received:', data);
-                setUnreadCount(data.unread.count || 0); // 읽지 않은 메시지 수 업데이트
-            };
-
-            eventSource.onerror = (err) => {
-                console.error('SSE error:', err);
-                eventSource.close();
-            };
-
-            return () => {
-                eventSource.close(); // 컴포넌트 언마운트 시 연결 종료
-            };
-        }
-    }, [userId]);
+    // useEffect(() => {
+    //     if(userId){
+    //         const eventSource = new EventSource(`/chat/sse/unread-messages?userId=${userId}`);
+    //
+    //         eventSource.onmessage = (event) => {
+    //             const data = JSON.parse(event.data);
+    //             // console.log('SSE message received:', data);
+    //             setUnreadCount(data.unread.count || 0); // 읽지 않은 메시지 수 업데이트
+    //         };
+    //
+    //         eventSource.onerror = (err) => {
+    //             console.error('SSE error:', err);
+    //             eventSource.close();
+    //         };
+    //
+    //         return () => {
+    //             eventSource.close(); // 컴포넌트 언마운트 시 연결 종료
+    //         };
+    //     }
+    // }, [userId]);
 
     return (
         <>
@@ -111,12 +111,12 @@ const RightSideMenu = memo(() => {
                                         d="M8.864 12.2a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Z"
                                     ></path>
                                 </svg>
-                                <div
-                                    className="absolute text-xs leading-[18px] -top-2 -right-1 w-[18px] h-[18px] font-semibold rounded-[50%] bg-jngreen text-center"
-                                    id="채팅하기"
-                                >
-                                    {unreadCount}
-                                </div>
+                                {/*<div*/}
+                                {/*    className="absolute text-xs leading-[18px] -top-2 -right-1 w-[18px] h-[18px] font-semibold rounded-[50%] bg-jngreen text-center"*/}
+                                {/*    id="채팅하기"*/}
+                                {/*>*/}
+                                {/*    {unreadCount}*/}
+                                {/*</div>*/}
                             </div>
 
                             <p id="채팅하기" className="ml-1">
