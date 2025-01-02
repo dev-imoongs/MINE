@@ -2,6 +2,8 @@ package com.app.mine.controller;
 
 import com.app.mine.service.AuctionItemService;
 import com.app.mine.vo.AuctionItemVO;
+import com.app.mine.vo.UserVO;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -55,4 +57,9 @@ public class AuctionItemController {
         return ResponseEntity.ok(res);
     }
 
+    @PostMapping("/getMyAuctionItemList")
+    public List<AuctionItemVO> getMyAuctionItemList(HttpSession session) {
+        UserVO userInfo = (UserVO)session.getAttribute("userInfo");
+        return auctionItemService.getMyAuctionItemList(userInfo);
+    }
 }

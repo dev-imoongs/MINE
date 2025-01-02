@@ -6,6 +6,7 @@ import com.app.mine.vo.AuctionItemVO;
 import com.app.mine.mapper.AuctionItemMapper;
 import com.app.mine.vo.Criteria;
 import com.app.mine.vo.UsedItemVO;
+import com.app.mine.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,11 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         auctionItemMap.put("itemList", itemList);
 
         return auctionItemMap;
+    }
+
+    @Override
+    public List<AuctionItemVO> getMyAuctionItemList(UserVO userVO) {
+        return auctionItemMapper.selectMyAuctionItemList(userVO);
     }
 
 }

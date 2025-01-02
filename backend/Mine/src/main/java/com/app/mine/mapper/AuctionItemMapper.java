@@ -4,6 +4,7 @@ import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.vo.AuctionItemVO;
 import com.app.mine.vo.UsedItemVO;
+import com.app.mine.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +26,6 @@ public interface AuctionItemMapper {
                                                 Integer userId);
     public List<AuctionItemVO> selectAllAuctionItem(@Param("page") PageDTO pageDTO);
     public Map<String, Object> selectItemStatisticsByCondition(@Param("page") SearchDTO searchDTO);
+
+    public List<AuctionItemVO> selectMyAuctionItemList(UserVO userVO);
 }
