@@ -5,7 +5,7 @@ import axios from 'axios';
 //baseURL: 'http://localhost:8070'
 
 export const myAuctionProduct = async () => {
-    const res = await axios.get('/data/myAuctionData.json');
+    const res = await axios.post('/api/auction-items/getMyAuctionItemList');
     return res.data;
 };
 

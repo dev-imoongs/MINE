@@ -15,11 +15,14 @@ public class AuctionItemVO {
     private String auctionItemEndTime;
     private String createdAt;
     private String categoryId;
-    private Integer auctionItemStatus;
+    private String categoryIdVal;
+    private String auctionItemStatus;
+    private String auctionItemStatusVal;
     private Integer minBidAmount;
     private String updatedAt;
 
     private String bidCount;
     private String likeCount;
     private Boolean myFavoriteAuction;
+    private Integer auctionItemJoinCount;
 }
