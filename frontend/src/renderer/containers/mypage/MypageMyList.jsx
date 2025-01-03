@@ -3,6 +3,7 @@ import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js";
 import TrustRatingModal from '../../pages/modal/TrustRatingModal.jsx';
 import {Link, useNavigate, useNavigation} from 'react-router-dom';
 import tempProductImage from '../../../assets/temp_product.png'
+import {getTimeAgo, getTimeRemaining } from "../../../services/commonService";
 
 import styled from "styled-components";
 import {useRecoilState} from "recoil";
@@ -213,15 +214,15 @@ const MypageMyList = ({data,isProduct}) => {
                       <div className="my-item-con relative" key={index}>
                           <div className="my-content-con relative">
                               <Link
-                                  to={`/auction/${item.AUCTION_ITEM_ID}`}
+                                  to={`/auction/${item.auctionItemId}`}
                                   className="relative group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
                               >
                                   <div
                                       className="my-img-con relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
                                       <img
-                                          alt={item.AUCTION_ITEM_NAME}
+                                          alt={item.auctionItemName}
                                           // referrerPolicy="no-referrer"
-                                          src={item.IMG}
+                                          src={tempProductImage}
                                           decoding="async"
                                           data-nimg="fill"
                                           className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
@@ -234,48 +235,48 @@ const MypageMyList = ({data,isProduct}) => {
                                               color: "transparent"
                                           }}
                                       />
-                                      {item.AUCTION_ITEM_STATUS === 1 && (
-                                          <div className="z-10 pending item-status">{item.AUCTION_ITEM_STATUS_NAME}</div>
+                                      {item.auctionItemStatus === '201' && (
+                                          <div className="z-10 pending item-status">{item.auctionItemStatusVal}</div>
                                       )}
-                                      {item.AUCTION_ITEM_STATUS === 2 && (
-                                          <div className="z-10 ongoing item-status">{item.AUCTION_ITEM_STATUS_NAME}</div>
+                                      {item.auctionItemStatus === '202' && (
+                                          <div className="z-10 ongoing item-status">{item.auctionItemStatusVal}</div>
                                       )}
                                       {/*<div className="z-10 ended item-status">종료</div>*/}
                                   </div>
                                   <div
                                       className="my-text-con w-full overflow-hidden p-0 md:p-0 lg:p-0 xl:p-0 2xl:p-0">
                                       <h2 className="line-clamp-2 min-h-[10h] text-sm md:text-base text-heading">
-                                          {item.AUCTION_ITEM_NAME}
+                                          {item.auctionItemName}
                                           {/*<span className="text-sm text-gray-400 mx-1">|</span>*/}
-                                          {/*<span>{item.AUCTION_ITEM_STATUS_NAME}</span>*/}
+                                          {/*<span>{item.AUCTIONITEMSTATUS_NAME}</span>*/}
                                       </h2>
                                       <div className="mt-2">
                                           <span className="font-bold">
-                                              {item.AUCTION_ITEM_STATUS === 1
-                                                  ? `${item.AUCTION_ITEM_START_PRICE}원`
-                                                  : `${item.AUCTION_ITEM_HIGHEST_PRICE}원`}
+                                              {item.auctionItemStatus === '201'
+                                                  ? `${item.auctionItemStartPrice}원`
+                                                  : `${item.auctionItemHighestPrice}원`}
                                           </span>
-                                          {item.AUCTION_ITEM_STATUS !== 1 && <span className="ml-2 text-s text-gray-500 line-through">{item.AUCTION_ITEM_START_PRICE}</span>}
+                                          {item.auctionItemStatus !== '201' && <span className="ml-2 text-s text-gray-500 line-through">{item.auctionItemStartPrice}</span>}
                                       </div>
                                       {/*<div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">*/}
-                                      {/*    {item.AUCTION_ITEM_STATUS === 1*/}
+                                      {/*    {item.AUCTIONITEMSTATUS === 201*/}
                                       {/*        ? `${item.AUCTION_ITEM_START_PRICE}원`*/}
                                       {/*        : `${item.AUCTION_ITEM_HIGHEST_PRICE}원`}*/}
-                                      {/*    {item.AUCTION_ITEM_STATUS !== 1 &&*/}
+                                      {/*    {item.AUCTIONITEMSTATUS !== 201 &&*/}
                                       {/*        <span className={"m-1"}>시작가: {item.AUCTION_ITEM_START_PRICE}</span>}*/}
                                       {/*</div>*/}
                                       <div className="my-1">
                                           <span
-                                              className="text-sm text-gray-400">{item.AUCTION_ITEM_STATUS === 1 ? '등록시간' : '종료시간'}</span>
+                                              className="text-sm text-gray-400">{item.auctionItemStatus === '201' ? '등록시간' : '종료시간'}</span>
                                           <span className="text-sm text-gray-400 mx-1">|</span>
                                           <span
-                                              className="text-sm text-gray-400">{item.AUCTION_ITEM_STATUS === 1 ? item.AUCTION_ITEM_CREATE_TIME : item.AUCTION_ITEM_END_TIME}</span>
+                                              className="text-sm text-gray-400">{item.auctionItemStatus === '201' ? item.createdAt : item.auctionItemEndTime}</span>
                                       </div>
-                                      {item.AUCTION_ITEM_STATUS === 2 && (
+                                      {item.auctionItemStatus === '202' && (
                                           <div className="item-info_wrap">
                                               <div>
                                                   <span>입찰 </span>
-                                                  <span>{item.AUCTION_JOIN_COUNT}회</span>
+                                                  <span>{item.auctionItemJoinCount}회</span>
                                               </div>
                                               <span className="bar"></span>
                                               <div className="item-info time">
@@ -291,7 +292,7 @@ const MypageMyList = ({data,isProduct}) => {
                                                           fill="#626262"
                                                       />
                                                   </svg>
-                                                  <span className="pl-[8px]">7일 00시간 </span>
+                                                  <span className="pl-[8px]">{getTimeRemaining(item.auctionItemEndTime)} </span>
                                               </div>
                                               {/*<span className="text-sm text-gray-400">남은시간</span>*/}
                                               {/*<span className="text-sm text-gray-400 mx-1">|</span>*/}
@@ -325,7 +326,7 @@ const MypageMyList = ({data,isProduct}) => {
                           {/*        </svg>*/}
                           {/*    </div>*/}
                           {/*</div>*/}
-                          {item.AUCTION_ITEM_STATUS === 1 && (
+                          {item.auctionItemStatus === '201' && (
                               <div
                                   className="flex flex-col space-y-2 items-end absolute cursor-pointer right-0 top-3 w-full h-auto">
                                   <div onClick={() => productMenuClick(index)}>
@@ -361,10 +362,10 @@ const MypageMyList = ({data,isProduct}) => {
                                       className="flex flex-col w-full lg:w-[160px] bg-white text-black rounded-lg border border-jnGray-300 overflow-hidden">
                                       <ul>
                                           <li className="font-semibold text-sm hover:bg-jnGray-200">
-                                              <button onClick={() => updateClick(item.AUCTION_ITEM_ID)}
+                                              <button onClick={() => updateClick(item.auctionItemId)}
                                                       className="w-full py-5">수정
                                               </button>
-                                              <button onClick={() => updateDelivery(item.AUCTION_ITEM_ID)}
+                                              <button onClick={() => updateDelivery(item.auctionItemId)}
                                                       className="w-full py-5">배송완료
                                               </button>
                                           </li>

@@ -111,6 +111,34 @@
         <include refid="searchCondition" />
     </select>
 
+    <select id="selectMyAuctionItemList" parameterType="UserVo" resultType="auctionItemVO">
+        select
+            tai.auction_item_id,
+            tai.user_id,
+            tai.auction_item_name,
+            tai.auction_item_explain,
+            tai.auction_item_start_price,
+            tai.auction_item_highest_price,
+            to_char(tai.auction_item_end_time, 'YYYY-MM-DD') as auction_item_end_time,
+            to_char(tai.created_at, 'YYYY-MM-DD') as created_at,
+            tai.category_id,
+            tc1.category_value as category_id_val,
+            tai.auction_item_status,
+            tc2.category_value as auction_item_status_val,
+            tai.min_bid_amount,
+            tai.updated_at,
+            (SELECT COUNT(*)
+             FROM tbl_auction_join taj
+             WHERE taj.auction_item_id = tai.auction_item_id) AS auction_item_join_count
+        from
+            tbl_auction_item tai
+            LEFT JOIN tbl_category tc1 ON tc1.category_detail = tai.category_id
+            LEFT JOIN tbl_category tc2 ON tc2.category_detail = tai.auction_item_status
+        where 1=1
+        AND tai.user_id = #{userId}
+        AND tai.auction_item_status IN ('201', '202')
+    </select>
+
     <sql id="searchCondition" >
         <choose>
             <when test="page.IS_SEARCH_DTO">
