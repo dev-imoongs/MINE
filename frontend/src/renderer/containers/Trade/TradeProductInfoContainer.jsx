@@ -8,7 +8,7 @@ import {
     chatListAndRoomState,
     chattingRoomSeller
 } from '../../../recoil/atoms/chatStateAtom'
-import { userState } from '../../../recoil/atoms/loginUserAtom'
+import { userState, userSession } from '../../../recoil/atoms/loginUserAtom'
 import { ToastContainer, toast } from 'react-toastify';
 import { useRecoilValue } from 'recoil';
 import { getTimeAgo } from '../../../services/commonService';
@@ -26,6 +26,7 @@ const TradeProductInfoContainer = ({ StImg }) => {
     const nav = useNavigate();
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
     const userId = useRecoilValue(userState);
+    const session = useRecoilValue(userSession);
     const [,setChatContainerState] = useRecoilState(chatListAndRoomState);
     const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
     const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
@@ -50,8 +51,9 @@ const TradeProductInfoContainer = ({ StImg }) => {
                     itemId : productInfo.usedItemId,
                     itemType : 'Used',
                     sender : userId,
-                    receive : sellerInfo.userId
-                });
+                    receive : sellerInfo.userId,
+                    userEmail : session.userEmail
+                },session.sessionId);
                 // // 2. 메시지 가공
                 const processedMessage = processMessages(message.chat, userId);
                 // 3. Recoil 상태 업데이트

@@ -11,3 +11,8 @@ export const userState = atom({
     key: 'userState',
     default: null, // 사용자 정보 초기값 (로그인 전에는 null)
 });
+
+export const userSession = atom({
+    key : 'userSession',
+    default: {}
+})

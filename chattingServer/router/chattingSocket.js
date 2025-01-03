@@ -1,21 +1,79 @@
 const socketIo = require('socket.io');
-// const redisClient = require('../service/redisClient');
+const redisClient = require('../service/redisClient');
 const dbService = require('../service/postgresService');
+const {getSessionData} = require('../service/sessionService')
 
 const chattingSocket = (server) => {
     const io = socketIo(server, {
         cors: {
             origin: "http://localhost:5173",
             methods: ["GET", "POST"],
-            credentials: true
+            credentials: true, // 쿠키 허용
         }
     });
+
+    // 세션 미들웨어를 socket.io에 적용
+    // 세션 미들웨어 적용
+    // Redis를 이용한 세션 인증
+    // io.use((socket, next) => {
+    //     const sessionId = socket.handshake.headers.sessionid; // 헤더에서 sessionid 가져오기
+    //     if (!sessionId) {
+    //         console.error('No session ID found in headers.');
+    //         return next(new Error('Authentication error'));
+    //     }
+    //
+    //     console.log('Extracted session ID:', sessionId);
+    //
+    //     // Redis에서 세션 데이터 조회
+    //     redisClient.get(`spring:session:sessions:${sessionId}`, (err, sessionData) => {
+    //         if (err || !sessionData) {
+    //             console.error('Redis session not found or error occurred:', err);
+    //             return next(new Error('Authentication error'));
+    //         }
+    //
+    //         try {
+    //             const sessionInfo = JSON.parse(sessionData); // Redis에서 가져온 세션 데이터 파싱
+    //             const userInfo = sessionInfo?.attributeMap?.userInfo; // Spring 세션 구조에 따라 userInfo 확인
+    //
+    //             if (!userInfo) {
+    //                 console.error('No userInfo found in session.');
+    //                 return next(new Error('Authentication error'));
+    //             }
+    //
+    //             console.log('User Info from Redis:', userInfo);
+    //             socket.userInfo = userInfo; // 소켓에 사용자 정보 추가
+    //             next();
+    //         } catch (parseError) {
+    //             console.error('Error parsing Redis session data:', parseError);
+    //             return next(new Error('Authentication error'));
+    //         }
+    //     });
+    // });
+
     const chatNamespace = io.of('/chat'); // '/chat' 네임스페이스 생성
 
-    chatNamespace.on('connection', (chatSocket) => {
-        const { chattingroom, sender, receiver } = chatSocket.handshake.headers;
+    chatNamespace.on('connection',async (chatSocket) => {
+        let { chattingroom,receiver , sessionid, sender} = chatSocket.handshake.headers;
 
+
+        let senderEmail = chatSocket.handshake.headers.sender;
+        console.log('세션 정보: ', sessionid);  // 세션 출력
         console.log(`새로운 클라이언트 연결: ${chatSocket.id}`);
+
+
+
+        const session = await getSessionData(sessionid);
+        if(!session){
+            chatSocket.emit('authError', {status : false, message : 'session 만료'})
+            chatSocket.disconnect();
+            return;
+        }
+
+
+        const userId = session.userInfo.userId
+        if(senderEmail === session.userInfo.userEmail){
+            sender = userId;
+        }
         console.log(`채팅방 ID: ${chattingroom}, 발신자: ${sender}, 수신자: ${receiver}`);
 
         // 클라이언트를 해당 채팅방(room)에 조인
@@ -23,7 +81,7 @@ const chattingSocket = (server) => {
         console.log(`${chatSocket.id} 채팅방 ${chattingroom}에 참여`);
 
         // 방에 새로 들어왔을 때 읽지 않은 메시지를 읽음 처리
-        chatSocket.on('joinRoom', async ({ userId, roomId }) => {
+        chatSocket.on('joinRoom', async ({ roomId }) => {
             console.log(`사용자 ${userId}가 방 ${roomId}에 입장`);
             try {
                 // `tbl_chatting_read`와 `tbl_chatting`을 조인하여 room_id를 기준으로 읽지 않은 메시지 가져오기
@@ -48,7 +106,6 @@ const chattingSocket = (server) => {
                     // 읽음 상태 업데이트 브로드캐스트
                     chatNamespace.to(chattingroom).emit('read', {
                         chatting_ids: unreadMessageIds,
-                        reader_id: userId
                     });
                     console.log('읽음 상태 업데이트 완료:', unreadMessageIds);
                 }
@@ -63,17 +120,12 @@ const chattingSocket = (server) => {
 
             try {
                 let roomClients = chatNamespace.adapter.rooms.get(chattingroom) || new Set();
-
-                // 상대방이 방에 접속해 있는지 확인
-                let isReceiverConnected = Array.from(roomClients).some((clientId) => {
-                    let clientSocket = chatNamespace.sockets.get(clientId);
-                    return clientSocket && clientSocket.handshake.headers.sender === String(message.receiver);
-                });
-                console.log(isReceiverConnected);
-
+                let isReceiverConnected = roomClients.size > 1 ? true : false;
+                console.log(":::::::::::::: isReceiverConnected     :::::::::: "+ isReceiverConnected);
                 // 메시지 저장
                 const savedChat = await dbService.insertChatting({
-                    chatting_sending_user_id: message.sender,
+                    // chatting_sending_user_id: message.sender,
+                    chatting_sending_user_id: sender,
                     chatting_receive_user_id: message.receiver,
                     item_id: message.itemId,
                     chatting_content: message.text,
@@ -82,9 +134,8 @@ const chattingSocket = (server) => {
                     images: JSON.stringify(message.images || [])
                 });
 
-                // console.log("메시지 저장 완료:", savedChat);
+                console.log("메시지 저장 완료:", savedChat);
 
-                // 읽음 상태 업데이트: 상대방이 방에 들어와 있거나 메시지가 수신자에게 도착한 경우
                 if (isReceiverConnected || String(message.receiver) === String(sender)) {
                     console.log('읽음 상태 업데이트 진행');
                     const readQuery = `
@@ -104,7 +155,8 @@ const chattingSocket = (server) => {
                 chatNamespace.to(chattingroom).emit('message', {
                     ...message,
                     chatting_id: savedChat.chatting_id,
-                    read: isReceiverConnected
+                    read: isReceiverConnected,
+                    userEmail : session.userInfo.userEmail
                 });
 
             } catch (error) {
@@ -127,7 +179,7 @@ const chattingSocket = (server) => {
                     `;
                     const result = await dbService.pool.query(query, [chattingroom]);
                     const messageCount = result.rows[0].message_count;
-                    console.log(typeof messageCount)
+                    // console.log(typeof messageCount)
 
                     if (parseInt(messageCount) === 0) {
                         // 3. 메시지가 없으면 방 삭제

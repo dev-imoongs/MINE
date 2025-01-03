@@ -55,7 +55,7 @@ const pool = new Pool({
 // }
 
 const selectMessage = async (roomId) => {
-    console.log(":::::::::::::::::::::::::::::::::::::::         ",roomId)
+    // console.log(":::::::::::::::::::::::::::::::::::::::         ",roomId)
     const query = `
         SELECT * FROM tbl_chatting
         WHERE room_id = ${roomId}
@@ -186,7 +186,7 @@ const selectRoomId = async (data) =>{
 
     try {
         const result = await pool.query(roomSelectQuery, values);
-        console.log(result.rows)
+        // console.log(result.rows)
         return result.rows[0].room_id;
     } catch (error) {
         console.error('::', error);
@@ -484,7 +484,7 @@ const unReadMsgCount = async (userId) => {
 }
 
 const selectRoomData = async (data) => {
-    console.log(data)
+    // console.log(data)
     const query = `
         SELECT
             item.used_item_name,
@@ -524,7 +524,7 @@ const selectRoomData = async (data) => {
     `
     try {
         const result = await pool.query(query);
-        console.log(result)
+        // console.log(result)
         const roomData = {
             itemName : result.rows[0].used_item_name,
             itemPrice : result.rows[0].used_item_price,
@@ -537,7 +537,7 @@ const selectRoomData = async (data) => {
             senderTrustScore:  result.rows[0].sender_trust_score
         }
 
-        console.log(roomData)
+        // console.log(roomData)
         return roomData;
     } catch (error) {
         console.error('::', error);

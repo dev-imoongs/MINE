@@ -5,7 +5,7 @@ import {
     chattingRoomSeller, textMessageArray
 } from '../../../recoil/atoms/chatStateAtom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { userState } from '../../../recoil/atoms/loginUserAtom';
+import {userSession, userState} from '../../../recoil/atoms/loginUserAtom';
 import {getChattingList, getMessage} from '../../../services/chatService';
 import { useQuery } from 'react-query';
 import LoadingSpinner from '../../components/Common/LoadingSpinner.jsx';
@@ -14,14 +14,15 @@ import {processMessages} from "../../../recoil/selectors/chatSelector.js";
 
 const ChattingListContainer = () => {
     const setDrawerVisible = useSetRecoilState(chatDrawerState);
+    const session = useRecoilValue(userSession)
     const userId = useRecoilValue(userState);
 
     // React Query를 사용하여 채팅 리스트 가져오기
     const { data: list = [], isLoading, error } = useQuery(
         ['chattingList', userId],
-        () => getChattingList(userId),
+        () => getChattingList(session.sessionId),
         {
-            enabled: !!userId, // userId가 있을 때만 쿼리 실행
+            enabled: !!session, // userId가 있을 때만 쿼리 실행
         }
     );
 
@@ -85,9 +86,9 @@ const ChattingListComponent = ({ chat }) => {
     const setChatContainerState = useSetRecoilState(chatListAndRoomState);
     const setRoomData = useSetRecoilState(chattingRoomSeller);
     const userId = useRecoilValue(userState);
+    const session = useRecoilValue(userSession)
     const [message, setMessage] = useRecoilState(textMessageArray);
     const fetchMessage = async () => {
-
         try {
             // 1. 서버에서 메시지 요청
             const message = await getMessage({
@@ -97,9 +98,10 @@ const ChattingListComponent = ({ chat }) => {
                 itemId : chat.itemId,
                 itemType : chat.itemType,
                 sender : chat.sender,
-                receive : chat.receiver
+                receive : chat.receiver,
+                userEmail : session.userEmail
                 // receive : userId === chat.buyer_id ? chat.seller_id : chat.buyer_id
-            });
+            },session.sessionId);
             console.log(message)
             // // 2. 메시지 가공
             const processedMessage = processMessages(message.chat, userId);
