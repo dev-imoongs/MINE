@@ -13,8 +13,9 @@ export const login = async (input) => {
     },
     {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        withCredentials: true
     });
-    
+    console.log("세션 ID", response.data)
     return response.data;
 }
 

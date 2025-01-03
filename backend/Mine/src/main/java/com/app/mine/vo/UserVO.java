@@ -3,9 +3,12 @@ package com.app.mine.vo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class UserVO {
+public class UserVO implements Serializable {
+    private static final long serialVersionUID = 1L;
     public Integer userId;
     public String userEmail;
     public String userPassword;

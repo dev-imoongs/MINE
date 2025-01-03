@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from "react-query";
 import styles from '../../../styles/login/index.module.css';
-import { authState, userState } from ".././../../recoil/atoms/loginUserAtom"
+import { authState, userState, userSession } from ".././../../recoil/atoms/loginUserAtom"
 import { useRecoilState } from 'recoil';
 import { login } from "../../../services/userApiService.js";
 
 const Index = () => {
     const navigate = useNavigate();
     const [user, setUser] = useRecoilState(userState);
+    const [session, setSession] = useRecoilState(userSession);
     const [input, setInput] = useState({
         email: "",
         password: "",
@@ -22,6 +23,7 @@ const Index = () => {
             if (result.login) {
                 console.log((result))
                 setUser(result.login)
+                setSession(result)
                 navigate("/"); // 성공 시 페이지 이동
             } else {
                 alert("이메일 또는 비밀번호를 확인하세요.");

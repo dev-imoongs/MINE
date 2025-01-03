@@ -10,17 +10,21 @@ import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import TextMessageComponent from '../../components/Chat/TextMessageComponent'
 import ImageMessageComponent from '../../components/Chat/ImageMessageComponent'
-import {userState} from "../../../recoil/atoms/loginUserAtom.js";
+import {userState,userSession} from "../../../recoil/atoms/loginUserAtom.js";
+import {useNavigate} from "react-router-dom";
+
 const ChattingRoomContainer = () => {
     // chatting room 번호
     const loginUser = useRecoilValue(userState)
+    const session = useRecoilValue(userSession)
     const [chatContainerState,setChatContainerState] = useRecoilState(chatListAndRoomState);
     const [socket, setSocket] = useState(null); // 소켓 상태 관리
     const [message, setMessage] = useRecoilState(textMessageArray);
     const [sndMsg, setSndMsg] = useRecoilState(sendMessage);
-    const drawerVisible = useRecoilValue(chatDrawerState); // 드로어 상태
+    const [drawerVisible,setDrawerVisible] = useRecoilState(chatDrawerState); // 드로어 상태
     const roomData = useRecoilValue(chattingRoomSeller);
     const messageEndRef = useRef(null);
+    const nav = useNavigate();
 
     useEffect(() => {
         console.log('mount')
@@ -33,15 +37,17 @@ const ChattingRoomContainer = () => {
         console.log('socket' + socket)
 
         console.log("roomData.roomId"+ roomData.roomId)
-        console.log("sender"+ loginUser)
+        console.log("sender"+ session.userEmail)
         console.log("roomData.receive"+ roomData.receive)
 
         if(drawerVisible && roomData.roomId && socket == null){
             const newSocket = io('http://localhost:3080/chat', {
+                withCredentials: true,
                 extraHeaders: {
                     chattingRoom: roomData.roomId,
-                    sender : loginUser,
+                    sender : session.userEmail,
                     receiver : roomData.receive,
+                    sessionId : session.sessionId
                 }
             });
             setSocket(newSocket)
@@ -51,7 +57,7 @@ const ChattingRoomContainer = () => {
                 console.log('연결: ' + newSocket.id);
             });
             newSocket.emit('joinRoom', {
-                userId: loginUser, // 로그인한 사용자 ID
+                // userId: loginUser, // 로그인한 사용자 ID
                 roomId: roomData.roomId, // 현재 방 ID
             })
 
@@ -65,7 +71,8 @@ const ChattingRoomContainer = () => {
                             chatting_id : message.chatting_id,
                             message: message.message || 'text', // 기본값 설정
                             text: message.text,
-                            type: message.sender === loginUser ? "send" : "receive",
+                            // type: message.sender === loginUser ? "send" : "receive",
+                            type : message.userEmail === session.userEmail ? "send" : "receive",
                             time: message.time,
                             read: message.read,
                             images : message.images
@@ -81,8 +88,15 @@ const ChattingRoomContainer = () => {
                 console.error(newSocket.id+ ' Disconnected: ' + err);
             });
 
+            newSocket.on('authError', async (data) => {
+                console.error(data.message)
+
+                setDrawerVisible(false)
+                nav('/login');
+            })
+
         }
-    }, [chatContainerState, drawerVisible /*socket, , chatId, loginUser, roomData, setMessage*/]);
+    }, [chatContainerState, drawerVisible, nav, setDrawerVisible /*socket, , chatId, loginUser, roomData, setMessage*/]);
 
     useEffect(() => {
         if(!drawerVisible){
@@ -95,7 +109,7 @@ const ChattingRoomContainer = () => {
     useEffect(() => {
         if (socket) {
             // 읽음 상태 업데이트 이벤트 수신
-            socket.on('read', ({ chatting_ids, reader_id }) => {
+            socket.on('read', ({ chatting_ids }) => {
                 console.log('읽음 상태 업데이트 수신:', chatting_ids);
                 console.log(":마 들어오나")
                 // 읽음 상태 업데이트
@@ -114,25 +128,23 @@ const ChattingRoomContainer = () => {
                 socket.off('messageRead');
             }
         };
-    }, [socket, loginUser, roomData.roomId, setMessage]);
+    }, [socket, roomData.roomId, setMessage]);
 
     useEffect(() => {
         console.log(socket)
         if(socket != null){
             if (sndMsg.message === 'text') {
                 if (sndMsg.text && sndMsg.text.trim()) {
-                    // setMessage((prevMessages) => [...prevMessages, sndMsg]);
                     console.log("text sndMsg" + JSON.stringify(sndMsg))
                     socket.emit('message', sndMsg);
                 }
             } else {
                 console.log("image sndMsg" + JSON.stringify(sndMsg))
-                // setMessage((prevMessages) => [...prevMessages, sndMsg]);
                 socket.emit('message', sndMsg)
             }
         }else{
         }
-    }, [sndMsg/*, socket*/]);
+    }, [sndMsg]);
 
 
 
@@ -163,7 +175,6 @@ const ChattingRoomContainer = () => {
                     <h2 className="flex flex-col md:flex-row justify-center items-center md:space-x-2 flex-1 text-lg font-semibold text-center text-jnGray-900 cursor-pointer">
                         <p className="mb-0">
                             <span className="flex items-center justify-center space-x-2">
-                                {console.log(roomData.nickName)}
                                 <span>{roomData.nickName}</span>
                                 <span className="text-[11px] text-[#0CB650] border border-jngreen px-2 rounded-2xl h-5 leading-5">{roomData.trust}</span>
                             </span>
@@ -244,8 +255,9 @@ export default ChattingRoomContainer;
 const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
     const [text, setText] = useState('');
     const loginUser = useRecoilValue(userState)
+    const session = useRecoilValue(userSession)
     const roomData = useRecoilValue(chattingRoomSeller);
-    const handleFileUpload = async(e, chatRoomId) => {
+    const handleFileUpload = async(e) => {
         const files = e.target.files;
         const formData = new FormData();
         if (files.length > 0) {
@@ -257,17 +269,19 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
           try {
             const res = await fetch('/chat/upload', {
                 method: 'POST',
+                headers : {
+                    uploadState: true
+                },
                 body: formData,
               });
             const result = await res.json();
             if(result.success){
                 const updatedImages = result.urls.map((url) => ({url}));
-                console.log(updatedImages)
                 setSendMessage((prev) => ({
                     ...prev,
                     message: 'image',
                     images: updatedImages,
-                    sender: loginUser,
+                    sender : session.userEmail,
                     receiver: roomData.receive,
                     text: '',
                     itemId : roomData.itemId,
@@ -291,7 +305,7 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
         console.log(roomData.itemId)
         await setSendMessage(prev => ({
             ...prev,
-            sender: loginUser,
+            sender : session.userEmail,
             receiver: roomData.receive,
             message: 'text',
             text: text,
