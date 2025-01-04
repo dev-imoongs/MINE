@@ -10,6 +10,7 @@ const sessionCheckHandler = require('./router/sessionCheckHandler')
 const sseHandler = require('./router/sseHandler');
 const helmet = require('helmet');
 const cors = require('cors');
+const compression = require("compression");
 const port = 3080;
 app.use(cookieParser());
 app.use(cors({
@@ -23,6 +24,8 @@ app.use(helmet({
 app.use(express.json());
 app.use(sessionValidation)
 app.use(express.urlencoded({ extended: true }));
+app.use(compression()); // compression 미들웨어 적용
+
 
 const webApp = http.createServer(app);
 app.use('/chat', chattingHandler);

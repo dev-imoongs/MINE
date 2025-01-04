@@ -54,26 +54,26 @@ const RightSideMenu = memo(() => {
     const [unreadCount, setUnreadCount] = useState(0);
 
 
-    // useEffect(() => {
-    //     if(auth.isLoggedIn){
-    //         const eventSource = new EventSource(`/chat/sse/unread-messages`);
-    //
-    //         eventSource.onmessage = (event) => {
-    //             const data = JSON.parse(event.data);
-    //             // console.log('SSE message received:', data);
-    //             setUnreadCount(data.unread.count || 0); // 읽지 않은 메시지 수 업데이트
-    //         };
-    //
-    //         eventSource.onerror = (err) => {
-    //             console.error('SSE error:', err);
-    //             eventSource.close();
-    //         };
-    //
-    //         return () => {
-    //             eventSource.close(); // 컴포넌트 언마운트 시 연결 종료
-    //         };
-    //     }
-    // }, [auth.isLoggedIn]);
+    useEffect(() => {
+        if(auth.isLoggedIn){
+            const eventSource = new EventSource(`/chat/sse/unread-messages`);
+
+            eventSource.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('SSE message received:', data);
+                setUnreadCount(data.unreadCount.count || 0); // 읽지 않은 메시지 수 업데이트
+            };
+
+            eventSource.onerror = (err) => {
+                console.error('SSE error:', err);
+                eventSource.close();
+            };
+
+            return () => {
+                eventSource.close(); // 컴포넌트 언마운트 시 연결 종료
+            };
+        }
+    }, [auth.isLoggedIn]);
 
     return (
         <>
