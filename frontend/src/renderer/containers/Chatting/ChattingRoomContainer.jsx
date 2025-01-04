@@ -10,13 +10,12 @@ import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import TextMessageComponent from '../../components/Chat/TextMessageComponent'
 import ImageMessageComponent from '../../components/Chat/ImageMessageComponent'
-import {userState,userSession} from "../../../recoil/atoms/loginUserAtom.js";
+import {authState} from "../../../recoil/atoms/loginUserAtom.js";
 import {useNavigate} from "react-router-dom";
 
 const ChattingRoomContainer = () => {
     // chatting room 번호
-    const loginUser = useRecoilValue(userState)
-    const session = useRecoilValue(userSession)
+    const auth = useRecoilValue(authState)
     const [chatContainerState,setChatContainerState] = useRecoilState(chatListAndRoomState);
     const [socket, setSocket] = useState(null); // 소켓 상태 관리
     const [message, setMessage] = useRecoilState(textMessageArray);
@@ -37,7 +36,6 @@ const ChattingRoomContainer = () => {
         console.log('socket' + socket)
 
         console.log("roomData.roomId"+ roomData.roomId)
-        console.log("sender"+ session.userEmail)
         console.log("roomData.receive"+ roomData.receive)
 
         if(drawerVisible && roomData.roomId && socket == null){
@@ -45,9 +43,7 @@ const ChattingRoomContainer = () => {
                 withCredentials: true,
                 extraHeaders: {
                     chattingRoom: roomData.roomId,
-                    sender : session.userEmail,
                     receiver : roomData.receive,
-                    sessionId : session.sessionId
                 }
             });
             setSocket(newSocket)
@@ -63,7 +59,10 @@ const ChattingRoomContainer = () => {
 
             // 서버에서 메시지를 받으면 콘솔에 출력
             newSocket.on('message', (message) => {
-                console.log("message.text ::::; ", JSON.stringify(message))
+                console.log("message.text ::::; ", JSON.stringify(message.userEmail === auth.userEmail))
+                console.log("auth.userEmail ::::; ", JSON.stringify(auth.userEmail))
+                console.log("message.userEmail ::::; ", JSON.stringify(message.userEmail))
+
                 if (message && message.sender) { // 유효성 검사
                     setMessage((prev) => [
                         ...prev,
@@ -72,7 +71,8 @@ const ChattingRoomContainer = () => {
                             message: message.message || 'text', // 기본값 설정
                             text: message.text,
                             // type: message.sender === loginUser ? "send" : "receive",
-                            type : message.userEmail === session.userEmail ? "send" : "receive",
+                            type : message.userEmail === auth.userEmail ? "send" : "receive",
+                            sender : message.sender,
                             time: message.time,
                             read: message.read,
                             images : message.images
@@ -254,8 +254,6 @@ export default ChattingRoomContainer;
 
 const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
     const [text, setText] = useState('');
-    const loginUser = useRecoilValue(userState)
-    const session = useRecoilValue(userSession)
     const roomData = useRecoilValue(chattingRoomSeller);
     const handleFileUpload = async(e) => {
         const files = e.target.files;
@@ -281,7 +279,6 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
                     ...prev,
                     message: 'image',
                     images: updatedImages,
-                    sender : session.userEmail,
                     receiver: roomData.receive,
                     text: '',
                     itemId : roomData.itemId,
@@ -305,7 +302,6 @@ const SendChattingArea = ({setSendMessage, scrollToBottom}) => {
         console.log(roomData.itemId)
         await setSendMessage(prev => ({
             ...prev,
-            sender : session.userEmail,
             receiver: roomData.receive,
             message: 'text',
             text: text,

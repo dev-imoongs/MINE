@@ -7,73 +7,8 @@ const pool = new Pool({
     password : process.env.PG_PW,
     port : process.env.PG_PORT
 })
-
-// const originalQuery = pool.query; // 기존 query 메서드를 참조
-// pool.query = async (text, params) => {
-//     console.log('Executing Query:', text);
-//     console.log('With Parameters:', params);
-//     const start = Date.now();
-//     const result = await originalQuery.call(pool, text, params); // 원래의 query 메서드 호출
-//     const duration = Date.now() - start;
-//     console.log('Query Duration:', duration, 'ms');
-//     return result;
-// };
-//
-// const insertChatting = async (message, roomId) => {
-//     const query = `
-//         insert into tbl_chatting (
-//             chatting_sending_user_id,
-//             chatting_receive_user_id,
-//             auction_item_id,
-//             chatting_content,
-//             created_at,
-//             updated_at,
-//             room_id,
-//             user_id
-//         ) values ($1, $2, $3, $4, $5, $6, $7, $8)
-//          RETURNING chatting_id;
-//     `
-//     console.log("room ", message)
-//     const values = [
-//         message.sender,
-//         message.receiver,
-//         message.itemId,
-//         message.text,
-//         new Date(),
-//         new Date(),
-//         roomId,
-//         message.userId
-//     ]
-//     try {
-//         const result = await pool.query(query, values);
-//         console.log('채팅 저장 성공, ID:', result.rows[0].chatting_id);
-//         return result.rows[0].chatting_id; // 삽입된 채팅 ID 반환
-//     } catch (err) {
-//         console.error('PostgreSQL에 채팅 저장 실패:', err);
-//         throw err; // 에러 발생 시 상위 호출로 전달
-//     }
-// }
-
-const selectMessage = async (roomId) => {
-    // console.log(":::::::::::::::::::::::::::::::::::::::         ",roomId)
-    const query = `
-        SELECT * FROM tbl_chatting
-        WHERE room_id = ${roomId}
-        ORDER BY created_at ASC;
-    `;
-    try {
-        const result = await pool.query(query);
-        console.log('로드 성공:', result.rows);
-        return result.rows;
-    } catch (err) {
-        console.error('PostgreSQL에서 로드 실패:', err);
-        throw err; // 에러 발생 시 상위 호출로 전��
-    }
-}
-
 // 채팅리스트페이지
 const selectChattingList = async (userId) => {
-
     const query = `
         SELECT
             room.room_id AS roomId,
@@ -86,7 +21,7 @@ const selectChattingList = async (userId) => {
             CASE
                 WHEN room.item_type = 'Auction' THEN auction.auction_item_name
                 WHEN room.item_type = 'Used' THEN used.used_item_name
-                ELSE NULL
+            ELSE NULL
             END AS itemName ,
             chat.chatting_content AS lastMessage,
             chat.created_at AS lastMessageTime,
@@ -134,7 +69,6 @@ const selectChattingList = async (userId) => {
             receiver : prev.receiver,
             sender : userId
         }))
-        // console.log('대화 내용:', chattingList);
         return chattingList;
     } catch (error) {
         console.error('대화 내용 조회 실패:', error);
@@ -548,7 +482,6 @@ module.exports = {
     pool:pool,
     selectChatting : selectChatting,
     insertChatting : insertChatting,
-    selectMessage : selectMessage,
     selectChattingList : selectChattingList,
     selectItemById : selectItemById,
     selectUserByBuyerId : selectUserByBuyerId,
