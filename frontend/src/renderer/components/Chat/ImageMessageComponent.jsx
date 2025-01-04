@@ -3,8 +3,6 @@ import ImageSliderModal from '../../components/Common/ImageSlideComponent';
 import {useState} from "react";
 
 const ImageMessageComponent = ({data})=> {
-    console.log(data)
-    console.log(data.images.length)
     const [isModalOpen, setModalOpen] = useState(false)
     const imageCount = data.images.length
 

@@ -6,8 +6,8 @@ import { useDropdown } from '../../../hooks/useDropdown';
 import { useRecoilState } from 'recoil';
 import { recentSearchesAtom } from '../../../recoil/atoms/recentSearchAtom';
 import { chatDrawerState, chatListAndRoomState } from '../../../recoil/atoms/chatStateAtom';
-import { useRecoilValue } from "recoil";
-import {userState} from '../../../recoil/atoms/loginUserAtom.js'
+import {authState} from '../../../recoil/atoms/loginUserAtom.js'
+import {sessionCheck} from "../../../services/sessionCheckApi.js";
 /**
  * 로그인 유무에 따라 마이페이지 드롭다운 설정
  */
@@ -17,7 +17,7 @@ const HeaderComponent = () => {
     useEffect(()=>{
         console.log('HeaderComponent mounted');
     },[])
-    
+
     return (
         <header
             id="siteHeader"
@@ -49,14 +49,14 @@ const RightSideMenu = memo(() => {
     const [, setDrawerVisible] = useRecoilState(chatDrawerState);
     const [, setChatContainerState] = useRecoilState(chatListAndRoomState)
     const { ref, isOpen, toggle, open, close }= useDropdown();
-    // const [userId, setUserId] = useState(null)
     const nav = useNavigate()
-    const [userId, setUserId] = useRecoilState(userState);
+    const [auth, setAuth] = useRecoilState(authState);
     const [unreadCount, setUnreadCount] = useState(0);
 
+
     // useEffect(() => {
-    //     if(userId){
-    //         const eventSource = new EventSource(`/chat/sse/unread-messages?userId=${userId}`);
+    //     if(auth.isLoggedIn){
+    //         const eventSource = new EventSource(`/chat/sse/unread-messages`);
     //
     //         eventSource.onmessage = (event) => {
     //             const data = JSON.parse(event.data);
@@ -73,7 +73,7 @@ const RightSideMenu = memo(() => {
     //             eventSource.close(); // 컴포넌트 언마운트 시 연결 종료
     //         };
     //     }
-    // }, [userId]);
+    // }, [auth.isLoggedIn]);
 
     return (
         <>
@@ -81,10 +81,18 @@ const RightSideMenu = memo(() => {
                 <ul className="flex w-full text-sm font-medium list-none text-jnGray-900 break-keep">
                     <li className="flex items-center justify-center pr-3">
                         <button className="ga4_main_top_menu flex items-center justify-center"
-                            onClick={() => {
-                                (userId ? setDrawerVisible(true) : nav('/login')
-                                )
-                                setChatContainerState("listContainer");
+                            onClick={async () => {
+                                const res = await sessionCheck()
+                                console.log(res.data)
+                                if(res.data.status) {
+                                    console.log("혹시 여기에?")
+                                    auth.isLoggedIn ? setDrawerVisible(true) : nav('/login')
+                                    setChatContainerState("listContainer");
+                                }else {
+                                    setAuth({isLoggedIn: false, userEmail: ''})
+                                    setDrawerVisible(false);
+                                    nav('/login')
+                                }
                             }}
                         >
                             <div className="relative cursor-pointer" id="채팅하기">
@@ -111,12 +119,12 @@ const RightSideMenu = memo(() => {
                                         d="M8.864 12.2a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Zm4 0a1.075 1.075 0 1 0-2.15 0 1.075 1.075 0 0 0 2.15 0Z"
                                     ></path>
                                 </svg>
-                                {/*<div*/}
-                                {/*    className="absolute text-xs leading-[18px] -top-2 -right-1 w-[18px] h-[18px] font-semibold rounded-[50%] bg-jngreen text-center"*/}
-                                {/*    id="채팅하기"*/}
-                                {/*>*/}
-                                {/*    {unreadCount}*/}
-                                {/*</div>*/}
+                                <div
+                                    className="absolute text-xs leading-[18px] -top-2 -right-1 w-[18px] h-[18px] font-semibold rounded-[50%] bg-jngreen text-center"
+                                    id="채팅하기"
+                                >
+                                    {unreadCount}
+                                </div>
                             </div>
 
                             <p id="채팅하기" className="ml-1">
@@ -126,6 +134,7 @@ const RightSideMenu = memo(() => {
                     </li>
                     <li className='after:contents-[""] after:absolute after:w-[1px] after:h-4 after:bg-jnGray-300 after:right-0 before:contents-[""] before:absolute before:w-[1px] before:h-4 before:bg-jnGray-300 before:left-0 ga4_main_top_menu relative flex items-center justify-center px-3'>
                         <Link className="flex items-center justify-center [&amp;>p]:ml-1" to="productRegister">
+                            {console.log("판매하기 버튼")}
                             <svg
                                 id="판매하기"
                                 width="24"
@@ -177,6 +186,7 @@ const RightSideMenu = memo(() => {
                         </Link>
                     </li>
                     <li className='after:contents-[""] after:absolute after:w-[1px] after:h-4 after:bg-jnGray-300 after:right-0 before:contents-[""] before:absolute before:w-[1px] before:h-4 before:bg-jnGray-300 before:left-0 ga4_main_top_menu relative flex items-center justify-center px-3'>
+                        {console.log("경매 버튼")}
                         <Link className="flex items-center justify-center [&amp;>p]:ml-1" to="auctionRegister">
                             <svg fill="#000000" height="25px" width="25px"  version="1.1" id="Layer_1"
                                  xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -195,7 +205,10 @@ const RightSideMenu = memo(() => {
                         ref={ref}
                     >
                         <button className="flex items-center justify-center [&amp;>p]:ml-1"
-                                onClick={() => userId ? open() : nav('/login')}
+                                onClick={() => {
+                                    console.log("마이페이지 버튼")
+                                    auth.isLoggedIn ? open() : nav('/login')
+                                }}
 
                         >
                             <svg
@@ -225,8 +238,8 @@ const RightSideMenu = memo(() => {
                                 <li className="pt-2 pb-3">
                                     <button className="cursor-pointer disabled:text-stone-400"
                                             onClick={() => {
-                                                // setUserId(null)
-                                                setUserId(null)
+                                                console.log("로그아웃 버튼")
+                                                setAuth({isLoggedIn: false, userEmail: ''})
                                                 close()
                                                 nav('/')
 

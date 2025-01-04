@@ -3,75 +3,67 @@ import { useToggle } from '../../../hooks/useToggle';
 import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
 import {
     textMessageArray,
-    sendMessage,
     chatDrawerState,
     chatListAndRoomState,
     chattingRoomSeller
 } from '../../../recoil/atoms/chatStateAtom'
-import { userState, userSession } from '../../../recoil/atoms/loginUserAtom'
+import { authState } from '../../../recoil/atoms/loginUserAtom'
 import { ToastContainer, toast } from 'react-toastify';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue,useRecoilState } from 'recoil';
 import { getTimeAgo } from '../../../services/commonService';
-import { useRecoilState } from 'recoil';
 import {useNavigate} from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
-
 import { getMessage } from '../../../services/chatService';
 import { processMessages } from '../../../recoil/selectors/chatSelector';
+import {sessionCheck} from "../../../services/sessionCheckApi.js";
 
 
 const TradeProductInfoContainer = ({ StImg }) => {
     const countRef = useRef(0);
     const nav = useNavigate();
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
-    const userId = useRecoilValue(userState);
-    const session = useRecoilValue(userSession);
     const [,setChatContainerState] = useRecoilState(chatListAndRoomState);
     const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
-    const [drawerVisible, setDrawerVisible] = useRecoilState(chatDrawerState);
+    const [, setDrawerVisible] = useRecoilState(chatDrawerState);
+    const [auth, setAuth] = useRecoilState(authState);
     const [,setRoomData] = useRecoilState(chattingRoomSeller);
-    const [message, setMessage] = useRecoilState(textMessageArray);
+    const [, setMessage] = useRecoilState(textMessageArray);
 
-    // const handleFetchMessages = async () => {
-        const fetchMessage = async () => {
-            console.log({
+    const fetchMessage = async () => {
+        console.log({
+            sellerId : sellerInfo.userId,
+            itemId : productInfo.usedItemId,
+            itemType : 'Used',
+            receive : sellerInfo.userId
+        })
+        try {
+            // 1. 서버에서 메시지 요청
+            const message = await getMessage({
                 sellerId : sellerInfo.userId,
-                buyerId : userId,
                 itemId : productInfo.usedItemId,
                 itemType : 'Used',
-                sender : userId,
-                receive : sellerInfo.userId
+                receive : sellerInfo.userId,
+                auth : auth.userEmail
+            });
+            // // 2. 메시지 가공
+            const processedMessage = processMessages(message.chat, message.roomData.sender);
+            // 3. Recoil 상태 업데이트
+            await setRoomData({
+                roomId : message.roomId,
+                itemId : productInfo.usedItemId,
+                nickName : message.roomData.receiveNickName,
+                itemName : message.roomData.itemName,
+                itemPrice : message.roomData.itemPrice,
+                sender : message.roomData.sender,
+                receive : message.roomData.receive,
+                trust : message.roomData.receiveTrustScore
             })
-            try {
-                // 1. 서버에서 메시지 요청
-                const message = await getMessage({
-                    sellerId : sellerInfo.userId,
-                    buyerId : userId,
-                    itemId : productInfo.usedItemId,
-                    itemType : 'Used',
-                    sender : userId,
-                    receive : sellerInfo.userId,
-                    userEmail : session.userEmail
-                },session.sessionId);
-                // // 2. 메시지 가공
-                const processedMessage = processMessages(message.chat, userId);
-                // 3. Recoil 상태 업데이트
-                await setRoomData({
-                    roomId : message.roomId,
-                    itemId : productInfo.usedItemId,
-                    nickName : message.roomData.receiveNickName,
-                    itemName : message.roomData.itemName,
-                    itemPrice : message.roomData.itemPrice,
-                    sender : message.roomData.sender,
-                    receive : message.roomData.receive,
-                    trust : message.roomData.receiveTrustScore
-                })
-                setMessage(processedMessage);
-            } catch (error) {
-                console.error('ERROR : ', error);
-            }
-        };
+            setMessage(processedMessage);
+        } catch (error) {
+            console.error('ERROR : ', error);
+        }
+    };
 
     return (
         <>
@@ -80,17 +72,19 @@ const TradeProductInfoContainer = ({ StImg }) => {
                 <SellerInfo sellerInfo={sellerInfo}/>
                 <div className="flex items-center space-s-4 pt-9 max-[479px]:fixed max-[479px]:bottom-0 max-[479px]:left-0 max-[479px]:z-20 max-[479px]:w-full max-[479px]:px-4 max-[479px]:pb-4 max-[479px]:bg-white">
                     <LikeButton countRef={countRef}/>
-                    {(userId !== sellerInfo.userId) && (
+                    {(auth.userEmail !== sellerInfo.userEmail) && (
                         <button
                             data-variant="slim"
                             className="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack"
                             onClick={async () => {
-                                    if(userId) {
+                                    const res = await sessionCheck()
+                                    if(res.data.status) {
                                         await fetchMessage()
-                                        // await handleFetchMessages()
                                         setDrawerVisible(true)
                                         setChatContainerState("roomContainer")
-                                    }else {
+                                    } else {
+                                        setAuth({isLoggedIn: false, userEmail: ''})
+                                        setDrawerVisible(false)
                                         nav('/login')
                                     }
                                 }

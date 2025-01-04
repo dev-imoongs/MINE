@@ -10,6 +10,7 @@ const redisClient = redis.createClient({
     username: process.env.REDIS_USER || '',
     password: process.env.REDIS_PASSWORD || ''
 });
+// 비동기 레디스 연결
 (async () => {
     try {
         await redisClient.connect(); // 비동기 연결 시도

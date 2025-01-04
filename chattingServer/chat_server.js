@@ -1,14 +1,17 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const http = require('http');
 const app = express();
 const chattingSocket = require('./router/chattingSocket');
 const chattingHandler = require('./router/chattingHandler');
 const sessionMiddleware = require('./service/sessionMiddleware')
 const sessionValidation = require('./middleware/sessionValidator')
-// const sseHandler = require('./router/sseHandler');
+const sessionCheckHandler = require('./router/sessionCheckHandler')
+const sseHandler = require('./router/sseHandler');
 const helmet = require('helmet');
 const cors = require('cors');
 const port = 3080;
+app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:5173', // React 클라이언트 URL
     credentials: true,              // 쿠키 허용
@@ -23,7 +26,8 @@ app.use(express.urlencoded({ extended: true }));
 
 const webApp = http.createServer(app);
 app.use('/chat', chattingHandler);
-// app.use('/chat/sse', sseHandler);
+app.use('/check', sessionCheckHandler);
+app.use('/chat/sse', sseHandler);
 chattingSocket(webApp)
 
 webApp.listen((port), () => {

@@ -20,28 +20,17 @@ public class UserRestController {
 
     private final UserService userService;
 
-//    @PostMapping("login")
-//    public boolean login(String userEmail, String userPassword, HttpSession session) {
-//        UserVO loginUser = userService.getUserInfo(userEmail, userPassword);
-//
-//        if(loginUser == null) {
-//            return false;
-//        }
-//        session.setAttribute("userInfo", loginUser);
-//
-//        return true;
-//    }
     @PostMapping("login")
     public Map<String, Object> login(String userEmail, String userPassword, HttpSession session) {
         UserVO loginUser = userService.getUserInfo(userEmail, userPassword);
         HashMap<String, Object> result = new HashMap<>();
         if(loginUser == null) {
-
             result.put("login", null);
             return result;
         }
         session.setAttribute("userInfo", loginUser);
-        result.put("login", loginUser.userId);
+        result.put("userEmail", loginUser.userEmail);
+        result.put("valid", true);
         return result;
     }
 

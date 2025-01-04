@@ -2,6 +2,7 @@ const socketIo = require('socket.io');
 const redisClient = require('../service/redisClient');
 const dbService = require('../service/postgresService');
 const {getSessionData} = require('../service/sessionService')
+const cookie = require('cookie')
 
 const chattingSocket = (server) => {
     const io = socketIo(server, {
@@ -12,57 +13,20 @@ const chattingSocket = (server) => {
         }
     });
 
-    // 세션 미들웨어를 socket.io에 적용
-    // 세션 미들웨어 적용
-    // Redis를 이용한 세션 인증
-    // io.use((socket, next) => {
-    //     const sessionId = socket.handshake.headers.sessionid; // 헤더에서 sessionid 가져오기
-    //     if (!sessionId) {
-    //         console.error('No session ID found in headers.');
-    //         return next(new Error('Authentication error'));
-    //     }
-    //
-    //     console.log('Extracted session ID:', sessionId);
-    //
-    //     // Redis에서 세션 데이터 조회
-    //     redisClient.get(`spring:session:sessions:${sessionId}`, (err, sessionData) => {
-    //         if (err || !sessionData) {
-    //             console.error('Redis session not found or error occurred:', err);
-    //             return next(new Error('Authentication error'));
-    //         }
-    //
-    //         try {
-    //             const sessionInfo = JSON.parse(sessionData); // Redis에서 가져온 세션 데이터 파싱
-    //             const userInfo = sessionInfo?.attributeMap?.userInfo; // Spring 세션 구조에 따라 userInfo 확인
-    //
-    //             if (!userInfo) {
-    //                 console.error('No userInfo found in session.');
-    //                 return next(new Error('Authentication error'));
-    //             }
-    //
-    //             console.log('User Info from Redis:', userInfo);
-    //             socket.userInfo = userInfo; // 소켓에 사용자 정보 추가
-    //             next();
-    //         } catch (parseError) {
-    //             console.error('Error parsing Redis session data:', parseError);
-    //             return next(new Error('Authentication error'));
-    //         }
-    //     });
-    // });
-
     const chatNamespace = io.of('/chat'); // '/chat' 네임스페이스 생성
 
     chatNamespace.on('connection',async (chatSocket) => {
-        let { chattingroom,receiver , sessionid, sender} = chatSocket.handshake.headers;
+        let { chattingroom,receiver} = chatSocket.handshake.headers;
+        const cookies = cookie.parse(chatSocket.handshake.headers.cookie || '');
+        const sessionId = atob(cookies['SESSIONID']);
+        console.log("::::::::::::::::::::::::"+ sessionId)
 
 
-        let senderEmail = chatSocket.handshake.headers.sender;
-        console.log('세션 정보: ', sessionid);  // 세션 출력
         console.log(`새로운 클라이언트 연결: ${chatSocket.id}`);
 
 
 
-        const session = await getSessionData(sessionid);
+        const session = await getSessionData(sessionId);
         if(!session){
             chatSocket.emit('authError', {status : false, message : 'session 만료'})
             chatSocket.disconnect();
@@ -71,9 +35,7 @@ const chattingSocket = (server) => {
 
 
         const userId = session.userInfo.userId
-        if(senderEmail === session.userInfo.userEmail){
-            sender = userId;
-        }
+        let sender = session.userInfo.userId
         console.log(`채팅방 ID: ${chattingroom}, 발신자: ${sender}, 수신자: ${receiver}`);
 
         // 클라이언트를 해당 채팅방(room)에 조인
@@ -154,6 +116,7 @@ const chattingSocket = (server) => {
                 // 동일한 채팅방(room)에 있는 클라이언트에게 메시지 전달
                 chatNamespace.to(chattingroom).emit('message', {
                     ...message,
+                    sender : userId,
                     chatting_id: savedChat.chatting_id,
                     read: isReceiverConnected,
                     userEmail : session.userInfo.userEmail

@@ -5,24 +5,26 @@ import {
     chattingRoomSeller, textMessageArray
 } from '../../../recoil/atoms/chatStateAtom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {userSession, userState} from '../../../recoil/atoms/loginUserAtom';
+import {authState} from '../../../recoil/atoms/loginUserAtom';
 import {getChattingList, getMessage} from '../../../services/chatService';
 import { useQuery } from 'react-query';
 import LoadingSpinner from '../../components/Common/LoadingSpinner.jsx';
 import {processMessages} from "../../../recoil/selectors/chatSelector.js";
+import {useNavigate} from "react-router-dom";
+import {sessionCheck} from "../../../services/sessionCheckApi.js";
 
 
 const ChattingListContainer = () => {
-    const setDrawerVisible = useSetRecoilState(chatDrawerState);
-    const session = useRecoilValue(userSession)
-    const userId = useRecoilValue(userState);
+    const [drawerVisible,setDrawerVisible] = useRecoilState(chatDrawerState);
+    const auth = useRecoilValue(authState)
+    const nav= useNavigate()
 
     // React Query를 사용하여 채팅 리스트 가져오기
     const { data: list = [], isLoading, error } = useQuery(
-        ['chattingList', userId],
-        () => getChattingList(session.sessionId),
+        ['chattingList'],
+        () => getChattingList(),
         {
-            enabled: !!session, // userId가 있을 때만 쿼리 실행
+            enabled: !!auth && drawerVisible,
         }
     );
 
@@ -31,6 +33,7 @@ const ChattingListContainer = () => {
     }
 
     if (error) {
+        nav('/login')
         return <p>Error fetching chatting list!</p>;
     }
 
@@ -84,10 +87,11 @@ const ChattingListContainer = () => {
 
 const ChattingListComponent = ({ chat }) => {
     const setChatContainerState = useSetRecoilState(chatListAndRoomState);
+    const setDrawerVisible = useSetRecoilState(chatDrawerState);
     const setRoomData = useSetRecoilState(chattingRoomSeller);
-    const userId = useRecoilValue(userState);
-    const session = useRecoilValue(userSession)
+    const [auth, setAuth] = useRecoilState(authState)
     const [message, setMessage] = useRecoilState(textMessageArray);
+    const nav = useNavigate()
     const fetchMessage = async () => {
         try {
             // 1. 서버에서 메시지 요청
@@ -99,13 +103,10 @@ const ChattingListComponent = ({ chat }) => {
                 itemType : chat.itemType,
                 sender : chat.sender,
                 receive : chat.receiver,
-                userEmail : session.userEmail
-                // receive : userId === chat.buyer_id ? chat.seller_id : chat.buyer_id
-            },session.sessionId);
-            console.log(message)
+            });
             // // 2. 메시지 가공
-            const processedMessage = processMessages(message.chat, userId);
-            setRoomData({
+            const processedMessage = processMessages(message.chat, chat.sender);
+            await setRoomData({
                 roomId : message.roomId,
                 itemId : chat.itemId,
                 nickName : message.roomData.receiveNickName,
@@ -123,8 +124,6 @@ const ChattingListComponent = ({ chat }) => {
         }
     };
 
-        // fetchMessage();
-    // };
 
     const chatListStyle = {
         position: 'absolute',
@@ -142,8 +141,15 @@ const ChattingListComponent = ({ chat }) => {
         <li
             className="flex justify-between px-5 gap-5 w-full cursor-pointer bg-white"
             onClick={async () => {
-                    await fetchMessage()
-                    setChatContainerState("roomContainer")
+                    const res = await sessionCheck()
+                    if(res.data.status) {
+                        await fetchMessage()
+                        setChatContainerState("roomContainer")
+                    } else {
+                        setAuth({isLoggedIn: false, userEmail: ''})
+                        setDrawerVisible(false)
+                        nav('/login')
+                    }
             }}
         >
             <div className="flex py-3 border-t-[1px] border-gray-200 w-[80%]">

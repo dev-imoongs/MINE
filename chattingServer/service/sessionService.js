@@ -25,8 +25,7 @@ const getSessionData = async (sessionId) => {
         }
 
         const userInfo = JSON.parse(userInfoRaw)[1]; // JSON 문자열을 파싱
-        // console.log('Redis에서 가져온 유저 정보:', userInfo);
-        //
+
         // 반환 데이터 구성
         return {
             userInfo, // 유저 정보
