@@ -7,7 +7,7 @@
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
     <select id="selectCategory" resultType="categoryVO">
-        select category_id, category_value
+        select category_detail, category_value
         from tbl_category
         where category_group = '1'
         order by category_value asc
