@@ -5,6 +5,7 @@ import com.app.mine.vo.UserVO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,5 +62,10 @@ public class UserRestController {
     public UserVO getMyInfo(HttpSession session) {
         UserVO userInfo = (UserVO)session.getAttribute("userInfo");
         return userService.getMyInfo(userInfo);
+    }
+
+    @GetMapping("logout")
+    public void logout(HttpSession session) {
+        session.invalidate();
     }
 }
