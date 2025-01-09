@@ -28,12 +28,19 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         return auctionItemMapper.findAuctionItemById(id);
     }
 
+//    @Override
+//    public List<AuctionItemVO> getFilteredAuctionItems(String category, Integer minPrice, Integer maxPrice, String searchQuery, String sort) {
+//        log.info("=================serviceImpl=======================\nFilters received: category={}, minPrice={}, maxPrice={}, searchQuery={}, sort={}",category, minPrice, maxPrice, searchQuery, sort);
+//            Integer userId = 1;
+//            return auctionItemMapper.findAuctionItems(category, minPrice, maxPrice, searchQuery, sort, userId);
+//    }
+
     @Override
-    public List<AuctionItemVO> getFilteredAuctionItems(Integer category, Integer minPrice, Integer maxPrice, String searchQuery, String sort) {
-        log.info("=================serviceImpl=======================\nFilters received: category={}, minPrice={}, maxPrice={}, searchQuery={}, sort={}",category, minPrice, maxPrice, searchQuery, sort);
-            Integer userId = 1;
-            return auctionItemMapper.findAuctionItems(category, minPrice, maxPrice, searchQuery, sort, userId);
+    public List<AuctionItemVO> getFilteredAuctionItems(SearchDTO searchDTO) {
+        Integer userId = 1;
+        return auctionItemMapper.findAuctionItems(searchDTO, userId);
     }
+
     @Override
     public Map<String, Object> findSearchAuctionItem(SearchDTO searchDTO) {
         Map<String, Object> auctionItemMap = new HashMap<>();

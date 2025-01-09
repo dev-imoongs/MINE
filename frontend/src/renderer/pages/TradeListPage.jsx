@@ -9,21 +9,25 @@ import { tradeListFiltersAtom } from '../../recoil/atoms/tradeAtom';
 import AuctionListSortContainer from '../containers/Auction/AuctionListSortContainer';
 import { useRecoilState } from 'recoil';
 import { useQuery } from 'react-query';
-import { getAuctionItems } from '../../services/auctionApiService';
 import AuctionListItemContainer from '../containers/Auction/AuctionListItemContainer';
 import AuctionListPaginationContainer from '../containers/Auction/AuctionListPaginationContainer';
 import axios from 'axios';
+import { getUsedItems } from '../../services/productApiService';
 
 const TradeListPage = () => {
-    const destinationType = "1";
+    const destinationType = '1';
     const [itemsInfo, setItemsInfo] = useState(null);
     const [filters, setFilters] = useRecoilState(tradeListFiltersAtom);
 
     // 중고거래 데이터에 맞게 가져와야함
-    const items = useQuery({
-        queryKey: 'getAuctionItemsData',
-        queryFn: getAuctionItems,
-    });
+    const items = useQuery(
+        {
+            queryKey: ['getUsedItemsData', filters],
+            queryFn: () => getUsedItems(filters), //productApiService.js
+            refetchOnWindowFocus: false,
+        },
+        [filters]
+    );
     //
 
     useEffect(() => {
@@ -32,39 +36,39 @@ const TradeListPage = () => {
         }
     }, [items.data]);
 
-    const buildQueryParams = (filters) => {
-        const params = {};
+    // const buildQueryParams = (filters) => {
+    //     const params = {};
 
-        const { category, priceRange, searchQuery, sort, isSold } = filters;
+    //     const { category, priceRange, searchQuery, sort, isSold } = filters;
 
-        // 각 필터가 유효한 경우에만 params에 추가
-        if (category && category !== '전체') params.category = category;
-        if (priceRange.minPrice) params.minPrice = priceRange.minPrice;
-        if (priceRange.maxPrice) params.maxPrice = priceRange.maxPrice;
-        if (searchQuery) params.search = searchQuery;
-        if (sort) params.sort = sort;
-        if (isSold) params.isSold = isSold;
+    //     // 각 필터가 유효한 경우에만 params에 추가
+    //     if (category && category !== '전체') params.category = category;
+    //     if (priceRange.minPrice) params.minPrice = priceRange.minPrice;
+    //     if (priceRange.maxPrice) params.maxPrice = priceRange.maxPrice;
+    //     if (searchQuery) params.search = searchQuery;
+    //     if (sort) params.sort = sort;
+    //     if (isSold) params.isSold = isSold;
 
-        return params;
-    };
+    //     return params;
+    // };
 
     // sort 정렬 기준 0: 좋아요순, 1: 최신순, 2: 낮은 가격순, 3: 높은 가격순
 
-    // 데이터 불러오는 예시
-    const fetchTrades = async (filters) => {
-        const queryParams = buildQueryParams(filters);
-        const response = await axios.get('/auction/', { params: queryParams });
-        console.log('queryParams', queryParams);
-        return response.data;
-    };
+    // // 데이터 불러오는 예시
+    // const fetchTrades = async (filters) => {
+    //     const queryParams = buildQueryParams(filters);
+    //     const response = await axios.get('/auction/', { params: queryParams });
+    //     console.log('queryParams', queryParams);
+    //     return response.data;
+    // };
 
     // 비동기 업데이트가 완료되면 fetchAuctions를 수행하도록 수정
-    useEffect(() => {
-        const fetchFilteredTrades = async () => {
-            const data = await fetchTrades(filters);
-        };
-        fetchFilteredTrades();
-    }, [filters]);
+    // useEffect(() => {
+    //     const fetchFilteredTrades = async () => {
+    //         const data = await fetchTrades(filters);
+    //     };
+    //     fetchFilteredTrades();
+    // }, [filters]);
 
     const handleSortChange = async (criteria) => {
         setFilters((prev) => ({

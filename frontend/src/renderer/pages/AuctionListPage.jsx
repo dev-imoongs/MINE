@@ -9,6 +9,7 @@ import { useQuery } from 'react-query';
 import { useRecoilState } from 'recoil';
 import { auctionListFiltersAtom } from '../../recoil/atoms/auctionListAtom';
 import useApiMutation from '../../hooks/mutation';
+import { getCategory } from '../../services/commonService';
 
 const AuctionListPage = () => {
     const destinationType = '2';
@@ -23,6 +24,12 @@ const AuctionListPage = () => {
         },
         [filters]
     );
+
+    const categoryList = useQuery({
+        queryKey: ['getCategory'],
+        queryFn: getCategory,
+        refetchOnWindowFocus: false,
+    });
 
     const { mutate } = useApiMutation(
         '/api/likes', // API endpoint
@@ -65,6 +72,7 @@ const AuctionListPage = () => {
                             itemsCount={itemsInfo.length}
                             filters={filters}
                             setFilters={setFilters}
+                            categoryList={categoryList}
                             destinationType={destinationType}
                         />
                         <AuctionListPriceInfoContainer />

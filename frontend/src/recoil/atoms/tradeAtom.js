@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 import tempImgFile from '../../assets/temp_product.png';
 export const tradeDetailProductAtom = atom({
     key: 'tradeDetailProductAtom',
-    default: []
+    default: [],
     /*{
         productInfo: {
             category: '남성의류',
@@ -31,7 +31,7 @@ export const tradeDetailProductAtom = atom({
 export const tradeListFiltersAtom = atom({
     key: 'tradeFiltersAtom',
     default: {
-        category: '전체',
+        category: null,
         priceRange: { minPrice: undefined, maxPrice: undefined },
         searchQuery: '',
         sort: '',

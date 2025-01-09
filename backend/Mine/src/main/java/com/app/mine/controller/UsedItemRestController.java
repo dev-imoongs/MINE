@@ -61,6 +61,19 @@ public class UsedItemRestController {
         return usedItemService.getMyUsedItemList(userInfo);
     }
 
+    // 중고거래 리스트 페이지
+    @GetMapping
+    public String getUsedItem(
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "minPrice", required = false) Integer minPrice,
+            @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
+            @RequestParam(value = "searchQuery", required = false) String searchQuery,
+            @RequestParam(value = "sort", defaultValue = "likes") String sort) {
+
+        log.info("들어왔다들어왔다들어왔다들어왔다들어왔다들어왔다");
+        return "ok";
+    }
+
     // 중고거래 상세 페이지
     @GetMapping("/getItem")
     public Map<String, Object> getUsedItemById(Integer usedItemId) {
