@@ -20,51 +20,53 @@
             COALESCE(COUNT(DISTINCT(tbl_like.user_id)),0) AS like_count,
             CASE
                 WHEN COUNT(CASE WHEN tbl_like.user_id = 1 THEN 1 END) > 0
-                THEN TRUE ELSE FAlSE
+                THEN TRUE ELSE FALSE
             END AS my_favorite_auction
         FROM tbl_auction_item AS AI
         LEFT JOIN tbl_auction_join AS AJ
             ON AI.auction_item_id = AJ.auction_item_id
         LEFT JOIN tbl_like
             ON AI.auction_item_id = tbl_like.auction_item_id
-        GROUP BY AI.auction_item_id
 
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <!-- 카테고리 필터링 -->
-            <if test="category != -1">
-                AND category_id = #{category}
+            <if test="searchDTO.category != null">
+                AND category_id = #{searchDTO.category}
             </if>
 
             <!-- 최소 가격 필터링 -->
-            <if test="minPrice != -1">
-                AND auction_item_highest_price >= #{minPrice}
+            <if test="searchDTO.minPrice != null">
+                AND auction_item_highest_price >= #{searchDTO.minPrice}
             </if>
 
             <!-- 최대 가격 필터링 -->
-            <if test="maxPrice != -1">
-                AND auction_item_highest_price &lt;= #{maxPrice}
+            <if test="searchDTO.maxPrice != null">
+                AND auction_item_highest_price &lt;= #{searchDTO.maxPrice}
             </if>
 
             <!-- 검색어 필터링 (부분 검색) -->
-            <if test="searchQuery != null and searchQuery != ''">
-                AND auction_item_name LIKE CONCAT('%', #{searchQuery}, '%')
+            <if test="searchDTO.searchQuery != null and searchDTO.searchQuery.size() > 0">
+                <foreach collection="searchDTO.searchQuery" item="query" separator="OR">
+                    AND auction_item_name LIKE CONCAT('%', #{query}, '%')
+                </foreach>
             </if>
         </trim>
+        GROUP BY AI.auction_item_id
 
 <!--        정렬 기준 (정렬 기준이 있을 경우만)-->
-        <if test="sort != null">
+        <if test="searchDTO.type != null">
             <choose>
-                <when test="sort == 'likes'">
+                <when test="searchDTO.type == 'likes'">
                     ORDER BY created_at ASC
 <!--                    ORDER BY likes DESC-->
                 </when>
-                <when test="sort == 'newest'">
+                <when test="searchDTO.type == 'newest'">
                     ORDER BY created_at DESC
                 </when>
-                <when test="sort == 'low-price'">
+                <when test="searchDTO.type == 'low-price'">
                     ORDER BY auction_item_highest_price ASC
                 </when>
-                <when test="sort == 'high-price'">
+                <when test="searchDTO.type == 'high-price'">
                     ORDER BY auction_item_highest_price DESC
                 </when>
                 <!-- 기본적으로 likes순으로 정렬 -->
@@ -152,6 +154,7 @@
         AND tai.auction_item_status IN ('201', '202')
     </select>
 
+    <!--페이징 처리 및 조건-->
     <sql id="searchCondition" >
         <choose>
             <when test="page.IS_SEARCH_DTO">

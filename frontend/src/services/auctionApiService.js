@@ -10,9 +10,22 @@ export const myAuctionProduct = async () => {
 };
 
 export const getAuctionItems = async (filters) => {
-    const config = filters ? { params: filters } : {};
-    // const res = await api.get('/auction-items', config); // 이전 코드
-    const res = await axios.get('/api/auction-items', config);
+    const { category, priceRange, searchQuery, sort } = filters;
+    const { minPrice, maxPrice } = priceRange;
+
+    const config = filters
+        ? {
+              params: {
+                  category,
+                  minPrice,
+                  maxPrice,
+                  searchQuery,
+                  sort,
+              },
+          }
+        : {};
+
+    const res = await axios.get('/api/auction-items/', config);
     return res.data;
 };
 

@@ -29,10 +29,10 @@ const ItemComponent = ({
     let url;
 
     switch (destinationType) {
-        case 1:
+        case '1':
             url = `/product/${id}`;
             break;
-        case 2:
+        case '2':
             url = `/auction/${id}`;
             break;
         default:
