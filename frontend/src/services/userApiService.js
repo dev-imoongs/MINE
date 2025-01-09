@@ -47,3 +47,21 @@ export const checkDuplicateEmail = async (input) => {
     
     return response.data;
 }
+
+export const logout = async () => {
+    try {
+        const response = await axios.get('/api/user/logout');
+        return response.status; // 성공 시 상태 코드 반환
+    } catch (e) {
+        if (e.response) {
+            return e.response.status;
+        } else if (e.request) {
+            console.error(e.request);
+            return 500; // 서버 오류로 가정
+        } else {
+            // 기타 에러 (예: 요청 설정 문제)
+            console.error(e.message);
+            return 400; // 클라이언트 오류로 가정
+        }
+    }
+};
