@@ -156,7 +156,7 @@ const ProductRegister = () => {
             return;
         }
 
-        if (!input.price) {
+        if (!input.price || input.startPrice <= 0) {
             alert("가격을 입력해주세요.");
             return;
         }
