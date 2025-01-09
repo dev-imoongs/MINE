@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import TradeListFilterContainer from '../containers/Trade/TradeListFilterContainer';
-import TradeListSortContainer from '../containers/Trade/TradeListSortContainer';
-import TradeListItemContainer from '../containers/Trade/TradeListItemContainer';
-import TradeListPaginationContainer from '../containers/Trade/TradeListPaginationContainer';
+import React from 'react';
 import AuctionListPriceInfoContainer from '../containers/Auction/AuctionListPriceInfoContainer';
 import AuctionListFilterContainer from '../containers/Auction/AuctionListFilterContainer';
 import { tradeListFiltersAtom } from '../../recoil/atoms/tradeAtom';
@@ -11,64 +7,47 @@ import { useRecoilState } from 'recoil';
 import { useQuery } from 'react-query';
 import AuctionListItemContainer from '../containers/Auction/AuctionListItemContainer';
 import AuctionListPaginationContainer from '../containers/Auction/AuctionListPaginationContainer';
-import axios from 'axios';
 import { getUsedItems } from '../../services/productApiService';
+import { getCategory } from '../../services/commonService';
+import useApiMutation from '../../hooks/mutation';
 
 const TradeListPage = () => {
     const destinationType = '1';
-    const [itemsInfo, setItemsInfo] = useState(null);
     const [filters, setFilters] = useRecoilState(tradeListFiltersAtom);
 
-    // 중고거래 데이터에 맞게 가져와야함
-    const items = useQuery(
+    // 카테고리 목록 요청
+    const categoryList = useQuery({
+        queryKey: ['getCategory'],
+        queryFn: getCategory,
+        refetchOnWindowFocus: false,
+    });
+
+    // 게시물 목록 요청
+    const {
+        data: items,
+        isLoading,
+        isError,
+    } = useQuery(
         {
             queryKey: ['getUsedItemsData', filters],
-            queryFn: () => getUsedItems(filters), //productApiService.js
+            queryFn: () => getUsedItems(filters),
             refetchOnWindowFocus: false,
         },
         [filters]
     );
-    //
 
-    useEffect(() => {
-        if (items.data) {
-            setItemsInfo(items.data);
-        }
-    }, [items.data]);
+    const { mutate } = useApiMutation(
+        '/api/likes', // API endpoint
+        'post' // HTTP method
+        // { headers: { Authorization: `Bearer your-token-here` } } // 필요한 헤더나 config 추가
+    );
 
-    // const buildQueryParams = (filters) => {
-    //     const params = {};
-
-    //     const { category, priceRange, searchQuery, sort, isSold } = filters;
-
-    //     // 각 필터가 유효한 경우에만 params에 추가
-    //     if (category && category !== '전체') params.category = category;
-    //     if (priceRange.minPrice) params.minPrice = priceRange.minPrice;
-    //     if (priceRange.maxPrice) params.maxPrice = priceRange.maxPrice;
-    //     if (searchQuery) params.search = searchQuery;
-    //     if (sort) params.sort = sort;
-    //     if (isSold) params.isSold = isSold;
-
-    //     return params;
-    // };
-
-    // sort 정렬 기준 0: 좋아요순, 1: 최신순, 2: 낮은 가격순, 3: 높은 가격순
-
-    // // 데이터 불러오는 예시
-    // const fetchTrades = async (filters) => {
-    //     const queryParams = buildQueryParams(filters);
-    //     const response = await axios.get('/auction/', { params: queryParams });
-    //     console.log('queryParams', queryParams);
-    //     return response.data;
-    // };
-
-    // 비동기 업데이트가 완료되면 fetchAuctions를 수행하도록 수정
-    // useEffect(() => {
-    //     const fetchFilteredTrades = async () => {
-    //         const data = await fetchTrades(filters);
-    //     };
-    //     fetchFilteredTrades();
-    // }, [filters]);
+    const handleLikeClick = (usedItemId, userId) => {
+        mutate({
+            usedItemId: usedItemId,
+            userId: userId,
+        });
+    };
 
     const handleSortChange = async (criteria) => {
         setFilters((prev) => ({
@@ -77,26 +56,42 @@ const TradeListPage = () => {
         }));
     };
 
+    // 로딩 중일 때
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    // 에러 발생 시
+    if (isError) {
+        console.log('isError', isError);
+        return <div>Error occurred while fetching the item!</div>;
+    }
+
+    // items가 있을때만 렌더링
     return (
         <main
             className="relative flex-grow border-b-2"
             style={{ minHeight: '0px !important; height: auto !important' }}
         >
-            {itemsInfo && (
+            {items && (
                 <div
                     className="mx-auto px-4 md:px-8 2xl:px-16 box-content pt-8 pb-16 bg-white lg:pt-[72px] lg:pb-20 max-w-[1024px] min-[1600px]:max-w-[1280px]"
                     style={{ height: 'auto !important' }}
                 >
                     <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important' }}>
                         <AuctionListFilterContainer
-                            itemsCount={itemsInfo.length}
+                            itemsCount={items.length}
                             filters={filters}
                             setFilters={setFilters}
                             destinationType={destinationType}
                         />
                         <AuctionListPriceInfoContainer />
                         <AuctionListSortContainer onSortChange={handleSortChange} />
-                        <AuctionListItemContainer itemsInfo={itemsInfo} destinationType={destinationType} />
+                        <AuctionListItemContainer
+                            items={items}
+                            destinationType={destinationType}
+                            handleLikeClick={handleLikeClick}
+                        />
                         <AuctionListPaginationContainer />
                     </div>
                 </div>

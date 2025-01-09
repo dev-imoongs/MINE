@@ -119,7 +119,7 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters, categoryL
     //카테고리 배열
     const categories = categoryList.data;
     console.log('categoryList', categoryList.data);
-    console.log('filters.category', filters.category);
+    console.log('filters.category', filters.category, typeof filters.category);
 
     return (
         <div className="relative">
@@ -156,7 +156,13 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters, categoryL
                                                 className="text-base font-semibold text-jnBlack font-semibold text-base text-jnBlack"
                                                 to="/search?category=1"
                                             >
-                                                {categories[filters.category - 1].name}
+                                                {categories.find(
+                                                    (category) => category.categoryDetail === filters.category
+                                                )
+                                                    ? categories.find(
+                                                          (category) => category.categoryDetail === filters.category
+                                                      ).categoryValue
+                                                    : '값을 찾을 수 없습니다.'}
                                             </Link>
                                         </li>
                                     ) : (
@@ -182,12 +188,12 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters, categoryL
                                         return (
                                             <li
                                                 className="flex justify-start items-center !mt-0 p-2 pl-0"
-                                                key={category.categoryId} // index를 key로 사용할 수 있지만, 고유한 id가 있으면 id 사용을 권장합니다.
+                                                key={category.categoryDetail} // index를 key로 사용할 수 있지만, 고유한 id가 있으면 id 사용을 권장합니다.
                                             >
                                                 <Link
                                                     to="#"
                                                     onClick={() => {
-                                                        setCategory(category.categoryId);
+                                                        setCategory(category.categoryDetail);
                                                         toggleOpen();
                                                     }}
                                                 >
@@ -337,7 +343,15 @@ const AuctionListFilterContainer = ({ itemsCount, filters, setFilters, categoryL
                                                 >
                                                     {filter.key === 'category' ? (
                                                         <span className="truncate">
-                                                            {categories[filter.value - 1].name}
+                                                            {categories.find(
+                                                                (category) =>
+                                                                    category.categoryDetail === filters.category
+                                                            )
+                                                                ? categories.find(
+                                                                      (category) =>
+                                                                          category.categoryDetail === filters.category
+                                                                  ).categoryValue
+                                                                : '값을 찾을 수 없습니다.'}
                                                         </span>
                                                     ) : (
                                                         <span className="truncate">{filter.value}</span>

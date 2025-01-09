@@ -35,32 +35,14 @@ public class AuctionItemController {
             @RequestParam(value = "searchQuery", required = false) List<String> searchQuery,
             @RequestParam(value = "sort", defaultValue = "likes") String sort) {
 
-        log.info("Filters received: category={}, minPrice={}, maxPrice={}, searchQuery={}, sort={}",
-                category, minPrice, maxPrice, searchQuery, sort);
-
 //        Criteria criteria = Criteria.builder().page(page).amount(amount).build();
         SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setCategory(category);
         searchDTO.setType(sort);
         searchDTO.setSearchQuery(searchQuery);
         searchDTO.setMinPrice(minPrice);
         searchDTO.setMaxPrice(maxPrice);
 
-//        // category, minPrice, maxPrice가 null일 경우 -1로 설정
-//        if (category == null) {
-//            category = "all";
-//        }
-//
-//        if (minPrice == null) {
-//            minPrice = -1;  // 예시로 -1로 설정 (매퍼에서 처리)
-//        }
-//
-//        if (maxPrice == null) {
-//            maxPrice = -1;  // 예시로 -1로 설정 (매퍼에서 처리)
-//        }
-//
-//        if (searchQuery == null) {
-//            searchQuery = "";  // 검색어가 null일 경우 빈 문자열로 설정
-//        }
 
         List<AuctionItemVO> res = auctionItemService.getFilteredAuctionItems(searchDTO);
 

@@ -24,7 +24,7 @@ export const getAuctionItems = async (filters) => {
               },
           }
         : {};
-
+    console.log('config', config);
     const res = await axios.get('/api/auction-items/', config);
     return res.data;
 };

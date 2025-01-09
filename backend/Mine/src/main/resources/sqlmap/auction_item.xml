@@ -31,23 +31,23 @@
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <!-- 카테고리 필터링 -->
             <if test="searchDTO.category != null">
-                AND category_id = #{searchDTO.category}
+                AND AI.category_id = #{searchDTO.category}
             </if>
 
             <!-- 최소 가격 필터링 -->
             <if test="searchDTO.minPrice != null">
-                AND auction_item_highest_price >= #{searchDTO.minPrice}
+                AND AI.auction_item_highest_price >= #{searchDTO.minPrice}
             </if>
 
             <!-- 최대 가격 필터링 -->
             <if test="searchDTO.maxPrice != null">
-                AND auction_item_highest_price &lt;= #{searchDTO.maxPrice}
+                AND AI.auction_item_highest_price &lt;= #{searchDTO.maxPrice}
             </if>
 
             <!-- 검색어 필터링 (부분 검색) -->
             <if test="searchDTO.searchQuery != null and searchDTO.searchQuery.size() > 0">
                 <foreach collection="searchDTO.searchQuery" item="query" separator="OR">
-                    AND auction_item_name LIKE CONCAT('%', #{query}, '%')
+                    AND AI.auction_item_name LIKE CONCAT('%', #{query}, '%')
                 </foreach>
             </if>
         </trim>
