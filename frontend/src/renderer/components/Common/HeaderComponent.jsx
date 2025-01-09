@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import { recentSearchesAtom } from '../../../recoil/atoms/recentSearchAtom';
 import { chatDrawerState, chatListAndRoomState } from '../../../recoil/atoms/chatStateAtom';
 import {authState} from '../../../recoil/atoms/loginUserAtom.js'
+import {logout} from '../../../services/userApiService.js'
 import {sessionCheck} from "../../../services/sessionCheckApi.js";
 /**
  * 로그인 유무에 따라 마이페이지 드롭다운 설정
@@ -237,8 +238,9 @@ const RightSideMenu = memo(() => {
                                 </li>
                                 <li className="pt-2 pb-3">
                                     <button className="cursor-pointer disabled:text-stone-400"
-                                            onClick={() => {
+                                            onClick={async () => {
                                                 console.log("로그아웃 버튼")
+                                                await logout();
                                                 setAuth({isLoggedIn: false, userEmail: ''})
                                                 close()
                                                 nav('/')
