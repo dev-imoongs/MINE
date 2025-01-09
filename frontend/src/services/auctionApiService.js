@@ -20,3 +20,41 @@ export const getAuctionDetail = async () => {
     const res = await axios.get('/data/auctionDetail.json');
     return res.data;
 };
+
+export const saveAuction = async (input, filesData) => {
+    const auctionItemVO = {
+        auctionItemName: input.name,
+        auctionItemStartPrice: input.startPrice,
+        auctionItemExplain: input.explain,
+        auctionItemEndTime: input.endTime,
+        minBidAmount: input.price,
+        categoryId: input.category,
+    };
+
+    const formData = new FormData();
+    formData.append('auctionItem', new Blob([JSON.stringify(auctionItemVO)], { type: 'application/json' }));
+
+    // 파일 데이터에서 파일을 복구하여 FormData에 추가
+    const filePromises = filesData.map(fileData =>
+        fetch(fileData.url)
+        .then(response => response.blob())
+        .then(blob => {
+            // Blob을 File 객체로 변환, 파일 확장자를 사용하도록 변경
+            const filename = fileData.name; // 이미 사용자가 파일 이름을 지정
+            return new File([blob], filename, { type: `image/${fileData.type}` });
+        })
+    );
+
+    // 모든 파일이 준비되면 FormData에 추가하고 요청을 보냄
+    const files = await Promise.all(filePromises);
+    files.forEach(file => {
+        formData.append('files', file);
+    });
+
+    // Axios 요청 보내기
+    return axios.post('/api/auction-items/save', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}

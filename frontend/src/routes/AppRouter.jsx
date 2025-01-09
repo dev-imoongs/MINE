@@ -46,7 +46,7 @@ const AppRouter = () => {
                 <Route path="/login" element={<Index />} />
                 <Route path="/join" element={<Join />} />
                 <Route path="/editInfo" element={<Join />} />
-                <Route path="/changePasfsword" element={<ChangePassword />} />
+                <Route path="/changePassword" element={<ChangePassword />} />
                 <Route path="/findPassword" element={<FindPassword />} />
             </Route>
         </Routes>

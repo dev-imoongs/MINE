@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from "react-query";
 import styles from '../../../styles/login/find-password.module.css';
 import InputForm from "../../components/login/LoginComponent";
+
+import { checkKey } from "../../../services/userApiService.js";
 
 const ChangePassword = () => {
     const navigate = useNavigate();
@@ -15,6 +18,34 @@ const ChangePassword = () => {
         passwordError: "",
         passwordCheckError: ""
     });
+
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get('userEmail');
+    const keyValue = params.get('key');
+
+    useEffect(() => {
+        if (!email || !keyValue) {
+            alert('잘못된 접근입니다.');
+            navigate('/');
+            return;
+        }
+
+        const verifyKey = async () => {
+            try {
+                const result = await checkKey(email, keyValue);
+                if (!result) {
+                    alert('잘못된 접근입니다.');
+                    navigate('/');
+                }
+            } catch (error) {
+                console.error("Error during checkKey:", error);
+                alert('오류가 발생했습니다.');
+                navigate('/');
+            }
+        };
+
+        verifyKey();
+    }, [email, keyValue, navigate]);
 
     const onChange = (e) => {
         setInput({

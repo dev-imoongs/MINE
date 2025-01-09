@@ -14,7 +14,7 @@ import java.util.Map;
 @Mapper
 public interface AuctionItemMapper {
 
-    public void insertAuctionItem();
+    public Integer selectLastUsedItem();
 
     public AuctionItemVO findAuctionItemById(int id);
 
@@ -28,4 +28,6 @@ public interface AuctionItemMapper {
     public Map<String, Object> selectItemStatisticsByCondition(@Param("page") SearchDTO searchDTO);
 
     public List<AuctionItemVO> selectMyAuctionItemList(UserVO userVO);
+
+    public void insertAuctionItem(AuctionItemVO acAuctionItemVO);
 }
