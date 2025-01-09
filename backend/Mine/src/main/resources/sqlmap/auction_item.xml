@@ -79,16 +79,29 @@
     <select id="selectAllAuctionItem" resultType="auctionItemVO">
         SELECT
         A.*,
+        COALESCE(MIN(C.file_path), '') AS file_path, -- 첫 번째
         COALESCE(B.like_count, 0) AS like_count
         FROM tbl_auction_item A
         LEFT JOIN (
-        SELECT
-        auction_item_id,
-        COUNT(auction_item_id) AS like_count
-        FROM tbl_like
-        GROUP BY auction_item_id
+            SELECT
+            auction_item_id,
+            COUNT(auction_item_id) AS like_count
+            FROM tbl_like
+            GROUP BY auction_item_id
         ) B
         ON A.auction_item_id = B.auction_item_id
+        LEFT JOIN (
+            SELECT
+            auction_item_id,
+            file_path
+            FROM
+            tbl_file
+        ) C
+        ON A.auction_item_id = C.auction_item_id
+        GROUP BY
+        A.auction_item_id, A.auction_item_name, A.auction_item_explain,
+        A.auction_item_highest_price, A.auction_item_start_price, A.category_id,
+        A.auction_item_status, A.min_bid_amount, A.user_id, B.like_count
         <include refid="searchCondition" />
         <choose>
             <when test="dto.type == 'recent'">

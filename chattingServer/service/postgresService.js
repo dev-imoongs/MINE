@@ -254,9 +254,9 @@ const selectChatting = async (data) => {
                 tc.room_id,
                 tc.item_id,
                 tc.item_type,
-                COALESCE(images, '[]'::jsonb) AS images, -- JSONB 형식 기본값 설정
+                COALESCE(images, '[]'::jsonb) AS images,
                 CASE
-                    WHEN COALESCE(tc.images, '[]'::jsonb) = '[]'::jsonb THEN 'text' -- 빈 배열인 경우 'text' 반환
+                    WHEN COALESCE(tc.images, '[]'::jsonb) = '[]'::jsonb THEN 'text'
                     ELSE 'images'
                     END AS message,
                 tcr.chatting_read_id,
@@ -293,9 +293,9 @@ const selectChatting = async (data) => {
                 tc.room_id,
                 tc.item_id,
                 tc.item_type,
-                COALESCE(images, '[]'::jsonb) AS images, -- JSONB 형식 기본값 설정
+                COALESCE(images, '[]'::jsonb) AS images,
                 CASE
-                    WHEN COALESCE(tc.images, '[]'::jsonb) = '[]'::jsonb THEN 'text' -- 빈 배열인 경우 'text' 반환
+                    WHEN COALESCE(tc.images, '[]'::jsonb) = '[]'::jsonb THEN 'text'
                     ELSE 'images'
                     END AS message,
                 tcr.chatting_read_id,
@@ -318,11 +318,16 @@ const selectChatting = async (data) => {
         const result = await pool.query(query, values);
         const chatRows = result.rows;
 
-        // 읽지 않은 메시지 필터링
+        // 읽지 않은 메시지 필터링 (내가 받은 메시지만 포함)
         const unreadChatIds = chatRows
-            .filter(chat => chat.reader_user_id === data.receive && !chat.chatting_read_status) // 수신자가 읽지 않은 메시지
+            .filter(chat =>
+                chat.reader_user_id === data.receive && // 수신자가 읽지 않은 메시지
+                !chat.chatting_read_status && // 읽지 않은 메시지
+                chat.chatting_receive_user_id === data.sender // 내가 받은 메시지만
+            )
             .map(chat => chat.chatting_id);
-
+        console.log(unreadChatIds)
+        console.log(chatRows)
         // 읽지 않은 메시지가 있으면 업데이트
         if (unreadChatIds.length > 0) {
             const updateQuery = `

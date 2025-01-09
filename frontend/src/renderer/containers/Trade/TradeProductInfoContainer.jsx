@@ -35,7 +35,8 @@ const TradeProductInfoContainer = ({ StImg }) => {
             sellerId : sellerInfo.userId,
             itemId : productInfo.usedItemId,
             itemType : 'Used',
-            receive : sellerInfo.userId
+            receive : sellerInfo.userId,
+            auth : auth.userEmail
         })
         try {
             // 1. 서버에서 메시지 요청

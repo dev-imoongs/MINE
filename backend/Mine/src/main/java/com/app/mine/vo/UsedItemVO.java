@@ -24,4 +24,7 @@ public class UsedItemVO {
     // likeCount 추가
     private int likeCount;
 
+    // filePath 추가
+    private String filePath;
+
 }

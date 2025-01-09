@@ -69,6 +69,7 @@ app.post('/getChattingMessage',async (req, res) => {
             data.buyerId = session.userInfo.userId
             data.sender = session.userInfo.userId
         }
+        console.log(data)
 
         let selectChat = await selectChatting(data)
         chattingData.chat = selectChat.length !== 0 ? selectChat : await selectOrInsertChattingRoom(data)
