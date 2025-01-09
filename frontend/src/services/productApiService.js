@@ -29,11 +29,14 @@ export const getUsedItems = async (filters) => {
                   maxPrice,
                   searchQuery,
                   sort,
+                  page: 1,
+                  amount: 30,
               },
           }
         : {};
 
-    const res = await axios.get('/api/used-item/ ', config);
+    const res = await axios.get('/api/used-item/', config);
+    console.log('res', res);
     return res.data;
 };
 

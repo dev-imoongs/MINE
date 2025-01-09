@@ -1,10 +1,18 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [react()],
-    server: {
-        proxy: { '/api': 'http://localhost:8070', '/chat' : 'http://localhost:3080', '/check' : 'http://localhost:3080' },
-    },
+export default defineConfig(({ mode }) => {
+    // 환경 변수 로드 (mode에 따라 다를 수 있음)
+    const env = loadEnv(mode, process.cwd(), '');
+
+    return {
+        plugins: [react()],
+        server: {
+            proxy: {
+                '/api': 'http://localhost:8070',
+                '/chat': env.MINE_HOST,
+                '/check': env.MINE_HOST,
+            },
+        },
+    };
 });
