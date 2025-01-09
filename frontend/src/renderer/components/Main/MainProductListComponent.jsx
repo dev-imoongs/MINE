@@ -82,7 +82,8 @@ const ProductList = ({product}) => {
                               <img
                                 alt=""
                                 referrerPolicy="no-referrer"
-                                src={'src/assets/temp_product.png'}
+                                // src={'src/assets/temp_product.png'}
+                                  src={item.filePath ? `/api/files/display?filePath=${item.filePath}` : 'src/assets/temp_product.png'}
                                 decoding="async"
                                 data-nimg="fill"
                                 className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"

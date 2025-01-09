@@ -25,4 +25,7 @@ public class AuctionItemVO {
     private String likeCount;
     private Boolean myFavoriteAuction;
     private Integer auctionItemJoinCount;
+
+    // filePath 추가
+    private String filePath;
 }
