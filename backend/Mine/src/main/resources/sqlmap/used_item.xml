@@ -62,16 +62,34 @@
         A.user_id,
         A.used_item_buyer_id,
         A.used_item_status,
+        COALESCE(MIN(C.file_path), '') AS file_path, -- 첫 번째 파일만 가져오기
         COALESCE(B.like_count, 0) AS like_count
-        FROM tbl_used_item A
+        FROM
+        tbl_used_item A
         LEFT JOIN (
         SELECT
         used_item_id,
         COUNT(used_item_id) AS like_count
-        FROM tbl_like
-        GROUP BY used_item_id
+        FROM
+        tbl_like
+        GROUP BY
+        used_item_id
         ) B
-        ON A.used_item_id = B.used_item_id
+        ON
+        A.used_item_id = B.used_item_id
+        LEFT JOIN (
+        SELECT
+        used_item_id,
+        file_path
+        FROM
+        tbl_file
+        ) C
+        ON
+        A.used_item_id = C.used_item_id
+        GROUP BY
+        A.used_item_id, A.used_item_name, A.used_item_explain, A.used_item_price,
+        A.updated_at, A.created_at, A.used_item_place, A.category_id, A.user_id,
+        A.used_item_buyer_id, A.used_item_status, B.like_count
         <include refid="searchCondition" />
         <choose>
             <when test="dto.type == 'recent'">
