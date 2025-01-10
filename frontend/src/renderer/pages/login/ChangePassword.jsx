@@ -5,6 +5,7 @@ import styles from '../../../styles/login/find-password.module.css';
 import InputForm from "../../components/login/LoginComponent";
 
 import { checkKey } from "../../../services/userApiService.js";
+import { changePassword } from "../../../services/userApiService.js";
 
 const ChangePassword = () => {
     const navigate = useNavigate();
@@ -47,6 +48,20 @@ const ChangePassword = () => {
         verifyKey();
     }, [email, keyValue, navigate]);
 
+    const changePasswordAction = useQuery({
+        queryKey: "changePassword",
+        queryFn: () => changePassword(email, input.password),
+        enabled: false, // 초기에는 쿼리를 자동 실행하지 않음
+        onSuccess: () => {
+            alert('비밀번호가 재설정 되었습니다.');
+            navigate('/');
+        },
+        onError: (error) => {
+            console.error("Error during login:", error);
+            alert('비밀번호 재설정 중 오류가 발생했습니다.');
+        },
+    });
+
     const onChange = (e) => {
         setInput({
             ...input,
@@ -56,8 +71,7 @@ const ChangePassword = () => {
 
     const onClick = () => {
         if (validateForm()) {
-            alert('성공');
-            navigate('/');
+            changePasswordAction.refetch();
         }
     };
 

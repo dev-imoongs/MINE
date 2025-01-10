@@ -61,7 +61,7 @@ const AuctionRegister = () => {
             navigate('/mypage');
         },
         onError: (error) => {
-            console.error("Error during productRegister:", error);
+            console.error("Error during auctionRegister:", error);
             alert('경매 등록 도중 오류가 발생했습니다.');
         },
     });
@@ -84,6 +84,17 @@ const AuctionRegister = () => {
 
         if (!input.endTime) {
             alert("경매 종료 시간을 입력해주세요.");
+            return;
+        }
+
+        const now = new Date();
+
+        const endTimeDate = new Date(input.endTime);
+        const timeDiff = endTimeDate - now;
+
+        // 차이가 24시간(밀리초로 24 * 60 * 60 * 1000) 이내인지 확인
+        if (timeDiff > 0 && timeDiff <= 24 * 60 * 60 * 1000) {
+            alert('경매는 최소 24시간 이후부터 종료 가능합니다.');
             return;
         }
 

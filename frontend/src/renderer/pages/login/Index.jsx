@@ -88,7 +88,7 @@ const Index = () => {
                 </div>
                 <div className={styles['forgot-password']}>
                     <span>비밀번호를 잊으셨나요?</span>
-                    <Link to="/findPassword">비밀번호 재설정</Link>
+                    <Link to="/findPassword"> 비밀번호 재설정</Link>
                 </div>
             </div>
         </div>
