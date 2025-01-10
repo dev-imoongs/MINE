@@ -1,19 +1,19 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import dotenv from 'dotenv';
+dotenv.config();
 
-export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), '');
 
-    return {
-        plugins: [react()],
-        server: {
-            proxy: {
-                '/api': 'http://localhost:8070',
-                // '/chat': 'http://localhost:3080',
-                // '/check': 'http://localhost:3080',
-                '/chat': env.MINE_HOST,
-                '/check': env.MINE_HOST,
-            },
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [react()],
+    server: {
+        proxy: {
+            '/api': 'http://localhost:8070',
+            '/chat' : process.env.VITE_MINE_URL,
+            '/check' :  process.env.VITE_MINE_URL
+            // '/chat' : 'http://localhost:3080',
+            // '/check' : 'http://localhost:3080',
         },
-    };
+    },
 });
