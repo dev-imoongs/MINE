@@ -14,7 +14,7 @@ import java.util.Map;
 @Mapper
 public interface AuctionItemMapper {
 
-    public Integer selectLastUsedItem();
+    public Integer selectLastAuctionItem();
 
     public AuctionItemVO findAuctionItemById(int id);
 

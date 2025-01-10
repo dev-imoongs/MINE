@@ -20,6 +20,7 @@ public class AuctionItemVO {
     private String auctionItemStatusVal;
     private Integer minBidAmount;
     private String updatedAt;
+    private String auctionItemCondition;
 
     private String bidCount;
     private String likeCount;
