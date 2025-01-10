@@ -25,7 +25,7 @@
                 #{usedItemId}
             </if>
             <if test='auctionItemId != null and auctionItemId != ""'>
-                #{actionItemId}
+                #{auctionItemId}
             </if>
             );
     </insert>

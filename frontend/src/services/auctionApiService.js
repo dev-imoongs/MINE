@@ -41,6 +41,7 @@ export const saveAuction = async (input, filesData) => {
         auctionItemExplain: input.explain,
         auctionItemEndTime: input.endTime,
         minBidAmount: input.price,
+        auctionItemCondition: input.status,
         categoryId: input.category,
     };
 

@@ -27,7 +27,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         auctionItemMapper.insertAuctionItem(acAuctionItemVO);
 
         fileVOList.forEach(fileVO -> {
-            fileVO.setAuctionItemId(auctionItemMapper.selectLastUsedItem());
+            fileVO.setAuctionItemId(auctionItemMapper.selectLastAuctionItem());
 
             fileMapper.insertFile(fileVO);
         });

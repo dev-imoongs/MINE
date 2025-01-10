@@ -188,7 +188,7 @@
     </sql>
 
     <!-- 파일 등록을 위한 최근 중고 물품 가져오기 selectLastUsedItem -->
-    <select id="selectLastUsedItem">
+    <select id="selectLastAuctionItem">
         /* 파일 등록을 위한 최근 중고 물품 가져오기 selectLastUsedItem */
         select auction_item_id from tbl_auction_item order by auction_item_id desc limit 1
     </select>
@@ -197,9 +197,9 @@
     <!-- 경매 물품 등록 insertAuctionItem -->
     <insert id="insertAuctionItem" parameterType="auctionItemVO">
         /* 경매 물품 등록 insertAuctionItem */
-        insert into mine.tbl_auction_item
-        (user_id, auction_item_name, auction_item_explain, auction_item_start_price, auction_item_end_time, category_id, auction_item_status, min_bid_amount)
-        values(#{userId}, #{auctionItemName}, #{auctionItemExplain}, #{auctionItemStartPrice}, #{auctionItemEndTime}::timestamp, #{categoryId}, '201', #{auctionItemStartPrice})
+        insert into tbl_auction_item
+        (user_id, auction_item_name, auction_item_explain, auction_item_start_price, auction_item_end_time, category_id, auction_item_status, min_bid_amount, auction_item_condition)
+        values(#{userId}, #{auctionItemName}, #{auctionItemExplain}, #{auctionItemStartPrice}, #{auctionItemEndTime}::timestamp, #{categoryId}, '201', #{auctionItemStartPrice}, #{auctionItemCondition})
     </insert>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
