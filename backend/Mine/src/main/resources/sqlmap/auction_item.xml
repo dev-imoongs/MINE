@@ -187,9 +187,9 @@
         </trim>
     </sql>
 
-    <!-- 파일 등록을 위한 최근 중고 물품 가져오기 selectLastUsedItem -->
+    <!-- 파일 등록을 위한 최근 경매 물품 가져오기 selectLastAuctionItem -->
     <select id="selectLastAuctionItem">
-        /* 파일 등록을 위한 최근 중고 물품 가져오기 selectLastUsedItem */
+        /* 파일 등록을 위한 최근 경매 물품 가져오기 selectLastAuctionItem */
         select auction_item_id from tbl_auction_item order by auction_item_id desc limit 1
     </select>
 

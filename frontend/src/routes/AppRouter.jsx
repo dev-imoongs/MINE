@@ -76,7 +76,8 @@ const Layout = React.memo(() => {
                 console.log('Session Valid:', auth);
                 try {
                     const isValid = await sessionCheck(); // 세션 검증 요청
-                    if (!isValid.data.status) {
+                    console.log(isValid)
+                    if (!isValid.data) {
                         console.warn('세션이 유효하지 않습니다. /login으로 리디렉션합니다.');
                         setDrawerVisible(false); // 드로어 닫기
                         setAuth({ isLoggedIn: false, userEmail: '' }); // 세션 초기화

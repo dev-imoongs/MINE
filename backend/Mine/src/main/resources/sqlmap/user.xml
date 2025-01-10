@@ -6,7 +6,9 @@
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 사용자 조회 selectUser -->
     <select id="selectUser" resultType="userVO">
+        /* 사용자 조회 selectUser */
         select user_id, user_email, user_password, user_nickname, user_category1, user_category2, user_category3, user_address, user_address_detail, user_point, user_trust_score, user_status
         from tbl_user
         where user_email = #{userEmail}
@@ -16,19 +18,64 @@
         and user_status = 'Y'
     </select>
 
+    <select id="selectMyInfo" resultType="userVO">
+        select
+            u.user_id,
+            u.user_email,
+            u.user_password,
+            u.user_nickname,
+            u.user_category1,
+            u.user_address,
+            u.user_point,
+            u.user_trust_score,
+            u.user_category2,
+            u.user_category3,
+            u.user_address_detail,
+            u.user_status,
+            ui.buy_count,
+            ui.sell_count,
+            ai.success_bid_count
+        from
+            tbl_user u
+                LEFT JOIN (
+                SELECT
+                    user_id,
+                    COUNT(*) FILTER (WHERE used_item_buyer_id = #{userId}) AS buy_count,
+                        COUNT(*) FILTER (WHERE user_id = #{userId} AND used_item_buyer_id IS NOT NULL) AS sell_count
+                FROM
+                    tbl_used_item
+                GROUP BY
+                    user_id
+            ) ui ON u.user_id = ui.user_id
+                LEFT JOIN (
+                SELECT
+                    user_id,
+                    COUNT(*) AS success_bid_count
+                FROM
+                    tbl_auction_item
+                WHERE
+                    user_id = #{userId} AND auction_item_status = '203'
+                GROUP BY
+                    user_id
+            ) ai ON u.user_id = ai.user_id
+        WHERE
+            u.user_id = #{userId} and u.user_status = 'Y'
+    </select>
+
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 회원가입 insertUser -->
     <insert id="insertUser" parameterType="userVO">
+        /* 회원가입 insertUser */
         insert into tbl_user(user_email, user_password, user_nickname, user_category1, user_category2, user_category3, user_address, user_address_detail)
         values(#{userEmail}, #{userPassword}, #{userNickname}, #{userCategory1}, #{userCategory2}, #{userCategory3}, #{userAddress}, #{userAddressDetail})
     </insert>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 사용자 수정 updateUser -->
     <update id="updateUser" parameterType="userVO">
+        /* 사용자 수정 updateUser */
         update tbl_user
         <set>
-            <if test='userEmail != null and userEmail != ""'>
-                user_email = #{userEmail}
-            </if>
             <if test='userPassword != null and userPassword != ""'>
                 user_password = #{userPassword}
             </if>
@@ -60,55 +107,20 @@
                 user_status = #{userStatus}
             </if>
         </set>
-        where user_id = #{userId}
+        where
+            <if test='userId != null and userId != ""'>
+                user_id = #{userId}
+            </if>
+            <if test='userId == null or userId == ""'>
+                user_email = #{userEmail}
+            </if>
     </update>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 회원 탈퇴 -->
     <delete id="deleteUser">
+        /* 회원 탈퇴 */
         delete from tbl_user where user_id = #{userId}
     </delete>
 
-    <select id="selectMyInfo" resultType="userVO">
-        select
-            u.user_id,
-            u.user_email,
-            u.user_password,
-            u.user_nickname,
-            u.user_category1,
-            u.user_address,
-            u.user_point,
-            u.user_trust_score,
-            u.user_category2,
-            u.user_category3,
-            u.user_address_detail,
-            u.user_status,
-            ui.buy_count,
-            ui.sell_count,
-            ai.success_bid_count
-        from
-            tbl_user u
-                LEFT JOIN (
-                SELECT
-                    user_id,
-                    COUNT(*) FILTER (WHERE used_item_buyer_id = #{userId}) AS buy_count,
-                    COUNT(*) FILTER (WHERE user_id = #{userId} AND used_item_buyer_id IS NOT NULL) AS sell_count
-                FROM
-                    tbl_used_item
-                GROUP BY
-                    user_id
-            ) ui ON u.user_id = ui.user_id
-                LEFT JOIN (
-                SELECT
-                    user_id,
-                    COUNT(*) AS success_bid_count
-                FROM
-                    tbl_auction_item
-                WHERE
-                    user_id = #{userId} AND auction_item_status = '203'
-                GROUP BY
-                    user_id
-            ) ai ON u.user_id = ai.user_id
-        WHERE
-            u.user_id = #{userId} and u.user_status = 'Y'
-    </select>
 </mapper>

@@ -72,6 +72,18 @@ export const checkKey = async (userEmail, key) => {
     return response.data;
 }
 
+export const changePassword = async (userEmail, userPassword) => {
+    const response = await axios.post('/api/user/change-password', {
+        userEmail : userEmail,
+        userPassword : userPassword
+    },
+    {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+
+    return response.data;
+}
+
 export const logout = async () => {
     try {
         const response = await axios.get('/api/user/logout');

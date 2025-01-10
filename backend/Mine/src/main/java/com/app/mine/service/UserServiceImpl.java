@@ -54,6 +54,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public void updateUser(UserVO userVO) {
+        userVO.setUserPassword(hash(userVO.getUserPassword()));
+
         userMapper.updateUser(userVO);
     }
 

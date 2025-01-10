@@ -1,7 +1,7 @@
 import axios from 'axios';
 export const sessionCheck = async () => {
     try {
-        const response = await axios.post('/check');
+        const response = await axios.post('/api/user/session-check');
         console.log('Response:', response); // 성공 응답 출력
         return response; // 성공 데이터 반환
     } catch (error) {

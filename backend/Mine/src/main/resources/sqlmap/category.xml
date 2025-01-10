@@ -6,7 +6,9 @@
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
+    <!-- 카테고리 조회 selectCategory -->
     <select id="selectCategory" resultType="categoryVO">
+        /* 카테고리 조회 selectCategory */
         select category_detail, category_value
         from tbl_category
         where category_group = '1'

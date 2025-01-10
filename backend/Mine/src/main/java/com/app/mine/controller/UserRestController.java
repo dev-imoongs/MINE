@@ -2,9 +2,11 @@ package com.app.mine.controller;
 
 import com.app.mine.service.UserService;
 import com.app.mine.vo.UserVO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,10 +75,9 @@ public class UserRestController {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(userEmail);
         message.setFrom("disappointed123419@gmail.com");
-//        from 값을 설정하지 않으면 application.properties의 username값이 설정됩니다.
         message.setSubject(userEmail + "님, 새 비밀번호 설정 링크입니다.");
 
-        String key = userEmail + ".enc";
+        String key = "userEmail=" + userEmail + ".enc";
         key = Base64.getEncoder().encodeToString(key.getBytes());
 
         message.setText(userEmail + "님, 비밀번호 재설정 하시기 바랍니다.\n" + "링크: http://127.0.0.1:5173/changePassword?userEmail=" + userEmail + "&key=" + key);
@@ -86,7 +87,29 @@ public class UserRestController {
 
     @PostMapping("check-key")
     public boolean checkKey(String userEmail, String key) {
-        return new String(Base64.getDecoder().decode(key)).equals(userEmail + ".enc");
+        return new String(Base64.getDecoder().decode(key)).equals("userEmail=" + userEmail + ".enc");
+    }
+
+    @PostMapping("change-password")
+    public void changePassword(String userEmail, String userPassword) {
+        UserVO userVO = new UserVO();
+
+        userVO.setUserEmail(userEmail);
+        userVO.setUserPassword(userPassword);
+
+        userService.updateUser(userVO);
+    }
+
+    @PostMapping("session-check")
+    public ResponseEntity<Boolean> sessionCheck(HttpServletRequest request) {
+        HttpSession session = request.getSession(false); // 기존 세션만 반환, 없으면 null
+
+        // 세션이 없거나 userInfo가 없으면 false 반환
+        if (session == null || session.getAttribute("userInfo") == null) {
+            return ResponseEntity.ok(false);
+        }
+
+        return ResponseEntity.ok(true); // 세션과 userInfo가 유효함
     }
 
     @GetMapping("logout")
