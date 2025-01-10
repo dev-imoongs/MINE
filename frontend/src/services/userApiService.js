@@ -48,6 +48,30 @@ export const checkDuplicateEmail = async (input) => {
     return response.data;
 }
 
+export const sendEmail = async (input) => {
+    const response = await axios.post('/api/user/send-email', {
+        userEmail : input.email
+    },
+    {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+    
+    return response.data;
+}
+
+export const checkKey = async (userEmail, key) => {
+    const params = new URLSearchParams();
+    params.append('userEmail', userEmail);
+    params.append('key', key);
+
+    const response = await axios.post('/api/user/check-key', params,
+    {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+
+    return response.data;
+}
+
 export const logout = async () => {
     try {
         const response = await axios.get('/api/user/logout');

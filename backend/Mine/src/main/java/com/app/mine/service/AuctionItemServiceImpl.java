@@ -2,11 +2,9 @@ package com.app.mine.service;
 
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
-import com.app.mine.vo.AuctionItemVO;
+import com.app.mine.mapper.FileMapper;
+import com.app.mine.vo.*;
 import com.app.mine.mapper.AuctionItemMapper;
-import com.app.mine.vo.Criteria;
-import com.app.mine.vo.UsedItemVO;
-import com.app.mine.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,18 +20,37 @@ import java.util.Map;
 public class AuctionItemServiceImpl implements AuctionItemService {
 
     private final AuctionItemMapper auctionItemMapper;
+    private final FileMapper fileMapper;
+
+    @Override
+    public void saveAuctionItem(AuctionItemVO acAuctionItemVO, List<FileVO> fileVOList) {
+        auctionItemMapper.insertAuctionItem(acAuctionItemVO);
+
+        fileVOList.forEach(fileVO -> {
+            fileVO.setAuctionItemId(auctionItemMapper.selectLastUsedItem());
+
+            fileMapper.insertFile(fileVO);
+        });
+    }
 
     @Override
     public AuctionItemVO getAuctionItemById(int id) {
         return auctionItemMapper.findAuctionItemById(id);
     }
 
+//    @Override
+//    public List<AuctionItemVO> getFilteredAuctionItems(String category, Integer minPrice, Integer maxPrice, String searchQuery, String sort) {
+//        log.info("=================serviceImpl=======================\nFilters received: category={}, minPrice={}, maxPrice={}, searchQuery={}, sort={}",category, minPrice, maxPrice, searchQuery, sort);
+//            Integer userId = 1;
+//            return auctionItemMapper.findAuctionItems(category, minPrice, maxPrice, searchQuery, sort, userId);
+//    }
+
     @Override
-    public List<AuctionItemVO> getFilteredAuctionItems(Integer category, Integer minPrice, Integer maxPrice, String searchQuery, String sort) {
-        log.info("=================serviceImpl=======================\nFilters received: category={}, minPrice={}, maxPrice={}, searchQuery={}, sort={}",category, minPrice, maxPrice, searchQuery, sort);
-            Integer userId = 1;
-            return auctionItemMapper.findAuctionItems(category, minPrice, maxPrice, searchQuery, sort, userId);
+    public List<AuctionItemVO> getFilteredAuctionItems(SearchDTO searchDTO) {
+        Integer userId = 1;
+        return auctionItemMapper.findAuctionItems(searchDTO, userId);
     }
+
     @Override
     public Map<String, Object> findSearchAuctionItem(SearchDTO searchDTO) {
         Map<String, Object> auctionItemMap = new HashMap<>();

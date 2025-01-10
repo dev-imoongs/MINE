@@ -28,6 +28,7 @@ public class MainRestController {
     public List<Map<String, Object>> getAllUsedItems() {
         return usedItemService.findAllUsedItems();
     }
+
     @GetMapping("getFilterItem")
     public Map<String, Object> getFilteredUsedItems(@RequestParam(required = false) int page,
                                                  @RequestParam(required = false) String type,

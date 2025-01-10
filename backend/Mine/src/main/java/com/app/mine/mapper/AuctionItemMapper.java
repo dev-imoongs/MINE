@@ -14,18 +14,24 @@ import java.util.Map;
 @Mapper
 public interface AuctionItemMapper {
 
-    public void insertAuctionItem();
+    public Integer selectLastUsedItem();
 
     public AuctionItemVO findAuctionItemById(int id);
 
-    public List<AuctionItemVO> findAuctionItems(Integer category,
-                                                Integer minPrice,
-                                                Integer maxPrice,
-                                                String searchQuery,
-                                                String sort,
-                                                Integer userId);
+//    public List<AuctionItemVO> findAuctionItems(String category,
+//                                                Integer minPrice,
+//                                                Integer maxPrice,
+//                                                String searchQuery,
+//                                                String sort,
+//                                                Integer userId);
+
+    public List<AuctionItemVO> findAuctionItems(SearchDTO searchDTO, Integer userId);
+
     public List<AuctionItemVO> selectAllAuctionItem(@Param("page") PageDTO pageDTO);
+
     public Map<String, Object> selectItemStatisticsByCondition(@Param("page") SearchDTO searchDTO);
 
     public List<AuctionItemVO> selectMyAuctionItemList(UserVO userVO);
+
+    public void insertAuctionItem(AuctionItemVO acAuctionItemVO);
 }
