@@ -3,12 +3,11 @@ package com.app.mine.controller;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.service.FileService;
 import com.app.mine.service.UsedItemService;
-import com.app.mine.vo.FileVO;
-import com.app.mine.vo.UsedItemVO;
-import com.app.mine.vo.UserVO;
+import com.app.mine.vo.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,6 +58,28 @@ public class UsedItemRestController {
     public List<UsedItemVO> getMyUsedItemList(HttpSession session) {
         UserVO userInfo = (UserVO)session.getAttribute("userInfo");
         return usedItemService.getMyUsedItemList(userInfo);
+    }
+
+    // 중고거래 리스트 페이지
+    @GetMapping
+    public Map<String, Object> getFilteredUsedItem(
+            @RequestParam(value = "page", required = false) int page,
+            @RequestParam(value = "amount", required = false) int amount,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "minPrice", required = false) Long minPrice,
+            @RequestParam(value = "maxPrice", required = false) Long maxPrice,
+            @RequestParam(value = "searchQuery", required = false) List<String> searchQuery,
+            @RequestParam(value = "sort", defaultValue = "likes") String sort) {
+
+        Criteria criteria = Criteria.builder().page(page).amount(amount).build();
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setCategory(category);
+        searchDTO.setType(sort);
+        searchDTO.setSearchQuery(searchQuery);
+        searchDTO.setMinPrice(minPrice);
+        searchDTO.setMaxPrice(maxPrice);
+
+        return usedItemService.getFilteredUsedItems(searchDTO, criteria);
     }
 
     // 중고거래 상세 페이지
