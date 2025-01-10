@@ -1,10 +1,19 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
     server: {
-        proxy: { '/api': 'http://localhost:8070', '/chat' : 'http://localhost:3080', '/check' : 'http://localhost:3080' },
+        proxy: {
+            '/api': 'http://localhost:8070',
+            '/chat' : process.env.VITE_MINE_URL,
+            '/check' :  process.env.VITE_MINE_URL
+            // '/chat' : 'http://localhost:3080',
+            // '/check' : 'http://localhost:3080',
+        },
     },
 });
