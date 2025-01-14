@@ -12,8 +12,8 @@ export const recommendProduct = async (type, page) => {
     return response.data;
 };
 
-export const myProduct = async () => {
-    const response = await axios.post('/api/used-item/getMyUsedItemList');
+export const myProduct = async (data) => {
+    const response = await axios.post('/api/used-item/getMyUsedItemList', data);
     return response.data;
 };
 
