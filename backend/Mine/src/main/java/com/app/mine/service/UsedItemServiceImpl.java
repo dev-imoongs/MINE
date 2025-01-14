@@ -72,8 +72,27 @@ public class UsedItemServiceImpl implements UsedItemService {
     }
 
     @Override
-    public List<UsedItemVO> getMyUsedItemList(UserVO userVO) {
-        return usedItemMapper.getMyUsedItemList(userVO);
+    public List<Map<String, Object>> getMyUsedItemList(UsedItemVO usedItemVO) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        // 내 중고 상품
+        List<UsedItemVO> myUsedItemList = usedItemMapper.getMyUsedItemList(usedItemVO);
+        Map<String, Object> myUsedItemLMap = new HashMap<>();
+        myUsedItemLMap.put("type", "myUsedItemList");
+        myUsedItemLMap.put("data", myUsedItemList);
+
+        // 내 중고 구매 상품
+        List<UsedItemVO> myUsedPurchaseList = usedItemMapper.selectMyUsedPurchaseList(usedItemVO);
+        Map<String, Object> myUsedPurchaseLMap = new HashMap<>();
+        myUsedPurchaseLMap.put("type", "myUsedPurchaseList");
+        myUsedPurchaseLMap.put("data", myUsedPurchaseList);
+
+        // 내 중고 찜한 상품
+        // 추가필요
+
+        result.add(myUsedItemLMap);
+        result.add(myUsedPurchaseLMap);
+
+        return result;
     }
 
     @Override

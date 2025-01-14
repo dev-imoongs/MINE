@@ -21,7 +21,9 @@ public interface UsedItemMapper {
 
     public List<UsedItemVO> selectAllUsedItem(@Param("page") PageDTO pageDTO);
 
-    public List<UsedItemVO> getMyUsedItemList(UserVO userVO);
+    public List<UsedItemVO> getMyUsedItemList(UsedItemVO usedItemVO);
+
+    public List<UsedItemVO> selectMyUsedPurchaseList(UsedItemVO usedItemVO);
 
     public int getUsedItemCount(@Param("page") SearchDTO searchDTO);
 
