@@ -1,8 +1,11 @@
 import React,{useEffect} from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
+import {useRecoilValue} from "recoil";
+import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
 
 const SwipeImgComponent = ({ StImg }) => {
+    const {productInfo } = useRecoilValue(tradeItemDetail);
     const imageData = [
         {
             id: 1,
@@ -30,7 +33,9 @@ const SwipeImgComponent = ({ StImg }) => {
             src: 'https://img2.joongna.com/cafe-article-data/live/2024/06/22/1062585033/1719019322790_004_HPwbV.jpg?impolicy=resizeWatermark3&amp;isSecret=false',
         },
     ];
-
+    useEffect(()=> {
+     console.log(productInfo.images)
+    })
     return (
         <div className="carouselWrapper relative product-gallery swiperThumbnail product-gallery-slider dotsCircle">
             <Swiper
@@ -45,13 +50,13 @@ const SwipeImgComponent = ({ StImg }) => {
                 onSlideChange={() => console.log("slide change")} 
                 onSwiper={(swiper) => console.log(swiper)}
             >
-                {imageData.map((image) => (
-                    <SwiperSlide key={image.id}>
+                {productInfo.images.map((image, i) => (
+                    <SwiperSlide key={i}>
                         <div className="col-span-1 transition duration-150 ease-in hover:opacity-90 min-w-[200px] min-h-[200px] w-full relative pt-[100%] dim rounded-2xl">
                             <img
-                                alt={image.alt}
+                                // alt={image.alt}
                                 referrerPolicy="no-referrer"
-                                src={image.src}
+                                src={`/api/files/display?filePath=${image}`}
                                 decoding="async"
                                 data-nimg="fill"
                                 className="object-cover lg:w-[520px] lg:h-[520px] w-[335px] h-[335px] rounded-2xl top-1/2 left-1/2"

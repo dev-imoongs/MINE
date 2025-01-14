@@ -62,7 +62,7 @@
         A.user_id,
         A.used_item_buyer_id,
         A.used_item_status,
-        COALESCE(MIN(C.file_path), '') AS file_path, -- 첫 번째 파일만 가져오기
+        COALESCE(MIN(C.file_path), '') AS file_path,
         COALESCE(B.like_count, 0) AS like_count
         FROM
         tbl_used_item A
@@ -86,11 +86,11 @@
         ) C
         ON
         A.used_item_id = C.used_item_id
+        <include refid="searchCondition" />
         GROUP BY
         A.used_item_id, A.used_item_name, A.used_item_explain, A.used_item_price,
         A.updated_at, A.created_at, A.used_item_place, A.category_id, A.user_id,
         A.used_item_buyer_id, A.used_item_status, B.like_count
-        <include refid="searchCondition" />
         <choose>
             <when test="dto.type == 'recent'">
                 ORDER BY A.created_at DESC
@@ -171,14 +171,39 @@
             c.used_item_status,
             d.user_email,
             d.user_trust_score,
-            d.user_nickname
+            d.user_nickname,
+            ARRAY_AGG(e.file_path) AS file_paths
         from (
                  select b.*, category_value
                  from tbl_category a, tbl_used_item b
                  where a.category_detail = b.category_id
              ) c join tbl_user d
-                      on c.user_id = d.user_id
-        where c.used_item_id = #{id};
+          on c.user_id = d.user_id
+         left join
+             (
+                 select
+                     file_path,
+                     used_item_id
+                 from
+                     tbl_file
+             ) e
+         ON
+         c.used_item_id = e.used_item_id
+        where c.used_item_id = #{id}
+        GROUP BY
+            c.used_item_id,
+            c.used_item_name,
+            c.used_item_explain,
+            c.used_item_price,
+            c.used_item_place,
+            c.updated_at,
+            c.created_at,
+            c.category_value,
+            c.user_id,
+            c.used_item_status,
+            d.user_email,
+            d.user_trust_score,
+            d.user_nickname;
     </select>
 
     <!--페이징 처리 및 조건-->

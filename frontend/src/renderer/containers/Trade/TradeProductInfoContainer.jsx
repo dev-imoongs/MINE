@@ -79,7 +79,7 @@ const TradeProductInfoContainer = ({ StImg }) => {
                             className="text-[13px] md:text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-body text-center justify-center placeholder-white focus-visible:outline-none focus:outline-none rounded-md h-11 md:h-12 px-5 py-2 transform-none normal-case hover:shadow-cart ga4_product_detail_bottom w-full bg-white hover:bg-white/90 text-jnblack hover:text-jnblack border-[1px] border-jnblack"
                             onClick={async () => {
                                     const res = await sessionCheck()
-                                    if(res.data.status) {
+                                    if(res.data) {
                                         await fetchMessage()
                                         setDrawerVisible(true)
                                         setChatContainerState("roomContainer")
