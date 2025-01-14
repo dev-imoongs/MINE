@@ -239,7 +239,7 @@
         </trim>
     </sql>
 
-    <select id="getMyUsedItemList" parameterType="UserVo" resultType="UsedItemVo">
+    <select id="getMyUsedItemList" parameterType="UsedItemVO" resultType="UsedItemVo">
         select
             tui.used_item_id,
             tui.used_item_name,
@@ -254,13 +254,51 @@
             tui.used_item_status,
             tu.user_email,
             tu.user_nickname,
-            tc.category_value as category_id_val
+            tc.category_value as category_id_val,
+            tui.used_item_sales_status,
+            tc1.category_value AS used_item_sales_status_val
         from
             tbl_used_item tui
                 LEFT JOIN tbl_user tu
                           ON tu.user_id = tui.user_id
                 LEFT JOIN tbl_category tc
                           ON tc.category_detail = tui.category_id
-        where tui.user_id = #{userId}
+                LEFT JOIN tbl_category tc1
+                          ON tc1.category_detail = tui.used_item_sales_status
+        where 1=1
+        AND tui.user_id = #{userId}
+        <if test="usedItemSalesStatus != null">
+            AND tui.used_item_sales_status = #{usedItemSalesStatus}
+        </if>
+    </select>
+
+    <select id="selectMyUsedPurchaseList" parameterType="UsedItemVO" resultType="UsedItemVo">
+        select
+        tui.used_item_id,
+        tui.used_item_name,
+        tui.used_item_explain,
+        tui.used_item_price,
+        tui.used_item_place,
+        tui.created_at,
+        tui.updated_at,
+        tui.category_id,
+        tui.user_id,
+        tui.used_item_buyer_id,
+        tui.used_item_status,
+        tu.user_email,
+        tu.user_nickname,
+        tc.category_value as category_id_val,
+        tui.used_item_sales_status,
+        tc1.category_value AS used_item_sales_status_val
+        from
+        tbl_used_item tui
+        LEFT JOIN tbl_user tu
+        ON tu.user_id = tui.user_id
+        LEFT JOIN tbl_category tc
+        ON tc.category_detail = tui.category_id
+        LEFT JOIN tbl_category tc1
+        ON tc1.category_detail = tui.used_item_sales_status
+        where 1=1
+        AND tui.used_item_buyer_id = #{userId}
     </select>
 </mapper>

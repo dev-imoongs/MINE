@@ -23,7 +23,7 @@ public interface UsedItemService {
     // 카테고리 페이지
     public Map<String, Object> findSearchUsedItem(SearchDTO searchDTO);
 
-    public List<UsedItemVO> getMyUsedItemList(UserVO userVO);
+    public List<Map<String, Object>> getMyUsedItemList(UsedItemVO usedItemVO);
 
     public Map<String, Object> findUsedItemById(Integer usedItemId);
 }

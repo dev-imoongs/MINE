@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {useQuery} from "react-query";
 import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js";
 import TrustRatingModal from '../../pages/modal/TrustRatingModal.jsx';
 import {Link, useNavigate, useNavigation} from 'react-router-dom';
@@ -16,11 +17,21 @@ const MypageMyList = ({data,isProduct}) => {
     const [activeIndex, setActiveIndex] = useRecoilState(activeIndexAtom);
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
+    const [status, setStatus] = useState(null);
 
     const handleClick = (index) => {
         setActiveIndex(index);
         //case문으로 각각의 데이터 불러오는 로직
-        //...
+        switch (index) {
+            case 0 : //productCondition[0] 판매내역
+                setStatus("401");
+                break;
+            case 1 : //productCondition[0] 판매내역
+                setStatus("402");
+                break;
+            default:
+                setStatus("401");
+        }
     };
 
     const productMenuClick = (index) => {
@@ -147,7 +158,7 @@ const MypageMyList = ({data,isProduct}) => {
                                           {item.usedItemPrice}원
                                       </div>
                                       <div className="my-1">
-                                          <span className="text-sm text-gray-400">{item.usedItemPlace}</span>
+                                          <span className="text-sm text-gray-400">{item.categoryIdVal}</span>
                                           <span className="text-sm text-gray-400 mx-1">|</span>
                                           <span className="text-sm text-gray-400">{item.createdAt}</span>
                                       </div>
