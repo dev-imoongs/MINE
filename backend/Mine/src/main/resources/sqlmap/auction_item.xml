@@ -81,7 +81,7 @@
     <select id="selectAllAuctionItem" resultType="auctionItemVO">
         SELECT
         A.*,
-        COALESCE(MIN(C.file_path), '') AS file_path, -- 첫 번째
+        COALESCE(MIN(C.file_path), '') AS file_path,
         COALESCE(B.like_count, 0) AS like_count
         FROM tbl_auction_item A
         LEFT JOIN (
@@ -100,11 +100,11 @@
             tbl_file
         ) C
         ON A.auction_item_id = C.auction_item_id
+        <include refid="searchCondition" />
         GROUP BY
         A.auction_item_id, A.auction_item_name, A.auction_item_explain,
         A.auction_item_highest_price, A.auction_item_start_price, A.category_id,
         A.auction_item_status, A.min_bid_amount, A.user_id, B.like_count
-        <include refid="searchCondition" />
         <choose>
             <when test="dto.type == 'recent'">
                 ORDER BY A.created_at DESC
