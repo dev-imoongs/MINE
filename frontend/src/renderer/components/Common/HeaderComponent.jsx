@@ -61,7 +61,7 @@ const RightSideMenu = memo(() => {
 
             eventSource.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log('SSE message received:', data);
+                // console.log('SSE message received:', data);
                 setUnreadCount(data.unreadCount.count || 0); // 읽지 않은 메시지 수 업데이트
             };
 
@@ -85,8 +85,7 @@ const RightSideMenu = memo(() => {
                             onClick={async () => {
                                 const res = await sessionCheck()
                                 console.log(res.data)
-                                if(res.data.status) {
-                                    console.log("혹시 여기에?")
+                                if(res.data) {
                                     auth.isLoggedIn ? setDrawerVisible(true) : nav('/login')
                                     setChatContainerState("listContainer");
                                 }else {

@@ -18,18 +18,21 @@ export const modifyData = selector({
 
         const auctionItem = data.auction.itemList?.map(item => ({
             id: item.auctionItemId,
-            image: '',
+            image: item.filePath,
             title: item.auctionItemName,
             price: item.auctionItemHighestPrice,
             elapsedTime: item.updatedAt,
             likes: item.likeCount,
             chat: '1',
+            bidcount: item.bidCount,
+            myFavoriteAuction : item.myFavoriteAuction,
+            endTime : item.auctionItemEndTime,
             destinationType: 2
         })) || [];
 
         const usedItem = data.usedItem.itemList?.map(item => ({
             id: item.usedItemId,
-            image: '',
+            image: item.filePath,
             title: item.usedItemName,
             price: item.usedItemPrice,
             elapsedTime: item.updatedAt,

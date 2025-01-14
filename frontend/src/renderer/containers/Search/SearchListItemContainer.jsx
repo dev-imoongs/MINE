@@ -15,6 +15,10 @@ const SearchListItemContainer = ({ itemInfo }) => {
                     likes={item.likes}
                     chats={item.chats}
                     destinationType={item.destinationType}
+
+                    myFavoriteAuction={item.myFavoriteAuction}
+                    bidCount={item.bidCount}
+                    endTime={item.endTime}
                 />
             ))}
         </ul>

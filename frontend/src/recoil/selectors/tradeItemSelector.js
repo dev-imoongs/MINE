@@ -17,6 +17,7 @@ export const tradeItemDetail = selector({
                 usedItemId : data.used_item_id,
                 price: data.used_item_price,
                 productPicture: [tempImgFile, tempImgFile, tempImgFile],
+                images : data.file_paths,
                 title: data.used_item_name,
                 state: data.used_item_status,
                 productMethod: '직거래',
