@@ -26,19 +26,25 @@ const MyPage = () => {
         setIsProduct(isProduct);
     }
 
-    const myProductData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
-        queryKey: "myProductData", // 캐싱, 식별 고유값
-        queryFn: myProduct // 서버에서 데이터 가져오는 함수
-    })
+    // const myProductData = useQuery({
+    //     queryKey: ['myProductData', { usedItemSalesStatus: '401' }],
+    //     queryFn: () => myProduct({ usedItemSalesStatus: '401' }),
+    // });
+    
+    const myProductData = useQuery({
+        queryKey: ['myProductData'],
+        queryFn: myProduct,
+    });
 
     const myInfoData = useQuery({
         queryKey: "myInfoData",
         queryFn: getMyInfo
     })
 
+    // selector로 바꿀 예정
     useEffect(() => {
         if (myProductData.data) {
-            setMyData(myProductData.data);
+            setMyData(myProductData.data.find((item) => item.type === 'myUsedItemList').data);
         }
     }, [myProductData.data]);
 

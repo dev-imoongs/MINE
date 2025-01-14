@@ -20,6 +20,8 @@ public class UsedItemVO {
     private String userEmail;
     private String userNickname;
     private String categoryIdVal;
+    private String usedItemSalesStatus;
+    private String usedItemSalesStatusVal;
 
     // likeCount 추가
     private int likeCount;
