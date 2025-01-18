@@ -49,8 +49,6 @@ const MypageNavigation = ({onItemClick}) => {
         }
     }, [myAuctionData.data]);
 
-    console.log("myAuctionList", myAuctionList);
-
     return (
         <NaviContainer>
             <NaviTitle>마이 페이지</NaviTitle>

@@ -17,7 +17,7 @@ import {myAuctionProduct} from "../../services/auctionApiService.js";
 import {getMyInfo} from "../../services/userApiService.js";
 
 const MyPage = () => {
-    const [myData, setMyData] = useState(null);
+    const [myData, setMyData] = useRecoilState(myProductListAtom);
     const [myInfo, setMyInfo] = useRecoilState(myInfoAtom);
     const [isProduct, setIsProduct] = useState(true);
 
@@ -40,11 +40,10 @@ const MyPage = () => {
         queryKey: "myInfoData",
         queryFn: getMyInfo
     })
-
-    // selector로 바꿀 예정
+    
     useEffect(() => {
         if (myProductData.data) {
-            setMyData(myProductData.data.find((item) => item.type === 'myUsedItemList').data);
+            setMyData(myProductData.data);
         }
     }, [myProductData.data]);
 
@@ -59,7 +58,7 @@ const MyPage = () => {
         <MypageNavigation onItemClick={onItemClick}></MypageNavigation>
         <div className="mx-auto box-content max-w-[1024px] min-[1600px]:max-w-[1280px] basis-[calc(100%-180px)] flex-grow px-0 md:px-0 2xl:px-0">
             <MypageMyInfo></MypageMyInfo>
-            <MypageMyList data={myData} isProduct={isProduct}></MypageMyList>
+            <MypageMyList isProduct={isProduct}></MypageMyList>
         </div>
     </div>
   );
