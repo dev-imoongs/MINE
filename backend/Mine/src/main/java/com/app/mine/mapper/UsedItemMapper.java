@@ -1,5 +1,6 @@
 package com.app.mine.mapper;
 
+import com.app.mine.dto.MyUsedItemDTO;
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.vo.UsedItemVO;
@@ -21,9 +22,11 @@ public interface UsedItemMapper {
 
     public List<UsedItemVO> selectAllUsedItem(@Param("page") PageDTO pageDTO);
 
-    public List<UsedItemVO> getMyUsedItemList(UsedItemVO usedItemVO);
+    public List<MyUsedItemDTO> selectMyUsedItemList(UsedItemVO usedItemVO);
 
-    public List<UsedItemVO> selectMyUsedPurchaseList(UsedItemVO usedItemVO);
+    public List<MyUsedItemDTO> selectMyUsedPurchaseList(UsedItemVO usedItemVO);
+
+    public List<MyUsedItemDTO> selectMyUsedLike(UsedItemVO usedItemVO);
 
     public int getUsedItemCount(@Param("page") SearchDTO searchDTO);
 

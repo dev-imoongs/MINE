@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useQuery} from "react-query";
 import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js";
 import TrustRatingModal from '../../pages/modal/TrustRatingModal.jsx';
@@ -7,10 +7,14 @@ import tempProductImage from '../../../assets/temp_product.png'
 import {getTimeAgo, getTimeRemaining } from "../../../services/commonService";
 
 import styled from "styled-components";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import PayModal from "../../pages/modal/PayModal.jsx";
-const MypageMyList = ({data,isProduct}) => {
+
+import { myUsedItemSelector } from "../../../recoil/selectors/myConditionselector";
+
+const MypageMyList = ({isProduct}) => {
     const productCondition = ["판매내역", "판매완료", "구매내역", "찜한 상품"];
+    const [usedItemSeltorCon, setUsedItemSeltorCon] = useState('myUsedItemList');
     const auctionCondition = ["경매내역", "경매완료", "구매내역", "찜한 상품"];
     const filter = ["최신순", "낮은가격순", "높은가격순"];
     const [openMenuIndex, setOpenMenuIndex] = useState(null); // 현재 열린 메뉴의 인덱스를 저장
@@ -18,19 +22,54 @@ const MypageMyList = ({data,isProduct}) => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(null);
+    const myUsedItem = useRecoilValue(myUsedItemSelector(usedItemSeltorCon));
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        if (!myUsedItem || myUsedItem.length === 0) {
+            setData([]);
+            return;
+        }
+
+        let filteredData = [];
+
+        switch (activeIndex) {
+            case 0:
+                filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
+                break;
+            case 1:
+                filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '402');
+                break;
+            case 2:
+            case 3:
+                filteredData = myUsedItem;
+                break;
+            default:
+                filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
+                break;
+        }
+
+        setData(filteredData);
+    }, [myUsedItem, activeIndex]);
 
     const handleClick = (index) => {
         setActiveIndex(index);
         //case문으로 각각의 데이터 불러오는 로직
         switch (index) {
             case 0 : //productCondition[0] 판매내역
-                setStatus("401");
+                setUsedItemSeltorCon("myUsedItemList");
                 break;
             case 1 : //productCondition[0] 판매내역
-                setStatus("402");
+                setUsedItemSeltorCon("myUsedItemList");
+                break;
+            case 2 : //productCondition[0;] 판매내역
+                setUsedItemSeltorCon("myUsedPurchaseList");
+                break;
+            case 3 : //productCondition[0] 판매내역
+                setUsedItemSeltorCon("myUsedLikeList");
                 break;
             default:
-                setStatus("401");
+                setUsedItemSeltorCon("myUsedItemList");
         }
     };
 
