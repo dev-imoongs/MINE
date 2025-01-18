@@ -1,5 +1,6 @@
 package com.app.mine.service;
 
+import com.app.mine.dto.MyUsedItemDTO;
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.mapper.AuctionItemMapper;
@@ -75,22 +76,26 @@ public class UsedItemServiceImpl implements UsedItemService {
     public List<Map<String, Object>> getMyUsedItemList(UsedItemVO usedItemVO) {
         List<Map<String, Object>> result = new ArrayList<>();
         // 내 중고 상품
-        List<UsedItemVO> myUsedItemList = usedItemMapper.getMyUsedItemList(usedItemVO);
+        List<MyUsedItemDTO> myUsedItemList = usedItemMapper.selectMyUsedItemList(usedItemVO);
         Map<String, Object> myUsedItemLMap = new HashMap<>();
         myUsedItemLMap.put("type", "myUsedItemList");
         myUsedItemLMap.put("data", myUsedItemList);
 
         // 내 중고 구매 상품
-        List<UsedItemVO> myUsedPurchaseList = usedItemMapper.selectMyUsedPurchaseList(usedItemVO);
+        List<MyUsedItemDTO> myUsedPurchaseList = usedItemMapper.selectMyUsedPurchaseList(usedItemVO);
         Map<String, Object> myUsedPurchaseLMap = new HashMap<>();
         myUsedPurchaseLMap.put("type", "myUsedPurchaseList");
         myUsedPurchaseLMap.put("data", myUsedPurchaseList);
 
         // 내 중고 찜한 상품
-        // 추가필요
+        List<MyUsedItemDTO> myUsedLikeList = usedItemMapper.selectMyUsedLike(usedItemVO);
+        Map<String, Object> myUsedLikeLMap = new HashMap<>();
+        myUsedLikeLMap.put("type", "myUsedLikeList");
+        myUsedLikeLMap.put("data", myUsedLikeList);
 
         result.add(myUsedItemLMap);
         result.add(myUsedPurchaseLMap);
+        result.add(myUsedLikeLMap);
 
         return result;
     }
