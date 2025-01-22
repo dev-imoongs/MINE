@@ -26,7 +26,8 @@ import ToastComponent from '../renderer/components/Common/ToastComponent.jsx'
 import {sessionCheck} from "../services/sessionCheckApi.js";
 import axios from "axios";
 const AppRouter = () => {
-    return (
+    return <>
+        <ScrollTop />
         <Routes>
             <Route element={<Layout />}>
                 <Route path="/" element={<MainPage />} />
@@ -50,7 +51,7 @@ const AppRouter = () => {
                 <Route path="/findPassword" element={<FindPassword />} />
             </Route>
         </Routes>
-    );
+    </>
 };
 
 const Layout = React.memo(() => {
@@ -121,4 +122,13 @@ const Layout = React.memo(() => {
 });
 Layout.displayName = "Layout";
 
+
+const ScrollTop = () => {
+    const {pathname} = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [pathname])
+
+    return null;
+}
 export default AppRouter;

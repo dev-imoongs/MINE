@@ -10,6 +10,7 @@ import TradeProductInfoContainer from '../containers/Trade/TradeProductInfoConta
 import TradeProductDetailContainer from '../containers/Trade/TradeProductDetailContainer';
 import KakaoMap from '../components/Trade/KakaoMap';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import useApiMutation from "../../hooks/mutation.js";
 
 const TradeDetailPage = () => {
     const  { productId }  = useParams();
@@ -32,7 +33,8 @@ const TradeDetailPage = () => {
         return <LoadingSpinner/>
     }; // 로딩 중일 때 표시할 컴포넌트
     if (error) return <div>Error loading product details</div>; // 에러 발생 시 표시할 컴포넌트
-    
+
+
     const StImg = {
         position: 'absolute',
         height: '100%',
@@ -47,7 +49,7 @@ const TradeDetailPage = () => {
                 <div className="mx-auto md:px-8 2xl:px-16 box-content max-w-[1024px] min-[1600px]:max-w-[1280px] lg:min-h-[950px] px-5 default-height">
                     <div className="items-start block grid-cols-2 lg:grid gap-x-[72px] lg:pt-[72px] lg:pb-[52px] pb-9 pt-0">
                         <SwipeImgComponent StImg={StImg} />
-                        <TradeProductInfoContainer StImg={StImg} />
+                        <TradeProductInfoContainer StImg={StImg}  />
                     </div>
                     <TradeProductDetailContainer />
                     <KakaoMap/>

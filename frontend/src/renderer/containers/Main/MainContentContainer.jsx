@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MainProductListComponent from "../../components/Main/MainProductListComponent"
-import { productListAtom } from "../../../recoil/atoms/productListAtom";
+import { mainProductList } from "../../../recoil/atoms/productListAtom";
 import { useRecoilValue } from 'recoil';
 import Slider from "../../components/Common/Slider.jsx";
 
 const MainContentContainer = () => {
-  const productList = useRecoilValue(productListAtom);
-
+  const productList = useRecoilValue(mainProductList);
   if(!productList || productList.length === 0){
     return;
   }

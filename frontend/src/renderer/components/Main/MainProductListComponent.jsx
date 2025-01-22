@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { titleCheck, getTimeAgo, getTimeRemaining } from "../../../services/commonService";
 
 const MainProductListComponent = ({product}) => {
-  console.log("::::::::::: " + product)
   return (
     <>
       <div className="max-w-[1024px] min-[1600px]:max-w-[1280px] m-auto">
@@ -80,7 +79,7 @@ const ProductList = ({product}) => {
                           >
                             <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
                               <img
-                                alt=""
+                                alt={item.usedItemName ? item.usedItemName : item.auctionItemName}
                                 referrerPolicy="no-referrer"
                                 // src={'src/assets/temp_product.png'}
                                   src={item.filePath ? `/api/files/display?filePath=${item.filePath}` : 'src/assets/temp_product.png'}
