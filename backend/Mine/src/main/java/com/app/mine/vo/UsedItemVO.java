@@ -12,6 +12,7 @@ public class UsedItemVO {
     private Integer usedItemPrice;
     private String usedItemStatus;
     private String usedItemPlace;
+    private String usedItemPlaceDetail;
     private String createdAt;
     private String updatedAt;
     private String categoryId;
