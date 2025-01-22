@@ -31,6 +31,8 @@ public interface AuctionItemMapper {
 
     public Map<String, Object> selectItemStatisticsByCondition(@Param("page") SearchDTO searchDTO);
 
+    public int getAuctionItemCount(@Param("page") SearchDTO searchDTO);
+
     public List<AuctionItemVO> selectMyAuctionItemList(UserVO userVO);
 
     public void insertAuctionItem(AuctionItemVO acAuctionItemVO);

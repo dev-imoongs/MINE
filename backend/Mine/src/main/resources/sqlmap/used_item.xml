@@ -64,7 +64,8 @@
         A.used_item_buyer_id,
         A.used_item_status,
         COALESCE(MIN(C.file_path), '') AS file_path,
-        COALESCE(B.like_count, 0) AS like_count
+        COALESCE(B.like_count, 0) AS like_count,
+        COALESCE(D.chat_count, 0) AS chat_count
         FROM
         tbl_used_item A
         LEFT JOIN (
@@ -87,11 +88,18 @@
         ) C
         ON
         A.used_item_id = C.used_item_id
+        LEFT JOIN (
+        SELECT item_id, count(distinct room_id) chat_count
+        FROM tbl_chatting
+        WHERE item_type = 'Used'
+        GROUP BY item_id
+        ) D
+        on A.used_item_id = D.item_id
         <include refid="searchCondition" />
         GROUP BY
         A.used_item_id, A.used_item_name, A.used_item_explain, A.used_item_price,
         A.updated_at, A.created_at, A.used_item_place, A.category_id, A.user_id,
-        A.used_item_buyer_id, A.used_item_status, B.like_count
+        A.used_item_buyer_id, A.used_item_status, B.like_count, D.chat_count
         <choose>
             <when test="dto.type == 'recent'">
                 ORDER BY A.created_at DESC
@@ -117,7 +125,7 @@
                 FROM tbl_like
                 GROUP BY used_item_id
                 ) B
-                JOIN tbl_used_item A
+                RIGHT JOIN tbl_used_item A
                 ON A.used_item_id = B.used_item_id
                 <include refid="searchCondition" />
             </otherwise>
@@ -210,11 +218,11 @@
     <!--페이징 처리 및 조건-->
     <sql id="searchCondition" >
         <choose>
-            <when test="page.IS_SEARCH_DTO">
-                <bind name="dto" value="page"/>
+            <when test="page.IS_SEARCH_DTO != null and page.IS_SEARCH_DTO">
+                <bind name="dto" value="page.searchDTO"/>
             </when>
             <otherwise>
-                <bind name="dto" value="page.searchDTO"/>
+                <bind name="dto" value="page"/>
             </otherwise>
         </choose>
         <trim prefix="WHERE" prefixOverrides="AND">

@@ -44,6 +44,7 @@ public class UsedItemServiceImpl implements UsedItemService {
         // 최근 상품
         searchDTO.setType("recent");
         PageDTO pageDTO = new PageDTO(criteria,0,searchDTO,0 );
+        pageDTO.setIS_SEARCH_DTO(true);
         List<UsedItemVO> recentUsedItem = usedItemMapper.selectAllUsedItem(pageDTO);
 
         // 기본 상품
@@ -107,6 +108,7 @@ public class UsedItemServiceImpl implements UsedItemService {
 
         //페이지 정보 계산 - 현재 페이지와 개수 기준
         PageDTO pageDTO = new PageDTO(criteria, totalCount, searchDTO,0);
+        pageDTO.setIS_SEARCH_DTO(true);
         Map<String, Object> recentUsedItemsMap = new HashMap<>();
         List<UsedItemVO> items = usedItemMapper.selectAllUsedItem(pageDTO);
         recentUsedItemsMap.put("pageNation", pageDTO.toPageNationMap());
@@ -122,14 +124,19 @@ public class UsedItemServiceImpl implements UsedItemService {
         Map<String, Object> usedItemsMap = new HashMap<>();
         Criteria criteria = Criteria.builder().page(1).amount(10).build();
         PageDTO pageDTO = new PageDTO(criteria, 0, searchDTO,0);
-        Map<String,Object> summary = usedItemMapper.selectItemStatisticsByCondition(searchDTO);
-        List<UsedItemVO> itemList = usedItemMapper.selectAllUsedItem(pageDTO);
-        usedItemsMap.put("summary", summary);
-        usedItemsMap.put("itemList", itemList);
+        pageDTO.setIS_SEARCH_DTO(true);
+        try {
+            Map<String, Object> summary = usedItemMapper.selectItemStatisticsByCondition(searchDTO);
+            usedItemsMap.put("summary", summary);
+            List<UsedItemVO> itemList = usedItemMapper.selectAllUsedItem(pageDTO);
+            usedItemsMap.put("itemList", itemList);
 
-        return usedItemsMap;
-    }
-
+            return usedItemsMap;
+        } catch (Exception e) {
+            log.error("Error searching used items: {}", e.getMessage());
+            throw new RuntimeException("Error occurred", e);
+        }
+}
     @Override
     public Map<String, Object> findUsedItemById(Integer usedItemId) {
         return usedItemMapper.selectUsedItemById(usedItemId);

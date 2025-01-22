@@ -1,6 +1,6 @@
 import { atom } from "recoil"
 import tempImgFile from '../../assets/temp_product.png';
-export const productListAtom = atom({
+export const mainProductList = atom({
     key : 'productListAtom',
     default : [],
 })

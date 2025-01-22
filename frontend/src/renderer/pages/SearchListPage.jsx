@@ -16,7 +16,6 @@ const SearchListPage = () => {
     const param = new URLSearchParams(location.search)
     const categoryParam = param.get('category');
     const productParam = param.get('product');
-    console.log(categoryParam +":::: " + productParam)
     const condition = {category : categoryParam, searchKeyword : productParam}
     const { data, error, isLoading, isError } = useQuery(
         ['searchItemList', condition], // 캐싱, 식별 고유값
@@ -45,7 +44,11 @@ const SearchListPage = () => {
         }
     }, [data]);
 
-    if(!data || (!auction.itemList.length && !used.itemList.length)){
+    // if(!data || (!auction.itemList.length && !used.itemList.length)){
+    //     console.log(data)
+    //     return <LoadingSpinner />
+    // }
+    if(isError){
         return <LoadingSpinner />
     }
 

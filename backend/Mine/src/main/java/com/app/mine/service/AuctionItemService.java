@@ -2,6 +2,7 @@ package com.app.mine.service;
 
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.vo.AuctionItemVO;
+import com.app.mine.vo.Criteria;
 import com.app.mine.vo.FileVO;
 import com.app.mine.vo.UserVO;
 
@@ -21,6 +22,8 @@ public interface AuctionItemService {
     List<AuctionItemVO> getFilteredAuctionItems(SearchDTO searchDTO);
 
     Map<String, Object> findSearchAuctionItem(SearchDTO searchDTO);
+
+    Map<String, Object> getFilteredAuctionItems(SearchDTO searchDTO, Criteria criteria);
 
     // 내 경매 아이템 목록 조회
     List<AuctionItemVO> getMyAuctionItemList(UserVO userVO);

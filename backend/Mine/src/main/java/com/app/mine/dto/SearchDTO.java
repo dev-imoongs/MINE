@@ -23,7 +23,7 @@ public class SearchDTO {
     private Long maxPrice; // 최대 가격
     private String searchKeyword;
 
-    private final boolean IS_SEARCH_DTO = true;
+    private Boolean IS_SEARCH_DTO = null;
 
 
     // 필요시 기본값 초기화 메서드

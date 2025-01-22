@@ -24,7 +24,7 @@ public class MainRestController {
     private final UsedItemService usedItemService;
     private final AuctionItemService auctionItemService;
     private final AuctionItemMapper auctionItemMapper;
-    @GetMapping("getItem")
+    @GetMapping("getItems")
     public List<Map<String, Object>> getAllUsedItems() {
         return usedItemService.findAllUsedItems();
     }
@@ -46,7 +46,10 @@ public class MainRestController {
         searchDTO.setMinPrice(minPrice);
         searchDTO.setMaxPrice(maxPrice);
 
-
+        if(type.equals("recommend")){
+            searchDTO.setType("like");
+            return auctionItemService.getFilteredAuctionItems(searchDTO, criteria);
+        }
         return usedItemService.getFilteredUsedItems(searchDTO, criteria);
     }
 
