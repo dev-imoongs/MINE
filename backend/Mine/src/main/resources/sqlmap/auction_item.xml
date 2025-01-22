@@ -82,7 +82,8 @@
         SELECT
         A.*,
         COALESCE(MIN(C.file_path), '') AS file_path,
-        COALESCE(B.like_count, 0) AS like_count
+        COALESCE(B.like_count, 0) AS like_count,
+        COALESCE(D.chat_count, 0) AS chat_count
         FROM tbl_auction_item A
         LEFT JOIN (
             SELECT
@@ -100,11 +101,18 @@
             tbl_file
         ) C
         ON A.auction_item_id = C.auction_item_id
+        LEFT JOIN (
+            SELECT item_id, count(distinct room_id) chat_count
+            FROM tbl_chatting
+            WHERE item_type = 'Auction'
+            GROUP BY item_id
+        ) D
+        ON D.item_id = A.auction_item_id
         <include refid="searchCondition" />
         GROUP BY
         A.auction_item_id, A.auction_item_name, A.auction_item_explain,
         A.auction_item_highest_price, A.auction_item_start_price, A.category_id,
-        A.auction_item_status, A.min_bid_amount, A.user_id, B.like_count
+        A.auction_item_status, A.min_bid_amount, A.user_id, B.like_count, D.chat_count
         <choose>
             <when test="dto.type == 'recent'">
                 ORDER BY A.created_at DESC
@@ -157,11 +165,11 @@
     <!--페이징 처리 및 조건-->
     <sql id="searchCondition" >
         <choose>
-            <when test="page.IS_SEARCH_DTO">
-                <bind name="dto" value="page"/>
+            <when test="page.IS_SEARCH_DTO != null and page.IS_SEARCH_DTO">
+                <bind name="dto" value="page.searchDTO"/>
             </when>
             <otherwise>
-                <bind name="dto" value="page.searchDTO"/>
+                <bind name="dto" value="page"/>
             </otherwise>
         </choose>
         <trim prefix="WHERE" prefixOverrides="AND">
@@ -193,6 +201,26 @@
         select auction_item_id from tbl_auction_item order by auction_item_id desc limit 1
     </select>
 
+    <select id="getAuctionItemCount" resultType="int">
+        <choose>
+            <when test="page.type == 'recent'">
+                SELECT COUNT(*) AS totalCount
+                FROM tbl_auction_item A
+                <include refid="searchCondition" />
+            </when>
+            <otherwise>
+                SELECT COUNT(*)
+                FROM (
+                SELECT auction_item_id, COUNT(*) AS like_count
+                FROM tbl_like
+                GROUP BY auction_item_id
+                ) B
+                RIGHT JOIN tbl_auction_item A
+                ON A.auction_item_id = B.auction_item_id
+                <include refid="searchCondition" />
+            </otherwise>
+        </choose>
+    </select>
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
     <!-- 경매 물품 등록 insertAuctionItem -->
     <insert id="insertAuctionItem" parameterType="auctionItemVO">

@@ -24,7 +24,7 @@ public class PageDTO {
     private boolean prev;        // 이전 버튼 여부
     private boolean next;        // 다음 버튼 여부
 
-    private final boolean IS_SEARCH_DTO = false; // 검색 DTO 여부를 나타내는 플래그
+    private boolean IS_SEARCH_DTO = false; // 검색 DTO 여부를 나타내는 플래그
 
     private int total;           // 전체 게시글 수
     private Criteria criteria;   // 페이지와 갯수 정보

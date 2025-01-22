@@ -23,7 +23,7 @@ export const modifyData = selector({
             price: item.auctionItemHighestPrice,
             elapsedTime: item.updatedAt,
             likes: item.likeCount,
-            chat: '1',
+            chats: item.chatCount,
             bidcount: item.bidCount,
             myFavoriteAuction : item.myFavoriteAuction,
             endTime : item.auctionItemEndTime,
@@ -37,7 +37,7 @@ export const modifyData = selector({
             price: item.usedItemPrice,
             elapsedTime: item.updatedAt,
             likes: item.likeCount,
-            chat: '1',
+            chats: item.chatCount,
             destinationType: 1
         })) || [];
 

@@ -56,12 +56,31 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         Map<String, Object> auctionItemMap = new HashMap<>();
         Criteria criteria = Criteria.builder().page(1).amount(10).build();
         PageDTO pageDTO = new PageDTO(criteria, 0, searchDTO,0);
+        pageDTO.setIS_SEARCH_DTO(true);
         Map<String,Object> summary = auctionItemMapper.selectItemStatisticsByCondition(searchDTO);
         List<AuctionItemVO> itemList = auctionItemMapper.selectAllAuctionItem(pageDTO);
         auctionItemMap.put("summary", summary);
         auctionItemMap.put("itemList", itemList);
 
         return auctionItemMap;
+    }
+
+    @Override
+    public Map<String, Object> getFilteredAuctionItems(SearchDTO searchDTO, Criteria criteria) {
+        //총 데이터 개수
+        int totalCount = auctionItemMapper.getAuctionItemCount(searchDTO);
+
+        //페이지 정보 계산 - 현재 페이지와 개수 기준
+        PageDTO pageDTO = new PageDTO(criteria, totalCount, searchDTO,0);
+        pageDTO.setIS_SEARCH_DTO(true);
+        Map<String, Object> recentUsedItemsMap = new HashMap<>();
+        List<AuctionItemVO> items = auctionItemMapper.selectAllAuctionItem(pageDTO);
+        recentUsedItemsMap.put("pageNation", pageDTO.toPageNationMap());
+        recentUsedItemsMap.put("items", items);
+
+
+        // 데이터 조회
+        return recentUsedItemsMap;
     }
 
     @Override

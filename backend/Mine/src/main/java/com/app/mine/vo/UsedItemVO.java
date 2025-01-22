@@ -26,7 +26,11 @@ public class UsedItemVO {
     // likeCount 추가
     private int likeCount;
 
+    // chatCount 추가
+    private int chatCount;
+
     // filePath 추가
     private String filePath;
+
 
 }

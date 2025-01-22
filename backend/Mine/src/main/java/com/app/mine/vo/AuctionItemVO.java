@@ -29,4 +29,7 @@ public class AuctionItemVO {
 
     // filePath 추가
     private String filePath;
+
+    // chatCount 추가
+    private int chatCount;
 }

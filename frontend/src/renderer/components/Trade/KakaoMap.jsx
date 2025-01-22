@@ -1,79 +1,78 @@
 import React, { useEffect, useState } from 'react';
-import { tradeDetailProductAtom } from "../../../recoil/atoms/tradeAtom";
+import { tradeItemDetail } from "../../../recoil/selectors/tradeItemSelector.js";
 import { useRecoilValue } from 'recoil';
 import marker2 from '../../../assets/marker.png';
-import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
+
 const KakaoMap = () => {
-    // const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
-    // const productInfo = tradeProductInfo.productInfo;
-    const {productInfo,sellerInfo } = useRecoilValue(tradeItemDetail);
+    const { productInfo, sellerInfo } = useRecoilValue(tradeItemDetail);
     const [map, setMap] = useState(null);
 
     useEffect(() => {
         const initializeMap = () => {
             const { kakao } = window;
 
-            // 지도의 중심좌표 설정
+            // 지도의 중심 좌표를 설정할 컨테이너
             const container = document.getElementById('map');
             const options = {
-                center: new kakao.maps.LatLng(productInfo.tradePlace.mapLat, productInfo.tradePlace.mapLon),
+                center: new kakao.maps.LatLng(37.5665, 126.9780), // 초기 지도 중심 좌표 (서울 시청 좌표)
                 level: 3, // 지도의 확대 레벨
             };
 
-            // 지도 생성 및 설정
-            const kakaoMap = new kakao.maps.Map(container, options);
-            kakaoMap.setDraggable(true); // 드래그 가능
-            kakaoMap.setZoomable(true); // 확대 축소 가능
+            // 지도 생성
+            const kakaoMap = new kakao.maps.Map(container, options)
 
-            // 마커 이미지 크기와 옵션
-            const imageSrc = marker2; // 마커 이미지 소스
-            const imageSize = new kakao.maps.Size(55, 60); // 마커 이미지 크기
-            const imageOption = { offset: new kakao.maps.Point(25, 65) }; // 이미지의 좌표 설정
-            
-            // 마커 이미지 생성
-            const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-            // 마커 생성
-            const markerPosition = new kakao.maps.LatLng(productInfo.tradePlace.mapLat, productInfo.tradePlace.mapLon);
-            const marker = new kakao.maps.Marker({
-                position: markerPosition,
-                image: markerImage, // 생성된 마커에 이미지 설정
-                map: kakaoMap, // 지도에 마커 추가
+            // 주소를 좌표로 변환
+            const geocoder = new kakao.maps.services.Geocoder();
+            geocoder.addressSearch('남부순환로 265길 4', (result, status) => {
+                if (status === kakao.maps.services.Status.OK) {
+                    // 검색 결과에서 첫 번째 주소의 좌표 가져오기
+                    const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    // 지도 중심 좌표 이동
+                    kakaoMap.setCenter(coords);
+
+                    // 마커 이미지 설정
+                    const imageSrc = marker2; // 마커 이미지 소스
+                    const imageSize = new kakao.maps.Size(55, 60); // 마커 이미지 크기
+                    const imageOption = { offset: new kakao.maps.Point(25, 65) }; // 마커의 좌표 설정
+                    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+                    // 마커 생성
+                    const marker = new kakao.maps.Marker({
+                        map: kakaoMap,
+                        position: coords,
+                        image: markerImage,
+                    });
+
+                    // 커스텀 오버레이 HTML 콘텐츠
+                    const content = `
+                        <div class="customoverlay">
+                            <a target="_blank">
+<!--                                <span class="title">${productInfo.tradePlace.place}</span>-->
+                                <span class="title">${result[0].address_name}</span>
+                            </a>
+                        </div>
+                    `;
+
+                    // 커스텀 오버레이 생성
+                    const customOverlay = new kakao.maps.CustomOverlay({
+                        map: kakaoMap,
+                        position: coords,
+                        content: content,
+                        yAnchor: 1, // 마커 위에 오버레이 배치
+                    });
+                } else {
+                    console.error('주소 변환 실패:', status);
+                }
             });
-         
-             // 커스텀 오버레이 HTML 콘텐츠
-             const content = `
-             <div class="customoverlay">
-                 <a target="_blank">
-                     <span class="title">${productInfo.tradePlace.place}</span>
-                 </a>
-             </div>
-         `;
 
-            // 커스텀 오버레이 생성
-            const customOverlay = new kakao.maps.CustomOverlay({
-                map: kakaoMap,
-                position: markerPosition,
-                content: content,
-                yAnchor: 1,  // 마커 위에 오버레이 배치
-            });
-            // 지도 클릭 이벤트 추가
-            kakao.maps.event.addListener(kakaoMap, 'click', (mouseEvent) => {
-                // 클릭한 위치의 좌표
-                const latlng = mouseEvent.latLng;
-
-                // 경도와 위도를 콘솔에 출력
-                console.log('클릭한 위치의 경도(lon):', latlng.getLng());
-                console.log('클릭한 위치의 위도(lat):', latlng.getLat());
-            });
-
-            // 생성된 지도 객체를 상태로 설정
             setMap(kakaoMap);
         };
 
         if (window.kakao && window.kakao.maps) {
             window.kakao.maps.load(initializeMap);
         }
-    }, []);
+    }, [productInfo.tradePlace.place]);
 
     return (
         <>
