@@ -55,7 +55,8 @@ export const saveProduct = async (input, filesData) => {
         usedItemExplain: input.explain,
         usedItemPrice: input.price,
         usedItemStatus: input.status,
-        usedItemPlace: input.address + ' ' + input.addressDetail,
+        usedItemPlace: input.address,
+        usedItemPlaceDetail: input.addressDetail,
         categoryId: input.category,
     };
 

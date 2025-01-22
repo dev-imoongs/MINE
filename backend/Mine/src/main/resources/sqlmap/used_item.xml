@@ -16,8 +16,8 @@
     <!-- 중고 물품 등록 insertUsedItem -->
     <insert id="insertUsedItem" parameterType="usedItemVO">
         /* 중고 물품 등록 insertUsedItem */
-        insert into tbl_used_item(used_item_name, used_item_explain, used_item_price, used_item_place, used_item_status, category_id, user_id)
-        values(#{usedItemName}, #{usedItemExplain}, #{usedItemPrice}, #{usedItemPlace}, #{usedItemStatus}, #{categoryId}, #{userId})
+        insert into tbl_used_item(used_item_name, used_item_explain, used_item_price, used_item_place, used_item_place_detail, used_item_status, category_id, user_id)
+        values(#{usedItemName}, #{usedItemExplain}, #{usedItemPrice}, #{usedItemPlace}, #{usedItemPlaceDetail}, #{usedItemStatus}, #{categoryId}, #{userId})
     </insert>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
