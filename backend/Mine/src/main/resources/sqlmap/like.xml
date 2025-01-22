@@ -6,7 +6,7 @@
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INCLUDE ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  QUERY  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
-    <select id="findByUserIdAndItemId" parameterType="LikeVO">
+    <select id="findByUserIdAndItemId" resultType="LikeVO">
         SELECT * FROM mine.tbl_like
         WHERE user_id = #{userId}
         AND used_item_id = #{usedItemId}
@@ -16,8 +16,8 @@
     <!-- 좋아요 추가 insertLike -->
     <insert id="insertLikeForItem" parameterType="LikeVO">
         INSERT into mine.tbl_like
-        (user_id, used_item_id, auction_item_id)
-        VALUES (#{userId}, #{usedItemId}, #{auctionItemId})
+        (user_id, used_item_id, auction_item_id, created_at, updated_at)
+        VALUES (#{userId}, #{usedItemId}, #{auctionItemId}, now(), now())
     </insert>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
