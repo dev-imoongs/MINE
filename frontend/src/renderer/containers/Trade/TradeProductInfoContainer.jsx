@@ -17,9 +17,10 @@ import {tradeItemDetail} from "../../../recoil/selectors/tradeItemSelector.js";
 import { getMessage } from '../../../services/chatService';
 import { processMessages } from '../../../recoil/selectors/chatSelector';
 import {sessionCheck} from "../../../services/sessionCheckApi.js";
+import useApiMutation from "../../../hooks/mutation.js";
 
 
-const TradeProductInfoContainer = ({ StImg }) => {
+const TradeProductInfoContainer = ({ StImg}) => {
     const countRef = useRef(0);
     const nav = useNavigate();
     const tradeProductInfo = useRecoilValue(tradeDetailProductAtom);
@@ -70,9 +71,9 @@ const TradeProductInfoContainer = ({ StImg }) => {
         <>
             <div>
                 <ProductInfo stImg={StImg} productInfo={productInfo}/>
-                <SellerInfo sellerInfo={sellerInfo}/>
+                <SellerInfo sellerInfo={sellerInfo} />
                 <div className="flex items-center space-s-4 pt-9 max-[479px]:fixed max-[479px]:bottom-0 max-[479px]:left-0 max-[479px]:z-20 max-[479px]:w-full max-[479px]:px-4 max-[479px]:pb-4 max-[479px]:bg-white">
-                    <LikeButton countRef={countRef}/>
+                    <LikeButton countRef={countRef} usedItemId={productInfo.usedItemId}/>
                     {(auth.userEmail !== sellerInfo.userEmail) && (
                         <button
                             data-variant="slim"
@@ -100,52 +101,108 @@ const TradeProductInfoContainer = ({ StImg }) => {
         </>
     );
 };
-const LikeButton = React.memo(({countRef}) => {
-    const [isLike, toggleLike] = useToggle();
-    const notify = (() => {
-        // if (!toast.isActive(countRef.current)) {
-        //     countRef.current = toast("찜 상품에 추가 되었습니다.");
-        // }else{
-        //     console.log("토스트가 이미 활성화 상태입니다.");
-        // }
-        if(!isLike){
-            toast("찜 상품에 추가 되었습니다.");
-        }else{
-            toast("찜 상품에 해제 되었습니다.");
+const LikeButton = React.memo(({ countRef, usedItemId }) => {
+    const nav = useNavigate();
+    const [isLike, setIsLike] = useState(false); // 초기 상태 false
+    const { mutateAsync: toggleLikeMutation } = useApiMutation('/api/likes/toggle', 'post');
+    const { mutateAsync: toggleStateMutation } = useApiMutation('/api/likes/state', 'post');
+    const [likeState, setLikeState] = useState({});
+
+    // 서버에서 현재 상태 가져오기
+    useEffect(() => {
+        const fetchLikeState = async () => {
+            try {
+                const res = await toggleStateMutation({ usedItemId });
+                setLikeState(res.data); // 서버 응답 데이터 저장
+
+                // 서버 응답에 따라 isLike 상태 설정
+                if (res.data.type === 'insert') {
+                    setIsLike(true); // isLike를 true로 설정
+                } else {
+                    setIsLike(false); // isLike를 false로 설정
+                }
+            } catch (error) {
+                console.error('Error fetching like state:', error);
+            }
+        };
+
+        fetchLikeState();
+    }, [toggleStateMutation, usedItemId]);
+
+    // notify 함수
+    const notify = React.useCallback(() => {
+        if (likeState.result === 'success') {
+            if (likeState.type === 'insert') {
+                setIsLike(true);
+                toast("찜 상품에 추가 되었습니다.");
+            } else {
+                setIsLike(false);
+                toast("찜 상품에 해제 되었습니다.");
+            }
+        } else if (likeState.result === 'failure') {
+            toast("찜 상품 등록을 실패 하였습니다.");
         }
-    });
+    }, [likeState]);
+
+    // likeState 변경 시 notify 실행
+    useEffect(() => {
+        if (likeState.result) {
+            notify();
+        }
+    }, [likeState, notify]);
+
+    // 좋아요 상태 변경
+    const handleLikeClick = async () => {
+        try {
+            const res = await toggleLikeMutation({ usedItemId });
+            setLikeState({
+                result: res.data.result,
+                type: res.data.type,
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
-      <div className="w-8 h-8">
-        <label htmlFor=":r0:" className="relative cursor-pointer"
-        onClick={(e) => {
-            e.preventDefault();
-            notify()
-            toggleLike();
-          }}
-        >
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="pointer-events-none w-8 h-8"
-            
-          >
-            <path
-              d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
-              strokeWidth="1.5"
-              stroke={isLike ? '#dc2626' : '#9CA3AF'}
-              fill={isLike ? '#dc2626' : 'transparent'}
-            />
-          </svg>
-        </label>
-        <input id=":r0:" type="checkbox" className="a11yHidden" />
-      </div>
+        <div className="w-8 h-8">
+            <label
+                htmlFor=":r0:"
+                className="relative cursor-pointer"
+                onClick={async (e) => {
+                    e.preventDefault(); // 기본 동작 방지
+                    try {
+                        const res = await sessionCheck(); // 세션 체크
+                        if (res.data) {
+                            await handleLikeClick();
+                        } else {
+                            nav('/login'); // 로그인 페이지로 이동
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }}
+            >
+                <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 32 32"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="pointer-events-none w-8 h-8"
+                >
+                    <path
+                        d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"
+                        strokeWidth="1.5"
+                        stroke={isLike ? '#dc2626' : '#9CA3AF'}
+                        fill={isLike ? '#dc2626' : 'transparent'}
+                    />
+                </svg>
+            </label>
+            <input id=":r0:" type="checkbox" className="a11yHidden" />
+        </div>
     );
-  });
-
+});
 const ProductInfo = React.memo(({StImg, productInfo}) => {
     return (
         <>
