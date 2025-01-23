@@ -238,10 +238,10 @@
             <if test="dto.searchKeyword != null">
                 AND A.used_item_name LIKE CONCAT('%', #{dto.searchKeyword}, '%')
             </if>
-            <if test="dto.searchQuery != null and searchQuery.length > 0">
+            <if test="dto.searchQuery != null and dto.searchQuery.size > 0">
                 AND (
                 <foreach collection="dto.searchQuery" item="query" separator=" OR ">
-                    A.used_item_name LIKE CONCAT('%', #{dto.query}, '%')
+                    A.used_item_name LIKE CONCAT('%', #{query}, '%')
                 </foreach>
                 )
             </if>
