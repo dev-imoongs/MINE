@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useQuery} from "react-query";
 import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js";
+import { myProductListAtom } from "../../../recoil/atoms/productListAtom.js";
 import TrustRatingModal from '../../pages/modal/TrustRatingModal.jsx';
 import {Link, useNavigate, useNavigation} from 'react-router-dom';
 import tempProductImage from '../../../assets/temp_product.png'
@@ -13,7 +14,7 @@ import PayModal from "../../pages/modal/PayModal.jsx";
 import { myUsedItemSelector } from "../../../recoil/selectors/myConditionselector";
 
 const MypageMyList = ({isProduct}) => {
-    const productCondition = ["판매내역", "판매완료", "구매내역", "찜한 상품"];
+    const productCondition = ["판매내역", "판매완료", "구매내역", "찜한상품"];
     const [usedItemSeltorCon, setUsedItemSeltorCon] = useState('myUsedItemList');
     const auctionCondition = ["경매내역", "경매완료", "구매내역", "찜한 상품"];
     const filter = ["최신순", "낮은가격순", "높은가격순"];
@@ -23,7 +24,10 @@ const MypageMyList = ({isProduct}) => {
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(null);
     const myUsedItem = useRecoilValue(myUsedItemSelector(usedItemSeltorCon));
+    const myAuctionItem = useRecoilValue(myProductListAtom);
     const [data, setData] = useState([]);
+    
+    // console.log("myAuctionItem>>>",myAuctionItem);
 
     useEffect(() => {
         if (!myUsedItem || myUsedItem.length === 0) {
@@ -32,21 +36,25 @@ const MypageMyList = ({isProduct}) => {
         }
 
         let filteredData = [];
-
-        switch (activeIndex) {
-            case 0:
-                filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
-                break;
-            case 1:
-                filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '402');
-                break;
-            case 2:
-            case 3:
-                filteredData = myUsedItem;
-                break;
-            default:
-                filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
-                break;
+        
+        if (isProduct) {
+            switch (activeIndex) {
+                case 0:
+                    filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
+                    break;
+                case 1:
+                    filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '402');
+                    break;
+                case 2:
+                case 3:
+                    filteredData = myUsedItem;
+                    break;
+                default:
+                    filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
+                    break;
+            }
+        } else {
+            // console.log("elsesleselsemyUsedItem>>>",myUsedItem);
         }
 
         setData(filteredData);
@@ -59,13 +67,13 @@ const MypageMyList = ({isProduct}) => {
             case 0 : //productCondition[0] 판매내역
                 setUsedItemSeltorCon("myUsedItemList");
                 break;
-            case 1 : //productCondition[0] 판매내역
+            case 1 : //productCondition[1] 판매완료
                 setUsedItemSeltorCon("myUsedItemList");
                 break;
-            case 2 : //productCondition[0;] 판매내역
+            case 2 : //productCondition[2] 구매내역
                 setUsedItemSeltorCon("myUsedPurchaseList");
                 break;
-            case 3 : //productCondition[0] 판매내역
+            case 3 : //productCondition[3] 찜한상품
                 setUsedItemSeltorCon("myUsedLikeList");
                 break;
             default:
@@ -106,7 +114,7 @@ const MypageMyList = ({isProduct}) => {
       <MyListCon>
           <MyListTitleWrap>
               <MyListTitle>
-                  {isProduct ? "거래상품" : "경매상품"}
+                  {isProduct ? "거래상품" : "경매상품(개발중)"}
               </MyListTitle>
               <MyListSubTitle>
                   <ul className="colors flex flex-nowrap justify-between lg:justify-start -me-3 border-b border-[#DADEE5]">

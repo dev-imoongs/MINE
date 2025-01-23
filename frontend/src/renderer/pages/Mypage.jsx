@@ -22,6 +22,7 @@ const MyPage = () => {
     const [isProduct, setIsProduct] = useState(true);
 
     const onItemClick = (data ,isProduct) => {
+        console.log("여기서 data>>>",data);
         setMyData(data);
         setIsProduct(isProduct);
     }
@@ -45,7 +46,7 @@ const MyPage = () => {
         if (myProductData.data) {
             setMyData(myProductData.data);
         }
-    }, [myProductData.data]);
+    }, []);
 
     useEffect(() => {
         if (myInfoData.data) {
