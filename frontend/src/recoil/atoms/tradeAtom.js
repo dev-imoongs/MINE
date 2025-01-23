@@ -35,6 +35,7 @@ export const tradeListFiltersAtom = atom({
         priceRange: { minPrice: undefined, maxPrice: undefined },
         searchQuery: '',
         sort: '',
+        searchKeyword : '',
         isSold: false, // 판매 완료 상태 추가
     },
 });

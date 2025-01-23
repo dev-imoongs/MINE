@@ -63,11 +63,11 @@ const SearchListPage = () => {
                 style={{ height: 'auto !important' }}
             >
                 <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important' }}>
-                    <SearchHeaderContainer link={'/product'} type={'중고'} title={search} itemInfo={used.summary}/>
+                    <SearchHeaderContainer link={`/product?search=${productParam? productParam : ''}&category=${categoryParam ? categoryParam : ''}`} type={'중고'} title={search} itemInfo={used.summary}/>
                     <SearchListItemContainer itemInfo={used.itemList} />
                 </div>
                 <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important', marginTop:'70px' }}>
-                    <SearchHeaderContainer link={'/auction'} type={'경매'} title={search} itemInfo={auction.summary}/>
+                    <SearchHeaderContainer link={`/auction?search=${productParam? productParam : ''}&category=${categoryParam ? categoryParam : ''}`} type={'경매'} title={search} itemInfo={auction.summary}/>
                     <SearchListItemContainer itemInfo={auction.itemList} />
                 </div>
 
