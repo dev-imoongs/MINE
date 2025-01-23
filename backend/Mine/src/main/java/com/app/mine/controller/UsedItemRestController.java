@@ -70,8 +70,10 @@ public class UsedItemRestController {
             @RequestParam(value = "minPrice", required = false) Long minPrice,
             @RequestParam(value = "maxPrice", required = false) Long maxPrice,
             @RequestParam(value = "searchQuery", required = false) List<String> searchQuery,
+            @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
             @RequestParam(value = "sort", defaultValue = "likes") String sort) {
 
+        log.info("page : {}, amount : {}, category : {}, minPrice : {}, maxPrice : {}, searchQuery : {}, sort : {}, searchKeyword : {}", page, amount,category,minPrice,maxPrice,searchQuery,sort, searchKeyword);
         Criteria criteria = Criteria.builder().page(page).amount(amount).build();
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setCategory(category);
@@ -79,6 +81,7 @@ public class UsedItemRestController {
         searchDTO.setSearchQuery(searchQuery);
         searchDTO.setMinPrice(minPrice);
         searchDTO.setMaxPrice(maxPrice);
+        searchDTO.setSearchKeyword(searchKeyword);
 
         return usedItemService.getFilteredUsedItems(searchDTO, criteria);
     }

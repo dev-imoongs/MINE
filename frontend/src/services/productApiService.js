@@ -18,24 +18,30 @@ export const myProduct = async (data) => {
 };
 
 export const getUsedItems = async (filters) => {
-    const { category, priceRange, searchQuery, sort } = filters;
+    const { category, priceRange, searchQuery, sort,searchKeyword } = filters;
     const { minPrice, maxPrice } = priceRange;
-
-    const config = filters
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    const payload = filters
         ? {
               params: {
                   category,
                   minPrice,
                   maxPrice,
                   searchQuery,
+                  searchKeyword,
                   sort,
                   page: 1,
                   amount: 30,
               },
+              ContentType : 'application/json'
           }
         : {};
 
-    const res = await axios.get('/api/used-item/', config);
+    const res = await axios.get('/api/used-item/', payload, config);
     console.log('res', res);
     return res.data;
 };
