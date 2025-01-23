@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState,useRecoilValue } from "recoil";
 import {useQuery} from "react-query";
 
 import styled from "styled-components";
@@ -14,8 +14,9 @@ import {Link} from "react-router-dom";
 
 const MypageNavigation = ({onItemClick}) => {
 
-    const [myProductList, setMyProductList] = useRecoilState(myProductListAtom);
-    const [myAuctionList, setMyAuctionList] = useRecoilState(myAuctionListAtom);
+    // const [myData, setMyData] = useState([]);
+    const [myAuctionList, setMyAuctionList] = useState([]);
+    const [myProductList, setMyProductList] = useState([]);
     const [activeIndex, setActiveIndex] = useRecoilState(activeIndexAtom);
 
     const myAuctionData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
@@ -28,8 +29,15 @@ const MypageNavigation = ({onItemClick}) => {
         queryFn: myProduct // 서버에서 데이터 가져오는 함수
     })
 
-    const handleClick = (data ,isProduct) => {
-        onItemClick(data, isProduct);
+    const handleClick = (isProduct) => {
+        if (isProduct) {
+            onItemClick(myProductList, isProduct);
+            // setMyData(myProductList);
+        } else {
+            // setMyData(myAuctionList);
+            onItemClick(myAuctionList, isProduct);
+        }
+        // console.log("myAuctionList>>>",myAuctionList);
         setActiveIndex(0);
     }
 
@@ -49,16 +57,18 @@ const MypageNavigation = ({onItemClick}) => {
         }
     }, [myAuctionData.data]);
 
+    // console.log("myData>>>",myData);
+
     return (
         <NaviContainer>
             <NaviTitle>마이 페이지</NaviTitle>
             <h3>거래</h3>
             <ul>
-              <li onClick={() => handleClick(myProductList ,true)}>거래상품</li>
+              <li onClick={() => handleClick(true)}>거래상품</li>
             </ul>
             <h3>경매</h3>
             <ul>
-              <li onClick={() => handleClick(myAuctionList, false)}>경매상품</li>
+              <li onClick={() => handleClick(false)}>경매상품</li>
             </ul>
             <h3>내 정보</h3>
             <ul>
