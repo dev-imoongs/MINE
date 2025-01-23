@@ -1,19 +1,59 @@
-import React from 'react';
-import AuctionListPriceInfoContainer from '../containers/Auction/AuctionListPriceInfoContainer';
-import AuctionListFilterContainer from '../containers/Auction/AuctionListFilterContainer';
+import React, {useEffect, useState} from 'react';
+import TradeListPriceInfoContainer from '../containers/Trade/TradeListPriceInfoContainer';
+import TradeListFilterContainer from '../containers/Trade/TradeListFilterContainer';
 import { tradeListFiltersAtom } from '../../recoil/atoms/tradeAtom';
-import AuctionListSortContainer from '../containers/Auction/AuctionListSortContainer';
+import TradeListSortContainer from '../containers/Trade/TradeListSortContainer';
 import { useRecoilState } from 'recoil';
 import { useQuery } from 'react-query';
-import AuctionListItemContainer from '../containers/Auction/AuctionListItemContainer';
-import AuctionListPaginationContainer from '../containers/Auction/AuctionListPaginationContainer';
+import TradeListItemContainer from '../containers/Trade/TradeListItemContainer';
+import TradeListPaginationContainer from '../containers/Trade/TradeListPaginationContainer';
 import { getUsedItems } from '../../services/productApiService';
 import { getCategory } from '../../services/commonService';
 import useApiMutation from '../../hooks/mutation';
+import {useLocation} from "react-router-dom";
 
 const TradeListPage = () => {
-    const destinationType = '1';
     const [filters, setFilters] = useRecoilState(tradeListFiltersAtom);
+    const [priceState, setPriceState] = useState({avgPrice : 0, lowPrice : 0, highPrice : 0})
+    const location = useLocation();
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+
+        const searchValue = queryParams.get('search') || ''; // search 쿼리 파라미터
+        const categoryValue = queryParams.get('category') || ''; // category 쿼리 파라미터
+        const decodedSearchValue = decodeURIComponent(searchValue);
+        const decodedCategoryValue = decodeURIComponent(categoryValue);
+
+        setFilters((prev) => {
+            if (decodedCategoryValue) {
+                return {
+                    ...prev,
+                    category: decodedCategoryValue,
+                };
+            } else if (decodedSearchValue) {
+                return {
+                    ...prev,
+                    searchKeyword: decodedSearchValue,
+                };
+            }else{
+                return{
+                    ...prev,
+                    category: null,
+                    searchKeyword: null,
+                }
+            }
+            return prev; // 아무 값도 없을 경우 이전 상태 유지
+        });
+
+        console.log("Search Value (Decoded):", decodedSearchValue);
+        console.log("Category Value (Decoded):", decodedCategoryValue);
+    }, [location.search, setFilters]); // location.search 변경 시 실행
+
+
+
+
+    const destinationType = '1';
 
     // 카테고리 목록 요청
     const categoryList = useQuery({
@@ -35,6 +75,20 @@ const TradeListPage = () => {
         },
         [filters]
     );
+    useEffect(() => {
+        if (items && items.items) {
+            const prices = items.items.map((price) => price.usedItemPrice);
+            const avgPrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+            const highPrice = Math.max(...prices);
+            const lowPrice = Math.min(...prices);
+
+            setPriceState({
+                avgPrice: avgPrice,
+                highPrice: highPrice,
+                lowPrice: lowPrice,
+            });
+        }
+    }, [items]); // items가 변경될 때만 실행
 
     const { mutate } = useApiMutation(
         '/api/likes', // API endpoint
@@ -42,10 +96,9 @@ const TradeListPage = () => {
         // { headers: { Authorization: `Bearer your-token-here` } } // 필요한 헤더나 config 추가
     );
 
-    const handleLikeClick = (usedItemId, userId) => {
+    const handleLikeClick = (usedItemId) => {
         mutate({
             usedItemId: usedItemId,
-            userId: userId,
         });
     };
 
@@ -67,6 +120,8 @@ const TradeListPage = () => {
         return <div>Error occurred while fetching the item!</div>;
     }
 
+
+
     // items가 있을때만 렌더링
     return (
         <main
@@ -79,20 +134,21 @@ const TradeListPage = () => {
                     style={{ height: 'auto !important' }}
                 >
                     <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important' }}>
-                        <AuctionListFilterContainer
-                            itemsCount={items.length}
+                        <TradeListFilterContainer
+                            itemsCount={items.items.length}
                             filters={filters}
                             setFilters={setFilters}
                             destinationType={destinationType}
+                            categoryList={categoryList}
                         />
-                        <AuctionListPriceInfoContainer />
-                        <AuctionListSortContainer onSortChange={handleSortChange} />
-                        <AuctionListItemContainer
+                        <TradeListPriceInfoContainer priceState={priceState}/>
+                        <TradeListSortContainer onSortChange={handleSortChange} />
+                        <TradeListItemContainer
                             items={items}
                             destinationType={destinationType}
                             handleLikeClick={handleLikeClick}
                         />
-                        <AuctionListPaginationContainer />
+                        <TradeListPaginationContainer />
                     </div>
                 </div>
             )}
