@@ -71,7 +71,7 @@ public class UsedItemRestController {
             @RequestParam(value = "maxPrice", required = false) Long maxPrice,
             @RequestParam(value = "searchQuery", required = false) List<String> searchQuery,
             @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
-            @RequestParam(value = "sort", defaultValue = "likes") String sort) {
+            @RequestParam(value = "sort", defaultValue = "like") String sort) {
 
         log.info("page : {}, amount : {}, category : {}, minPrice : {}, maxPrice : {}, searchQuery : {}, sort : {}, searchKeyword : {}", page, amount,category,minPrice,maxPrice,searchQuery,sort, searchKeyword);
         Criteria criteria = Criteria.builder().page(page).amount(amount).build();

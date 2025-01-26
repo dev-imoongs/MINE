@@ -95,7 +95,7 @@ const ProductList = ({product}) => {
                                 {item.usedItemName ? item.usedItemName : item.auctionItemName}
                               </h2>
                               <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                              {item.usedItemPrice ? item.usedItemPrice : item.auctionItemHighestPrice}원
+                              {item.usedItemPrice ? item.usedItemPrice.toLocaleString() : item.auctionItemHighestPrice.toLocaleString()}원
                               </div>
                               <div className="my-1">
                                 <span className="text-sm text-gray-400">

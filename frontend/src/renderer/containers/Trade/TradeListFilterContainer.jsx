@@ -29,6 +29,7 @@ const TradeListFilterContainer = ({ itemsCount, filters, setFilters, categoryLis
         setFilters((prev) => ({
             ...prev,
             category: category,
+            page : 1
         }));
     };
 
@@ -37,6 +38,7 @@ const TradeListFilterContainer = ({ itemsCount, filters, setFilters, categoryLis
         setFilters((prev) => ({
             ...prev,
             priceRange: { minPrice: inputMinPrice, maxPrice: inputMaxPrice },
+            page: 1
         }));
     };
 
@@ -118,8 +120,8 @@ const TradeListFilterContainer = ({ itemsCount, filters, setFilters, categoryLis
 
     //카테고리 배열
     const categories = categoryList.data;
-    console.log('categoryList', categoryList.data);
-    console.log('filters.category', filters.category, typeof filters.category);
+    // console.log('categoryList', categoryList.data);
+    // console.log('filters.category', filters.category, typeof filters.category);
 
     return (
         <div className="relative">

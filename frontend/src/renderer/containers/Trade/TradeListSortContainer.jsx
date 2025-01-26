@@ -1,23 +1,27 @@
-import React, { useState } from "react";
+import React, {useMemo, useEffect, useState} from "react";
 
-const TradeListSortContainer = ({ onSortChange }) => {
-  const [isActive, setIsActive] = useState(0);
-
+const TradeListSortContainer = ({ onSortChange, isActive }) => {
+  // const [isActive, setIsActive] = useState(0);
   // i는 인덱스
   const handleClick = (i) => {
-    setIsActive(i);
+    let criteria = "like"; // 기본값
     switch (i) {
       case 0:
-        return onSortChange("likes"); // 좋아요순
+        criteria = "like"; // 좋아요순
+        break;
       case 1:
-        return onSortChange("newest"); // 최신순
+        criteria = "recent"; // 최신순
+        break;
       case 2:
-        return onSortChange("low-price"); // 낮은가격순
+        criteria = "low"; // 낮은가격순
+        break;
       case 3:
-        return onSortChange("high-price"); // 높은가격순
+        criteria = "high"; // 높은가격순
+        break;
       default:
-        return onSortChange("likes");
+        criteria = "like";
     }
+    onSortChange(criteria, i);
   };
 
   // 정렬 버튼 배열
@@ -43,4 +47,4 @@ const TradeListSortContainer = ({ onSortChange }) => {
   );
 };
 
-export default TradeListSortContainer;
+export default React.memo(TradeListSortContainer);

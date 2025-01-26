@@ -15,40 +15,28 @@ import {useLocation} from "react-router-dom";
 const TradeListPage = () => {
     const [filters, setFilters] = useRecoilState(tradeListFiltersAtom);
     const [priceState, setPriceState] = useState({avgPrice : 0, lowPrice : 0, highPrice : 0})
+    const [isActive, setIsActive] = useState(0);
     const location = useLocation();
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
+        const searchValue = queryParams.get('search') || '';
+        const categoryValue = queryParams.get('category') || '';
 
-        const searchValue = queryParams.get('search') || ''; // search 쿼리 파라미터
-        const categoryValue = queryParams.get('category') || ''; // category 쿼리 파라미터
         const decodedSearchValue = decodeURIComponent(searchValue);
         const decodedCategoryValue = decodeURIComponent(categoryValue);
 
         setFilters((prev) => {
-            if (decodedCategoryValue) {
-                return {
-                    ...prev,
-                    category: decodedCategoryValue,
-                };
-            } else if (decodedSearchValue) {
-                return {
-                    ...prev,
-                    searchKeyword: decodedSearchValue,
-                };
-            }else{
-                return{
-                    ...prev,
-                    category: null,
-                    searchKeyword: null,
-                }
+            if (prev.category === decodedCategoryValue && prev.searchKeyword === decodedSearchValue) {
+                return prev; // 상태가 변경되지 않으면 업데이트하지 않음
             }
-            return prev; // 아무 값도 없을 경우 이전 상태 유지
+            return {
+                ...prev,
+                category: decodedCategoryValue || null,
+                searchKeyword: decodedSearchValue || null,
+            };
         });
-
-        console.log("Search Value (Decoded):", decodedSearchValue);
-        console.log("Category Value (Decoded):", decodedCategoryValue);
-    }, [location.search, setFilters]); // location.search 변경 시 실행
+    }, [location.search]);
 
 
 
@@ -76,11 +64,11 @@ const TradeListPage = () => {
         [filters]
     );
     useEffect(() => {
-        if (items && items.items) {
+        if (items && items.items && items.items.length > 0) {
             const prices = items.items.map((price) => price.usedItemPrice);
-            const avgPrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-            const highPrice = Math.max(...prices);
-            const lowPrice = Math.min(...prices);
+            const avgPrice = Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length).toLocaleString();
+            const highPrice = Math.max(...prices).toLocaleString();
+            const lowPrice = Math.min(...prices).toLocaleString();
 
             setPriceState({
                 avgPrice: avgPrice,
@@ -102,11 +90,12 @@ const TradeListPage = () => {
         });
     };
 
-    const handleSortChange = async (criteria) => {
+    const handleSortChange = async (criteria, index) => {
         setFilters((prev) => ({
             ...prev,
             sort: criteria,
         }));
+        setIsActive(index)
     };
 
     // 로딩 중일 때
@@ -135,20 +124,23 @@ const TradeListPage = () => {
                 >
                     <div className="w-full 2xl:-ms-9" style={{ height: 'auto !important' }}>
                         <TradeListFilterContainer
-                            itemsCount={items.items.length}
+                            itemsCount={items.pageNation.totalCount}
                             filters={filters}
                             setFilters={setFilters}
                             destinationType={destinationType}
                             categoryList={categoryList}
                         />
                         <TradeListPriceInfoContainer priceState={priceState}/>
-                        <TradeListSortContainer onSortChange={handleSortChange} />
+                        <TradeListSortContainer
+                            isActive={isActive}
+                            onSortChange={handleSortChange}
+                        />
                         <TradeListItemContainer
                             items={items}
                             destinationType={destinationType}
                             handleLikeClick={handleLikeClick}
                         />
-                        <TradeListPaginationContainer />
+                        <TradeListPaginationContainer pageNation={items.pageNation} />
                     </div>
                 </div>
             )}

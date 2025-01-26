@@ -69,4 +69,4 @@ const TradeListPriceInfoContainer = ({priceState}) => {
     </div>
   );
 };
-export default TradeListPriceInfoContainer;
+export default React.memo(TradeListPriceInfoContainer);

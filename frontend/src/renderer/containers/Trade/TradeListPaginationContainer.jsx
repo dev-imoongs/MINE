@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
 import Pagination from '../../components/Common/Pagination';
+import {useRecoilState} from "recoil";
+import {tradeListFiltersAtom} from "../../../recoil/atoms/tradeAtom.js";
 
 const itemsPerPage = 4;
 
-const TradeListPaginationContainer = () => {
-    const [itemOffset, setItemOffset] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-
-    // 임시로 아이템 만들었음
-    const items = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`);
-    const endOffset = itemOffset + itemsPerPage;
-    const currentItems = items.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(items.length / itemsPerPage);
+const TradeListPaginationContainer = ({pageNation}) => {
+    const [filters, setFilters] = useRecoilState(tradeListFiltersAtom);
 
     const handlePageClick = (e) => {
-        const newOffset = (e.selected * itemsPerPage) % items.length;
-        setItemOffset(newOffset);
-        setCurrentPage(e.selected);
+        setFilters(prev => {
+            return {
+                ...prev,
+                page : e.selected + 1
+            }
+        })
+
     };
 
     return (
         <div className="bottom-0 py-3 m-auto text-center bg-white lg:mb-2">
             {/* 페이지네이션 */}
-            {pageCount > 1 && (
-                <Pagination pageCount={pageCount} onPageChange={handlePageClick} currentPage={currentPage} />
+            {pageNation.totalPages > 1 && (
+                // <Pagination pageCount={pageCount} onPageChange={handlePageClick} currentPage={currentPage} />
+                <Pagination pageCount={pageNation.totalPages} onPageChange={handlePageClick} currentPage={pageNation.currentPage-1} />
             )}
         </div>
     );
