@@ -74,15 +74,15 @@ const ProductList = ({product}) => {
                         <div className="relative" key={i}>
                           <Link
                             className="ga4_main_recommend_product group box-border overflow-hidden flex rounded-md cursor-pointer pe-0 pb-2 lg:pb-3 flex-col items-start transition duration-200 ease-in-out transform bg-white"
-                            title={item.usedItemId ? item.usedItemId : item.auctionItemId}
-                            to={`${item.usedItemId ? '/product/' + item.usedItemId : '/auction/' + item.auctionItemId}`}
+                            title={item.itemId}
+                            to={item.link}
                           >
                             <div className="relative w-full rounded-md overflow-hidden dim pt-[100%] mb-3 md:mb-3.5">
                               <img
-                                alt={item.usedItemName ? item.usedItemName : item.auctionItemName}
+                                // alt={item.usedItemName ? item.usedItemName : item.auctionItemName}
+                                alt={item.itemId}
                                 referrerPolicy="no-referrer"
-                                // src={'src/assets/temp_product.png'}
-                                  src={item.filePath ? `/api/files/display?filePath=${item.filePath}` : 'src/assets/temp_product.png'}
+                                src={item.filePath}
                                 decoding="async"
                                 data-nimg="fill"
                                 className="bg-gray-300 object-cover h-full group-hover:scale-105 w-full transition duration-200 ease-in rounded-md"
@@ -92,20 +92,20 @@ const ProductList = ({product}) => {
                             </div>
                             <div className="w-full overflow-hidden p-2 md:px-2.5 xl:px-4">
                               <h2 className="line-clamp-2 min-h-[2lh] text-sm md:text-base text-heading">
-                                {item.usedItemName ? item.usedItemName : item.auctionItemName}
+                                {item.itemName}
                               </h2>
                               <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
-                              {item.usedItemPrice ? item.usedItemPrice.toLocaleString() : item.auctionItemHighestPrice.toLocaleString()}원
+                              {item.itemPrice}원
                               </div>
                               <div className="my-1">
                                 <span className="text-sm text-gray-400">
-                                {item.usedItemPlace ? item.usedItemPlace : '입찰 '+ (item.bidCount ? item.bidCount  : '0')  + '회'}
+                                {item.subInfo}
                                 </span>
                                 <span className="text-sm text-gray-400 mx-1">
                                   |
                                 </span>
                                 <span className="text-sm text-gray-400">
-                                  {item.auctionItemEndTime ? getTimeRemaining(item.auctionItemEndTime) : getTimeAgo(item.updatedAt)}
+                                  {item.endTime}
                                 </span>
                               </div>
                             </div>

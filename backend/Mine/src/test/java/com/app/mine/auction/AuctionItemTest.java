@@ -3,9 +3,11 @@ package com.app.mine.auction;
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.mapper.AuctionItemMapper;
+import com.app.mine.mapper.LikeMapper;
 import com.app.mine.service.AuctionItemService;
 import com.app.mine.vo.AuctionItemVO;
 import com.app.mine.vo.Criteria;
+import com.app.mine.vo.LikeVO;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -26,6 +29,8 @@ public class AuctionItemTest {
     @Autowired
     private AuctionItemService auctionItemService;
 
+    @Autowired
+    private LikeMapper likeMapper;
     @Test
     void selectAuctionItemTest() {
          // given

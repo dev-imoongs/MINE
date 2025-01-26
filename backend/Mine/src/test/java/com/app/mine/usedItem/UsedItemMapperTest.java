@@ -30,7 +30,7 @@ public class UsedItemMapperTest {
         SearchDTO searchDTO = new SearchDTO();
         searchDTO.setType("recent");
         Criteria criteria = Criteria.builder()
-                .page(1)  // 페이지 번호는 1부터 시작
+                .page(2)  // 페이지 번호는 1부터 시작
                 .amount(12)
                 .build();
 
