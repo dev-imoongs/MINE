@@ -107,6 +107,12 @@
             <when test="dto.type == 'like'">
                 ORDER BY like_count DESC
             </when>
+            <when test="dto.type == 'high'">
+                ORDER BY A.used_item_place DESC
+            </when>
+            <when test="dto.type == 'low'">
+                ORDER BY A.used_item_place ASC
+            </when>
         </choose>
         LIMIT #{page.criteria.amount} OFFSET #{page.criteria.offset};
     </select>

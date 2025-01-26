@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import ItemComponent from '../../components/Trade/ItemComponent';
 
 const TradeListItemContainer = ({ items, destinationType, handleLikeClick }) => {
@@ -12,11 +12,11 @@ const TradeListItemContainer = ({ items, destinationType, handleLikeClick }) => 
                     id={item.usedItemId}
                     image={item.filePath}
                     title={item.usedItemName}
-                    price={item.usedItemPrice}
+                    price={item.usedItemPrice.toLocaleString()}
                     endTime={item.endTime}
                     elapsedTime={item.updatedAt}
                     likes={item.likeCount}
-                    chats={item.chats}
+                    chats={item.chatCount}
                     bidCount={item.bidCount}
                     myFavoriteused={item.myFavoriteused}
                     handleLikeClick={handleLikeClick}
@@ -27,4 +27,4 @@ const TradeListItemContainer = ({ items, destinationType, handleLikeClick }) => 
     );
 };
 
-export default TradeListItemContainer;
+export default React.memo(TradeListItemContainer);

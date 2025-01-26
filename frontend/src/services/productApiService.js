@@ -18,7 +18,7 @@ export const myProduct = async (data) => {
 };
 
 export const getUsedItems = async (filters) => {
-    const { category, priceRange, searchQuery, sort,searchKeyword } = filters;
+    const { category, priceRange, searchQuery, sort,searchKeyword, page } = filters;
     const { minPrice, maxPrice } = priceRange;
     const config = {
         headers: {
@@ -34,8 +34,8 @@ export const getUsedItems = async (filters) => {
                   searchQuery,
                   searchKeyword,
                   sort,
-                  page: 1,
-                  amount: 30,
+                  page,
+                  amount: 20,
               },
               ContentType : 'application/json'
           }
