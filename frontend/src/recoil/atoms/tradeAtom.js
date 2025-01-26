@@ -37,5 +37,6 @@ export const tradeListFiltersAtom = atom({
         sort: '',
         searchKeyword : '',
         isSold: false, // 판매 완료 상태 추가
+        page: 1,
     },
 });

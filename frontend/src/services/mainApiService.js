@@ -3,7 +3,6 @@ import axios from 'axios';
 export const mainProducts = async () => {
     try {
         const res = await axios.get('/api/main/getItems')
-        console.log("main page data : " + JSON.stringify(res.data));
         return res.data;
         
     } catch (error) {

@@ -184,6 +184,7 @@
             c.category_value as category,
             c.user_id,
             c.used_item_status,
+            c.used_item_place_detail,
             d.user_email,
             d.user_trust_score,
             d.user_nickname,
@@ -216,6 +217,7 @@
             c.category_value,
             c.user_id,
             c.used_item_status,
+            c.used_item_place_detail,
             d.user_email,
             d.user_trust_score,
             d.user_nickname;

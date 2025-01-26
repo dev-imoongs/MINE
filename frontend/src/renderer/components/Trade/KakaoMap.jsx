@@ -23,7 +23,7 @@ const KakaoMap = () => {
 
             // 주소를 좌표로 변환
             const geocoder = new kakao.maps.services.Geocoder();
-            geocoder.addressSearch('남부순환로 265길 4', (result, status) => {
+            geocoder.addressSearch(productInfo.tradePlace.preferredPlace[0], (result, status) => {
                 if (status === kakao.maps.services.Status.OK) {
                     // 검색 결과에서 첫 번째 주소의 좌표 가져오기
                     const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -49,7 +49,7 @@ const KakaoMap = () => {
                         <div class="customoverlay">
                             <a target="_blank">
 <!--                                <span class="title">${productInfo.tradePlace.place}</span>-->
-                                <span class="title">${result[0].address_name}</span>
+                                <span class="title">${result[0].address_name} ${productInfo.tradePlace.placeDetail}</span>
                             </a>
                         </div>
                     `;
