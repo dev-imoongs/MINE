@@ -112,9 +112,8 @@ public class UsedItemServiceImpl implements UsedItemService {
         PageDTO pageDTO = new PageDTO(criteria, totalCount, searchDTO,0);
         pageDTO.setIS_SEARCH_DTO(true);
         Map<String, Object> recentUsedItemsMap = new HashMap<>();
-        List<UsedItemVO> items = usedItemMapper.selectAllUsedItem(pageDTO);
         recentUsedItemsMap.put("pageNation", pageDTO.toPageNationMap());
-        recentUsedItemsMap.put("items", items);
+        recentUsedItemsMap.put("items", usedItemMapper.selectAllUsedItem(pageDTO));
 
 
         // 데이터 조회
@@ -128,14 +127,11 @@ public class UsedItemServiceImpl implements UsedItemService {
         PageDTO pageDTO = new PageDTO(criteria, 0, searchDTO,0);
         pageDTO.setIS_SEARCH_DTO(true);
         try {
-            Map<String, Object> summary = usedItemMapper.selectItemStatisticsByCondition(searchDTO);
-            usedItemsMap.put("summary", summary);
-            List<UsedItemVO> itemList = usedItemMapper.selectAllUsedItem(pageDTO);
-            usedItemsMap.put("itemList", itemList);
-
+            usedItemsMap.put("summary", usedItemMapper.selectItemStatisticsByCondition(searchDTO));
+            usedItemsMap.put("itemList", usedItemMapper.selectAllUsedItem(pageDTO));
             return usedItemsMap;
         } catch (Exception e) {
-            log.error("Error searching used items: {}", e.getMessage());
+            log.error("Error searching : {}", e.getMessage());
             throw new RuntimeException("Error occurred", e);
         }
 }

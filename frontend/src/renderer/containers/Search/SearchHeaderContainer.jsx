@@ -3,15 +3,6 @@ import { Link } from 'react-router-dom';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const SearchHeaderContainer = ({link, type, title, itemInfo}) => {
-    // let sum, count, max, min, avg;
-    //
-    // if (itemInfo) {
-    //     sum = itemInfo.reduce((acc, cur) => acc + cur.price, 0);
-    //     count = itemInfo.length;
-    //     max = Math.max(...itemInfo.map((item) => item.price));
-    //     min = Math.min(...itemInfo.map((item) => item.price));
-    // }
-   
     return (
         <div className="relative">
             <div className="flex flex-col lg:flex-row lg:items-center gap-[6px] items-start mb-[10px] justify-between">

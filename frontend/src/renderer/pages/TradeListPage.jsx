@@ -22,10 +22,8 @@ const TradeListPage = () => {
         const queryParams = new URLSearchParams(location.search);
         const searchValue = queryParams.get('search') || '';
         const categoryValue = queryParams.get('category') || '';
-
         const decodedSearchValue = decodeURIComponent(searchValue);
         const decodedCategoryValue = decodeURIComponent(categoryValue);
-
         setFilters((prev) => {
             if (prev.category === decodedCategoryValue && prev.searchKeyword === decodedSearchValue) {
                 return prev; // 상태가 변경되지 않으면 업데이트하지 않음
@@ -37,9 +35,6 @@ const TradeListPage = () => {
             };
         });
     }, [location.search]);
-
-
-
 
     const destinationType = '1';
 
@@ -59,6 +54,8 @@ const TradeListPage = () => {
         {
             queryKey: ['getUsedItemsData', filters],
             queryFn: () => getUsedItems(filters),
+            staleTime: 1000 * 60 * 5, // 5분 동안 데이터를 신선하다고 간주
+            cacheTime: 1000 * 60 * 10, // 캐시를 10분 동안 유지
             refetchOnWindowFocus: false,
         },
         [filters]
@@ -69,7 +66,6 @@ const TradeListPage = () => {
             const avgPrice = Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length).toLocaleString();
             const highPrice = Math.max(...prices).toLocaleString();
             const lowPrice = Math.min(...prices).toLocaleString();
-
             setPriceState({
                 avgPrice: avgPrice,
                 highPrice: highPrice,
@@ -81,7 +77,6 @@ const TradeListPage = () => {
     const { mutate } = useApiMutation(
         '/api/likes', // API endpoint
         'post' // HTTP method
-        // { headers: { Authorization: `Bearer your-token-here` } } // 필요한 헤더나 config 추가
     );
 
     const handleLikeClick = (usedItemId) => {
@@ -109,9 +104,6 @@ const TradeListPage = () => {
         return <div>Error occurred while fetching the item!</div>;
     }
 
-
-
-    // items가 있을때만 렌더링
     return (
         <main
             className="relative flex-grow border-b-2"
