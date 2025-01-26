@@ -103,6 +103,8 @@ public class UsedItemServiceImpl implements UsedItemService {
 
     @Override
     public Map<String, Object> getFilteredUsedItems(SearchDTO searchDTO, Criteria criteria) {
+        log.info("{}",searchDTO);
+
         //총 데이터 개수
         int totalCount = usedItemMapper.getUsedItemCount(searchDTO);
 
