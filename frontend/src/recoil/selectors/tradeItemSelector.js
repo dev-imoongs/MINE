@@ -23,11 +23,12 @@ export const tradeItemDetail = selector({
                 productMethod: '직거래',
                 productExplain: data.used_item_explain,
                 tradePlace: {
-                preferredPlace: [data.used_item_place],
+                    preferredPlace: [data.used_item_place],
+                    placeDetail : data.used_item_place_detail,
                     mapLat: 37.47657573458364,
                     mapLon: 126.98147605060717,
                     place: '서울 동작구 남부순환로 2089',
-            },
+                },
             createAt: data.created_at,
             } || {};
 

@@ -1,11 +1,12 @@
 import React from "react";
 import MainProductListComponent from "../../components/Main/MainProductListComponent"
-import { mainProductList } from "../../../recoil/atoms/productListAtom";
 import { useRecoilValue } from 'recoil';
 import Slider from "../../components/Common/Slider.jsx";
+import {mainFilteredProdSelector} from "../../../recoil/selectors/mainFilteredProdSelector.js";
 
 const MainContentContainer = () => {
-  const productList = useRecoilValue(mainProductList);
+  const productList = useRecoilValue(mainFilteredProdSelector);
+  console.log(productList)
   if(!productList || productList.length === 0){
     return;
   }
