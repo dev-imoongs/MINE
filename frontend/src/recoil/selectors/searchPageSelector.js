@@ -21,7 +21,7 @@ export const modifyData = selector({
             image: item.filePath,
             title: item.auctionItemName,
             price: item.auctionItemHighestPrice,
-            elapsedTime: item.updatedAt,
+            elapsedTime: item.auctionItemEndTime,
             likes: item.likeCount,
             chats: item.chatCount,
             bidcount: item.bidCount,

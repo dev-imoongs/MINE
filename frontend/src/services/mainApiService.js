@@ -1,24 +1,18 @@
-import axios from 'axios';
-
+import {fetchData} from "./commonApi.js";
+// 메인 페이지 상품 목록 요청
 export const mainProducts = async () => {
     try {
-        const res = await axios.get('/api/main/getItems')
-        return res.data;
-        
+        return await fetchData('/api/main/getItems');
     } catch (error) {
-        const response = await axios.get('/data/mainPageData.json')
-        return response.data;
+        return await fetchData('/data/mainPageData.json');
     }
-}
+};
 
+// 조건 검색 상품 목록 요청
 export const searchItems = async (conditions) => {
     try {
-        const res = await axios.get('/api/main/searchItem', {
-            params : conditions
-        })
-        return res.data;
-    }catch (err){
-        const response = await axios.get('/data/mainPageData.json')
-        return response.data;
+        return await fetchData('/api/main/searchItem', conditions);
+    } catch (error) {
+        return await fetchData('/data/mainPageData.json');
     }
-}
+};

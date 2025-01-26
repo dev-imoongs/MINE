@@ -26,7 +26,8 @@ const TradeDetailPage = () => {
             onError : (error) => {
                 console.error("데이터를 가져오는 중 오류 발생:", error);
             },
-        }
+            refetchOnWindowFocus : false
+        },
     )
 
     if (!productDetail || (!productInfo && !sellerInfo)) {

@@ -46,7 +46,7 @@ public class MainRestController {
         searchDTO.setMinPrice(minPrice);
         searchDTO.setMaxPrice(maxPrice);
 
-        if(type.equals("recommend")){
+        if("recommend".equals(type)){
             searchDTO.setType("like");
             return auctionItemService.getFilteredAuctionItems(searchDTO, criteria);
         }
@@ -62,11 +62,8 @@ public class MainRestController {
         searchDTO.setCategory(category);
         searchDTO.setSearchKeyword(searchKeyword);
 
-        Map<String, Object> auction = auctionItemService.findSearchAuctionItem(searchDTO);
-        Map<String, Object> usedItem = usedItemService.findSearchUsedItem(searchDTO);
-
-        result.put("auction", auction);
-        result.put("usedItem", usedItem);
+        result.put("auction", auctionItemService.findSearchAuctionItem(searchDTO));
+        result.put("usedItem", usedItemService.findSearchUsedItem(searchDTO));
         return result;
     }
 }

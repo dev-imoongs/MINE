@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import { useToggle } from "../../../hooks/useToggle";
 import {Link, useNavigate} from "react-router-dom";
-import {getTimeAgo} from '../../../services/commonService.js'
+import {getTimeAgo, getTimeRemaining} from '../../../services/commonService.js'
 import { ToastContainer, toast } from "react-toastify";
 import useApiMutation from "../../../hooks/mutation.js";
 import {sessionCheck} from "../../../services/sessionCheckApi.js";
@@ -19,7 +19,6 @@ const ItemComponent = ({
   bidCount,
   myFavoriteAuction
 }) => {
-  const [isLike, toggleLike] = useToggle();
   const StImg = {
     position: "absolute",
     height: "100%",
@@ -29,14 +28,6 @@ const ItemComponent = ({
   };
 
   let url;
-  const notify = (() => {
-    if (!isLike){
-      toast("찜 상품에 추가 되었습니다.");
-    }else{
-      toast("찜 상품에 해제 되었습니다.");
-    }
-    console.log("자 보자")
-});
   switch (destinationType) {
     case 1:
       url = `/product/${id}`;
@@ -72,29 +63,6 @@ const ItemComponent = ({
                   loading="lazy"
                   style={StImg}
               />
-              {/*<div className="absolute top-2 z-10 right-2 w-6 h-6">*/}
-              {/*  <svg*/}
-              {/*      width="32"*/}
-              {/*      height="32"*/}
-              {/*      viewBox="0 0 32 32"*/}
-              {/*      fill="none"*/}
-              {/*      xmlns="http://www.w3.org/2000/svg"*/}
-              {/*      className="w-6 h-6 cursor-pointer"*/}
-              {/*      onClick={(e) => {*/}
-              {/*        e.preventDefault();*/}
-              {/*        notify()*/}
-              {/*        toggleLike();*/}
-              {/*      }}*/}
-              {/*  >*/}
-              {/*    <path*/}
-              {/*        d="M5.94197 17.9925L15.2564 26.334C15.3282 26.3983 15.3641 26.4305 15.3975 26.4557C15.7541 26.7249 16.2459 26.7249 16.6025 26.4557C16.6359 26.4305 16.6718 26.3983 16.7436 26.3341L26.058 17.9925C28.8244 15.5151 29.1565 11.3015 26.8124 8.42125L26.5675 8.12029C23.8495 4.78056 18.5906 5.35863 16.663 9.20902C16.3896 9.75505 15.6104 9.75505 15.337 9.20902C13.4094 5.35863 8.1505 4.78056 5.43249 8.12028L5.18755 8.42125C2.84352 11.3015 3.17564 15.5151 5.94197 17.9925Z"*/}
-              {/*        strokeWidth="1.5"*/}
-              {/*        stroke={isLike ? "#dc2626" : "white"}*/}
-              {/*        fill={isLike ? "#dc2626" : "#9ca3afb4"}*/}
-              {/*    ></path>*/}
-              {/*  </svg>*/}
-              {/*  <input id=":r10:" type="checkbox" className="a11yHidden"/>*/}
-              {/*</div>*/}
               <LikeButton usedItemId={id}/>
             </div>
             {destinationType == 1 ? (
@@ -135,13 +103,6 @@ const ItemComponent = ({
                   <div className="font-semibold space-s-2 mt-0.5 text-heading lg:text-lg lg:mt-1.5">
                     {!!price ? price : 0} 원
                   </div>
-                  {/*<div className="item-info_wrap">*/}
-                  {/*  <div>*/}
-                  {/*    <span>찜 {likes} ∙ 채팅 {chats} </span>*/}
-                  {/*    <span>∙ 입찰 </span>*/}
-                  {/*    <span>{!!bidCount ? bidCount : 0}회</span>*/}
-                  {/*  </div>*/}
-                  {/*</div>*/}
                   <div className="item-info_wrap">
                     <div>
                       <span>입찰 </span>
@@ -161,7 +122,7 @@ const ItemComponent = ({
                             fill="#626262"
                         />
                       </svg>
-                      <span className="pl-[8px]">7일 00시간 </span>
+                      <span className="pl-[8px]">{getTimeRemaining(elapsedTime)}</span>
                     </div>
                   </div>
                   <div className="flex justify-between">
@@ -186,8 +147,11 @@ const LikeButton = React.memo(({ usedItemId }) => {
   const { mutateAsync: toggleLikeMutation } = useApiMutation('/api/likes/toggle', 'post');
   const { mutateAsync: toggleStateMutation } = useApiMutation('/api/likes/state', 'post');
   const [likeState, setLikeState] = useState({});
-
+  const [session, setSession] = useState(false)
   // 서버에서 현재 상태 가져오기
+  useEffect(() => {
+    setSession(asyncSessionCheck())
+  }, []);
   useEffect(() => {
     const fetchLikeState = async () => {
       try {
@@ -204,10 +168,15 @@ const LikeButton = React.memo(({ usedItemId }) => {
         console.error('Error fetching like state:', error);
       }
     };
-
-    fetchLikeState();
+    if(session){
+      fetchLikeState();
+    }
   }, [toggleStateMutation, usedItemId]);
 
+  const asyncSessionCheck = async () => {
+    const res = await sessionCheck();
+    return res.data
+  }
   // notify 함수
   const notify = React.useCallback(() => {
     if (likeState.result === 'success') {
