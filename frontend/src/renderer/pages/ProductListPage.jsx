@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
-import { titleCheck, getTimeAgo } from "../../services/commonService";
+import {titleCheck, getTimeAgo, getTimeRemaining} from "../../services/commonService";
 import { recommendProduct } from "../../services/productApiService";
 import { useInfiniteQuery } from "react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -123,7 +123,7 @@ const ProductList = ({ productList, type }) => {
                           fill="#626262"
                       />
                     </svg>
-                    <span className="pl-[8px]">7일 00시간 </span>
+                    <span className="pl-[8px]">{getTimeRemaining(item.auctionItemEndTime)} </span>
                   </div>
                 </div>
               </div>

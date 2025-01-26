@@ -1,7 +1,6 @@
 import React, {useMemo, useEffect, useState} from "react";
 
 const TradeListSortContainer = ({ onSortChange, isActive }) => {
-  // const [isActive, setIsActive] = useState(0);
   // i는 인덱스
   const handleClick = (i) => {
     let criteria = "like"; // 기본값

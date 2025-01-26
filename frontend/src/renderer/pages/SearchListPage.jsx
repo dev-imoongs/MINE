@@ -22,8 +22,10 @@ const SearchListPage = () => {
         () => searchItems(condition),
         {
             staleTime: 1000 * 60 * 5, // 5분 동안 캐싱 데이터 유지
-            cacheTime: 1000 * 60 * 10 // 캐시가 메모리에 10분간 유지 (아무도 조회하지 않을 경우 삭제)
+            cacheTime: 1000 * 60 * 10, // 캐시가 메모리에 10분간 유지 (아무도 조회하지 않을 경우 삭제)
+            refetchOnWindowFocus : false
         }// 서버에서 데이터 가져오는 함수
+        ,
     );
 
     let categoryList = ['디지털 기기', '생활 가전', '가구/인테리어', '생활/주방', '도서', '의류', '뷰티/미용', '스포츠/레저', '식물', '취미/게임/음반', '상품권/모바일티켓', '식품'];
@@ -44,10 +46,6 @@ const SearchListPage = () => {
         }
     }, [data]);
 
-    // if(!data || (!auction.itemList.length && !used.itemList.length)){
-    //     console.log(data)
-    //     return <LoadingSpinner />
-    // }
     if(isError){
         return <LoadingSpinner />
     }

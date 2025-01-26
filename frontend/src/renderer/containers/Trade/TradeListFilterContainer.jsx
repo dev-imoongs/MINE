@@ -80,7 +80,7 @@ const TradeListFilterContainer = ({ itemsCount, filters, setFilters, categoryLis
             searchQuery: null,
             isSold: false,
         };
-
+        
         setFilters((prev) => ({
             ...prev,
             ...(filterKey === 'initialize' ? initialState : { [filterKey]: initialState[filterKey] }),
@@ -120,8 +120,6 @@ const TradeListFilterContainer = ({ itemsCount, filters, setFilters, categoryLis
 
     //카테고리 배열
     const categories = categoryList.data;
-    // console.log('categoryList', categoryList.data);
-    // console.log('filters.category', filters.category, typeof filters.category);
 
     return (
         <div className="relative">
@@ -264,7 +262,6 @@ const TradeListFilterContainer = ({ itemsCount, filters, setFilters, categoryLis
                             )}
                         </td>
                     </tr>
-
                     <tr>
                         <td>결과 내 검색</td>
                         <td className="price-filter">
@@ -402,4 +399,4 @@ const TradeListFilterContainer = ({ itemsCount, filters, setFilters, categoryLis
     );
 };
 
-export default TradeListFilterContainer;
+export default React.memo(TradeListFilterContainer);

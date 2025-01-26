@@ -10,7 +10,7 @@ const SearchListItemContainer = ({ itemInfo }) => {
                     id={item.id}
                     image={item.image}
                     title={item.title}
-                    price={item.price.toLocaleString() }
+                    price={item.price.toLocaleString()}
                     elapsedTime={item.elapsedTime}
                     likes={item.likes}
                     chats={item.chats}
