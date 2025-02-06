@@ -1,272 +1,83 @@
 [
     {
-        "type" : "recommend",
-        "data" : [
+        "data": [
             {
-                "id": 1,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "usedItemId": 71,
+                "usedItemName": "임시데이터",
+                "usedItemExplain": "임시데이터",
+                "usedItemPrice": 235235235,
+                "filePath": "2025/01/22/a41737e5-84be-4e61-b6c2-36cb6bf991c9_1661922248128.jpg"
             },
             {
-                "id": 2,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "usedItemId": 70,
+                "usedItemName": "임시데이터",
+                "usedItemExplain": "임시데이터",
+                "usedItemPrice": 35353,
+                "filePath": "2025/01/22/86c388cb-304e-4d1a-9763-74fb6a126c28_big.png"
             },
             {
-                "id": 3,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 4,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 5,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 6,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 7,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 8,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 9,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 10,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 11,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 12,
-                "title": "추천 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "usedItemId": 66,
+                "usedItemName": "임시데이터",
+                "usedItemExplain": "임시데이터",
+                "usedItemPrice": 300,
+                "filePath": "2025/01/22/271689d0-e9fd-4b66-b287-181e005c78e7_1661922248128.jpg"
             }
-        ]
-    
+        ],
+        "type": "recent"
     },
     {
-        "type" : "recent",
-        "data" : [
+        "data": [
             {
-                "id": 1,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "usedItemId": 4,
+                "usedItemName": "임시데이터",
+                "usedItemExplain": "임시데이터",
+                "usedItemPrice": 9000,
+                "filePath": ""
             },
             {
-                "id": 2,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "usedItemId": 2,
+                "usedItemName": "임시데이터",
+                "usedItemExplain": "임시데이터",
+                "usedItemPrice": 7000,
+                "filePath": ""
             },
             {
-                "id": 3,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 4,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 5,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 6,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 7,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 8,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 9,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 10,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 11,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 12,
-                "title": "최근 등록된 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "usedItemId": 29,
+                "usedItemName": "임시데이터",
+                "usedItemExplain": "임시데이터",
+                "usedItemPrice": 10800,
+                "filePath": ""
             }
-        ]
-    
+        ],
+        "type": "like"
     },
     {
-        "type" : "popular",
-        "data" : [
+        "data": [
             {
-                "id": 1,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "auctionItemId": 2,
+                "auctionItemName": "임시데이터",
+                "auctionItemExplain": "임시데이터",
+                "auctionItemStartPrice": 2000,
+                "auctionItemHighestPrice": 7000,
+                "filePath": ""
             },
             {
-                "id": 2,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "auctionItemId": 4,
+                "auctionItemName": "임시데이터",
+                "auctionItemExplain": "임시데이터",
+                "auctionItemStartPrice": 4000,
+                "auctionItemHighestPrice": 9000,
+                "filePath": "2025/01/08/b0191d19-15c0-43ff-931e-02d6273d0826_test.png"
             },
             {
-                "id": 3,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 4,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 5,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 6,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 7,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 8,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 9,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 10,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 11,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
-            },
-            {
-                "id": 12,
-                "title": "인기 상품 product 임시 데이터 입니다.",
-                "price": 10000,
-                "img": "src/assets/temp_product.png",
-                "address": "사당동"
+                "auctionItemId": 5,
+                "auctionItemName": "임시데이터",
+                "auctionItemExplain": "임시데이터",
+                "auctionItemStartPrice": 5000,
+                "auctionItemHighestPrice": 10000,
+                "filePath": "2025/01/02/027ff512-c2da-4bf7-81ca-9b6bea3fadf4_test.png"
             }
-        ]
-    
+        ],
+        "type": "recommend"
     }
-]    
+]
