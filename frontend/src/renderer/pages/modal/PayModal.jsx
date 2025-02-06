@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-// import "../../../styles/auction/payModal.css";
-import '@styles/auction/payModal.css';
+import "../../../styles/auction/modal_pay.css";
 import useFormattedPrice from "../../../hooks/useFormattedPrice";
 import PaymentButtonComponent from "../../components/Auction/PaymentButtonComponent";
 
