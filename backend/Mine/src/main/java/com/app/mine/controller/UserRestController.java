@@ -49,7 +49,12 @@ public class UserRestController {
     }
 
     @PostMapping("join")
-    public void join(String userEmail, String userPassword, String userNickname, String userAddress, String userAddressDetail, Integer userCategory1, Integer userCategory2, Integer userCategory3) {
+    public boolean join(String userEmail, String userPassword, String userNickname, String userAddress, String userAddressDetail, Integer userCategory1, Integer userCategory2, Integer userCategory3) {
+        UserVO userInfo = userService.getUserInfo(userEmail, null);
+        if(userInfo != null) {
+            return false;
+        }
+
         UserVO userVO = new UserVO();
 
         userVO.setUserEmail(userEmail);
@@ -62,6 +67,7 @@ public class UserRestController {
         userVO.setUserCategory3(userCategory3);
 
         userService.saveUser(userVO);
+        return true;
     }
 
     @PostMapping("getMyInfo")
@@ -116,4 +122,42 @@ public class UserRestController {
     public void logout(HttpSession session) {
         session.invalidate();
     }
+
+    @PostMapping("modify")
+    public boolean modify(String userEmail, String userPassword, String userNickname, String userAddress, String userAddressDetail, Integer userCategory1, Integer userCategory2, Integer userCategory3, String presentPassword) {
+        UserVO userInfo = userService.getUserInfo(userEmail, presentPassword);
+
+        if(userInfo == null) {
+            return false;
+        }
+
+        UserVO userVO = new UserVO();
+
+        userVO.setUserEmail(userEmail);
+        userVO.setUserPassword(userPassword);
+        userVO.setUserNickname(userNickname);
+        userVO.setUserAddress(userAddress);
+        userVO.setUserAddressDetail(userAddressDetail);
+        userVO.setUserCategory1(userCategory1);
+        userVO.setUserCategory2(userCategory2);
+        userVO.setUserCategory3(userCategory3);
+
+        userService.updateUser(userVO);
+        return true;
+    }
+
+    @PostMapping("unregister")
+    public void unregister(HttpSession session) {
+        UserVO loginUser = (UserVO) session.getAttribute("userInfo");
+
+        UserVO userVO = new UserVO();
+
+        userVO.setUserId(loginUser.getUserId());
+        userVO.setUserStatus("N");
+
+        userService.unregisterUser(userVO);
+
+        session.invalidate();
+    }
+
 }

@@ -12,6 +12,8 @@ public interface UserService {
 
     public void updateUser(UserVO userVO);
 
-    public void deleteUser(Integer userId);
+    public void unregisterUser(UserVO userVO);
+
+    public void deleteUser(Integer deleteKeepDate);
 
 }

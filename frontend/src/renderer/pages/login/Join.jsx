@@ -10,6 +10,7 @@ import {useRecoilState} from "recoil";
 import { checkDuplicateEmail } from "../../../services/userApiService.js";
 import { getCategory } from "../../../services/commonService.js";
 import { join } from "../../../services/userApiService.js";
+import { modify } from "../../../services/userApiService.js";
 
 import { useLocation } from 'react-router-dom';
 
@@ -45,27 +46,36 @@ const Join = () => {
         category3: ""
     });
 
-    const emailCheck = useQuery({
-        queryKey: "emailCheck",
-        queryFn: () => checkDuplicateEmail(input),
-        enabled: false, // 초기에는 쿼리를 자동 실행하지 않음
-        onSuccess: (result) => {
-            setEmailValid(result);
-        },
-        onError: (error) => {
-            console.error("Error during login:", error);
-            alert('로그인 도중 오류가 발생했습니다.');
-            setEmailValid(false);
-        },
-    });
-
     const joinAction = useQuery({
         queryKey: "join",
         queryFn: () => join(input),
         enabled: false, // 초기에는 쿼리를 자동 실행하지 않음
-        onSuccess: () => {
-            alert('회원가입이 완료되었습니다.');
-            navigate('/');
+        onSuccess: (result) => {
+            if(result) {
+                alert('회원가입이 완료되었습니다.');
+                navigate('/');
+            } else {
+                alert('이미 사용중인 이메일입니다.');
+            }
+        },
+        onError: (error) => {
+            console.error("Error during login:", error);
+            alert('회원가입 도중 오류가 발생했습니다.');
+        },
+    });
+
+    const modifyAction = useQuery({
+        queryKey: "modify",
+        queryFn: () => modify(input),
+        enabled: false, // 초기에는 쿼리를 자동 실행하지 않음
+        onSuccess: (result) => {
+            console.log(result)
+            if (result) {
+                alert('수정이 완료되었습니다.');
+                navigate('/mypage');
+            } else {
+                alert('현재 비밀번호가 일치하지 않습니다.');
+            }
         },
         onError: (error) => {
             console.error("Error during login:", error);
@@ -76,16 +86,16 @@ const Join = () => {
     useEffect(() => {
         if (location.pathname === '/editInfo') {
             setInput({
-                email: myInfo.USER_EMAIL,
+                email: myInfo.userEmail,
                 presentPassword: "",
                 password: "",
                 passwordCheck: "",
-                nickname: myInfo.USER_NICKNAME,
-                address: myInfo.USER_ADDRESS,
-                addressDetail: myInfo.USER_ADDRESS_DETAIL,
-                category1: myInfo.USER_CATEGORY_ID,
-                category2: "",
-                category3: ""
+                nickname: myInfo.userNickname,
+                address: myInfo.userAddress,
+                addressDetail: myInfo.userAddressDetail,
+                category1: myInfo.userCategory1,
+                category2: myInfo.userCategory2,
+                category3: myInfo.userCategory3
             });
         } else {
             setInput({
@@ -124,7 +134,7 @@ const Join = () => {
             if(location.pathname === '/join') {
                 joinAction.refetch();
             } else {
-                alert('수정되었습니다.');
+                modifyAction.refetch();
             }
         }
     };
@@ -141,15 +151,13 @@ const Join = () => {
             errors.emailError = '이메일 형식이 맞지 않습니다.';
         }
 
-        emailCheck.refetch();
-
         if(!emailValid) {
             errors.emailError = '사용중인 이메일입니다.';
         }
 
-        if (myInfo.USER_PASSWORD) {
-            if (input.presentPassword !== myInfo.USER_PASSWORD) {
-                errors.presentPasswordError = '비밀번호가 다릅니다.';
+        if (location.pathname === "/editInfo") {
+            if (input.presentPassword) {
+                errors.presentPasswordError = '현재 비밀번호를 입력해주세요.';
             }
         }
 
