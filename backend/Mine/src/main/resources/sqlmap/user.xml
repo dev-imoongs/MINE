@@ -77,34 +77,37 @@
         update tbl_user
         <set>
             <if test='userPassword != null and userPassword != ""'>
-                user_password = #{userPassword}
+                user_password = #{userPassword},
             </if>
             <if test='userNickname != null and userNickname != ""'>
-                user_nickname = #{userNickname}
+                user_nickname = #{userNickname},
             </if>
             <if test='userCategory1 != null and userCategory1 != ""'>
-                user_category1 = #{userCategory1}
+                user_category1 = #{userCategory1},
             </if>
             <if test='userCategory2 != null and userCategory2 != ""'>
-                user_category2 = #{userCategory2}
+                user_category2 = #{userCategory2},
             </if>
             <if test='userCategory3 != null and userCategory3 != ""'>
-                user_category3 = #{userCategory3}
+                user_category3 = #{userCategory3},
             </if>
             <if test='userAddress != null and userAddress != ""'>
-                user_address = #{userAddress}
+                user_address = #{userAddress},
             </if>
             <if test='userAddressDetail != null and userAddressDetail != ""'>
-                user_address_detail = #{userAddressDetail}
+                user_address_detail = #{userAddressDetail},
             </if>
             <if test='userPoint != null and userPoint != ""'>
-                user_point = #{userPoint}
+                user_point = #{userPoint},
             </if>
             <if test='userTrustScore != null and userTrustScore != ""'>
-                user_trust_score = #{userTrustScore}
+                user_trust_score = #{userTrustScore},
             </if>
             <if test='userStatus != null and userStatus != ""'>
-                user_status = #{userStatus}
+                user_status = #{userStatus},
+                <if test='userStatus == "N"'>
+                    unregister_date = current_timestamp,
+                </if>
             </if>
         </set>
         where
@@ -120,7 +123,7 @@
     <!-- 회원 탈퇴 -->
     <delete id="deleteUser">
         /* 회원 탈퇴 */
-        delete from tbl_user where user_id = #{userId}
+        delete from tbl_user where unregister_date <![CDATA[<=]]> current_date - (#{deleteKeepDate} * interval '1 day')
     </delete>
 
 </mapper>
