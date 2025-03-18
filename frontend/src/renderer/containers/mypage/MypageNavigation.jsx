@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState,useRecoilValue } from "recoil";
 import {useQuery} from "react-query";
 
@@ -10,6 +11,7 @@ import { activeIndexAtom } from "../../../recoil/atoms/userAtom.js"
 
 import {myProduct} from "../../../services/productApiService.js";
 import {myAuctionProduct} from "../../../services/auctionApiService.js";
+import {unregister} from "../../../services/userApiService.js";
 import {Link} from "react-router-dom";
 
 const MypageNavigation = ({onItemClick}) => {
@@ -18,6 +20,7 @@ const MypageNavigation = ({onItemClick}) => {
     const [myAuctionList, setMyAuctionList] = useState([]);
     const [myProductList, setMyProductList] = useState([]);
     const [activeIndex, setActiveIndex] = useRecoilState(activeIndexAtom);
+    const navigate = useNavigate();
 
     const myAuctionData = useQuery({ // useQuery hook : 서버에서 데이터를 가져옴
         queryKey: "myAuctionData", // 캐싱, 식별 고유값
@@ -28,6 +31,21 @@ const MypageNavigation = ({onItemClick}) => {
         queryKey: "myProductData", // 캐싱, 식별 고유값
         queryFn: myProduct // 서버에서 데이터 가져오는 함수
     })
+
+
+    const unregisterAction = useQuery({
+        queryKey: "unregister",
+        queryFn: () => unregister(),
+        enabled: false, // 초기에는 쿼리를 자동 실행하지 않음
+        onSuccess: () => {
+            alert('탈퇴되셨습니다. 이용해주셔서 감사합니다.');
+            navigate('/');
+        },
+        onError: (error) => {
+            console.error("Error during login:", error);
+            alert('탈퇴 도중 오류가 발생했습니다.');
+        },
+    });
 
     const handleClick = (isProduct) => {
         if (isProduct) {
@@ -43,6 +61,10 @@ const MypageNavigation = ({onItemClick}) => {
 
     const handleWithDraw = () => {
         let result = confirm("탈퇴하시겠습니까?"); //확인 === true 취소 === false
+        
+        if(result) {
+          unregisterAction.refetch();
+        }
     }
 
     useEffect(() => {

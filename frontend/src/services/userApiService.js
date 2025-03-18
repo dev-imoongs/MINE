@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getMyInfo = async () => {
-    const response = await axios.post('/api/user/getMyInfo')
+    const response = await axios.post('/api/user/getMyInfo');
     console.log(response.data)
     return response.data;
 }
@@ -101,3 +101,26 @@ export const logout = async () => {
         }
     }
 };
+
+export const modify = async (input) => {
+    const response = await axios.post('/api/user/modify', {
+        userEmail : input.email,
+        presentPassword : input.presentPassword,
+        userPassword : input.password,
+        userNickname : input.nickname,
+        userAddress : input.address,
+        userAddressDetail : input.addressDetail,
+        userCategory1 : input.category1,
+        userCategory2 : input.category2,
+        userCategory3 : input.category3
+    },
+    {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
+    
+    return response.data;
+}
+
+export const unregister = async () => {
+    await axios.post('/api/user/unregister');
+}

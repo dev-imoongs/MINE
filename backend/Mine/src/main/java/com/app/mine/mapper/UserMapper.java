@@ -14,6 +14,6 @@ public interface UserMapper {
 
     public void updateUser(UserVO userVO);
 
-    public void deleteUser(Integer userId);
+    public void deleteUser(Integer deleteKeepDate);
 
 }

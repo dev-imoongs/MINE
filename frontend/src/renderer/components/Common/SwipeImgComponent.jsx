@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
@@ -6,6 +7,7 @@ import { tradeItemDetail } from '../../../recoil/selectors/tradeItemSelector.js'
 
 const SwipeImgComponent = ({ StImg }) => {
     const { productInfo } = useRecoilValue(tradeItemDetail);
+
     const imageData = [
         {
             id: 1,
@@ -33,9 +35,11 @@ const SwipeImgComponent = ({ StImg }) => {
             src: 'https://img2.joongna.com/cafe-article-data/live/2024/06/22/1062585033/1719019322790_004_HPwbV.jpg?impolicy=resizeWatermark3&amp;isSecret=false',
         },
     ];
+
     useEffect(() => {
         console.log(productInfo.images);
     });
+
     return (
         <div className="carouselWrapper relative product-gallery swiperThumbnail product-gallery-slider dotsCircle">
             <Swiper

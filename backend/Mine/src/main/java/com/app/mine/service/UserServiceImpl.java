@@ -59,7 +59,11 @@ public class UserServiceImpl implements UserService {
         userMapper.updateUser(userVO);
     }
 
-    public void deleteUser(Integer userId) {
-        userMapper.deleteUser(userId);
+    public void unregisterUser(UserVO userVO) {
+        userMapper.updateUser(userVO);
+    }
+
+    public void deleteUser(Integer deleteKeepDate) {
+        userMapper.deleteUser(deleteKeepDate);
     }
 }

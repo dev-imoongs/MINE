@@ -24,7 +24,7 @@ public interface AuctionItemService {
     Map<String, Object> findSearchAuctionItem(SearchDTO searchDTO);
 
     Map<String, Object> getFilteredAuctionItems(SearchDTO searchDTO, Criteria criteria);
-
+  
     // 경매 참여
     String insertAuctionJoin(int price);
 

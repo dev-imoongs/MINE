@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import '../../../styles/auction/modal_pay.css';
-import useFormattedPrice from '../../../hooks/useFormattedPrice';
-import PaymentButtonComponent from '../../components/Auction/PaymentButtonComponent';
+import React, { useState } from "react";
+import "../../../styles/auction/modal_pay.css";
+import useFormattedPrice from "../../../hooks/useFormattedPrice";
+import PaymentButtonComponent from "../../components/Auction/PaymentButtonComponent";
 
 const PayModal = ({ auctionDetailInfo, setPayIsOpen }) => {
     const [amount, setAmount] = useState('');
