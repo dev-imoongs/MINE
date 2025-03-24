@@ -256,7 +256,58 @@
             LEFT JOIN tbl_category tc2 ON tc2.category_detail = tai.auction_item_status
         where 1=1
         AND tai.user_id = #{userId}
-        AND tai.auction_item_status IN ('201', '202')
+--         AND tai.auction_item_status IN ('201', '202')
+    </select>
+
+    <select id="selectMyAuctionJoinList" parameterType="UserVo" resultType="auctionItemVO">
+        select
+            taj.auction_join_id,
+            taj.user_id,
+            taj.auction_item_id,
+            taj.auction_join_price,
+            taj.auction_join_status,
+            tc1.category_value as auction_join_status_val,
+            tai.auction_item_name,
+            tai.auction_item_explain,
+            tai.auction_item_start_price,
+            tai.auction_item_highest_price,
+            to_char(tai.auction_item_end_time, 'YYYY-MM-DD') as auction_item_end_time,
+            to_char(tai.created_at, 'YYYY-MM-DD') as created_at,
+            tai.category_id,
+            tc2.category_value as category_id_val
+        from
+            tbl_auction_join taj
+                left join tbl_auction_item tai on tai.auction_item_id = taj.auction_item_id
+                left join tbl_category tc1 ON tc1.category_detail = taj.auction_join_status
+                left join tbl_category tc2 ON tc2.category_detail = tai.category_id
+        where tai.user_id = #{userId}
+    </select>
+
+    <select id="selectMyAuctionLike" parameterType="UserVo" resultType="auctionItemVO">
+        select
+            tl.like_id,
+            tl.user_id,
+            tai.auction_item_id,
+            tai.user_id,
+            tai.auction_item_name,
+            tai.auction_item_explain,
+            tai.auction_item_start_price,
+            tai.auction_item_highest_price,
+            tai.auction_item_end_time,
+            tai.created_at,
+            tai.category_id,
+            tai.auction_item_status,
+            tc2.category_value as auction_item_status_val,
+            tai.min_bid_amount,
+            tai.updated_at,
+            tai.auction_item_condition,
+            tc1.category_value as category_id_val
+        from
+            tbl_like tl
+                left join tbl_auction_item tai on tl.auction_item_id = tai.auction_item_id
+                LEFT JOIN tbl_category tc1 ON tc1.category_detail = tai.category_id
+                LEFT JOIN tbl_category tc2 ON tc2.category_detail = tai.auction_item_status
+        where tl.user_id = #{userId}
     </select>
 
     <!--페이징 처리 및 조건-->

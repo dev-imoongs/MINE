@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,8 +103,33 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     }
 
     @Override
-    public List<AuctionItemVO> getMyAuctionItemList(UserVO userVO) {
-        return auctionItemMapper.selectMyAuctionItemList(userVO);
+    public List<Map<String, Object>> getMyAuctionItemList(UserVO userVO) {
+        List<Map<String, Object>> result = new ArrayList<>();
+//        DTO로 수정해야됨
+        // 내 경매 상품
+        List<AuctionItemVO> myAuctionItemList = auctionItemMapper.selectMyAuctionItemList(userVO);
+        Map<String, Object> myAuctionItemMap = new HashMap<>();
+        myAuctionItemMap.put("type", "myAuctionItemList");
+        myAuctionItemMap.put("data", myAuctionItemList);
+
+        // 내 경매 구매 상품 (쿼리문 수정 필요)
+//        List<AuctionItemVO> myAuctionJoinList = auctionItemMapper.selectMyAuctionJoinList(userVO);
+//        Map<String, Object> myAuctionJoinMap = new HashMap<>();
+//        myAuctionJoinMap.put("type", "myAuctionJoinList");
+//        myAuctionJoinMap.put("data", myAuctionJoinList);
+
+        // 내 중고 찜한 상품
+//        List<AuctionItemVO> myAuctionLikeList = auctionItemMapper.selectMyAuctionLike(userVO);
+//        Map<String, Object> myAuctionLikeLMap = new HashMap<>();
+//        myAuctionLikeLMap.put("type", "myUsedLikeList");
+//        myAuctionLikeLMap.put("data", myAuctionLikeList);
+
+        result.add(myAuctionItemMap);
+//        result.add(myAuctionJoinMap);
+//        result.add(myAuctionLikeLMap);
+
+
+        return result;
     }
 
 }
