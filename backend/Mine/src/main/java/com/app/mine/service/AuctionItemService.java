@@ -29,5 +29,5 @@ public interface AuctionItemService {
     String insertAuctionJoin(int price);
 
     // 내 경매 아이템 목록 조회
-    List<AuctionItemVO> getMyAuctionItemList(UserVO userVO);
+    List<Map<String, Object>> getMyAuctionItemList(UserVO userVO);
 }

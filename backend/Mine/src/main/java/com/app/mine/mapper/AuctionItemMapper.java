@@ -35,6 +35,10 @@ public interface AuctionItemMapper {
 
     public List<AuctionItemVO> selectMyAuctionItemList(UserVO userVO);
 
+    public List<AuctionItemVO> selectMyAuctionJoinList(UserVO userVO);
+
+    public List<AuctionItemVO> selectMyAuctionLike(UserVO userVO);
+
     public void insertAuctionItem(AuctionItemVO acAuctionItemVO);
 
     public int selectAuctionJoin(); // 경매 아이템 결제 전 입찰최고금액 조회

@@ -87,7 +87,7 @@ public class AuctionItemController {
     }
 
     @PostMapping("getMyAuctionItemList")
-    public List<AuctionItemVO> getMyAuctionItemList(HttpSession session) {
+    public List<Map<String, Object>>  getMyAuctionItemList(HttpSession session) {
         UserVO userInfo = (UserVO)session.getAttribute("userInfo");
         return auctionItemService.getMyAuctionItemList(userInfo);
     }
