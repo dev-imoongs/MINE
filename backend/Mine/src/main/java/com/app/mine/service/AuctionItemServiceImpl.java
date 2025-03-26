@@ -40,8 +40,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     }
 
     @Override
-    public List<AuctionItemVO> getFilteredAuctionItems(SearchDTO searchDTO) {
-        Integer userId = 1;
+    public List<AuctionItemVO> getAuctionItemList(SearchDTO searchDTO, Integer userId) {
         return auctionItemMapper.findAuctionItems(searchDTO, userId);
     }
 
@@ -79,24 +78,27 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 
     // 경매 참여
     @Override
-    public String insertAuctionJoin(int price) {
+    public String insertAuctionJoin(Long auctionId, Integer userId, Long price) {
         try {
-            int currentHighPrice = auctionItemMapper.selectAuctionJoin();
+            int currentHighPrice = auctionItemMapper.selectAuctionJoin(auctionId);
+
+            log.info("currentHighPrice : " + currentHighPrice);
 
             if (price > currentHighPrice) {
                 // 경매 참여 데이터를 삽입하는 부분에 price 값도 함께 넣어야 할 수 있습니다.
-                int result = auctionItemMapper.insertAuctionJoin(price);  // 이 부분에서 price를 전달해야 할 수 있습니다.
+                int result = auctionItemMapper.insertAuctionJoin(auctionId, userId, price, (long)301.0);  // 이 부분에서 price를 전달해야 할 수 있습니다.
+                int updateResult = auctionItemMapper.updateAuctionItemPrice(auctionId, price);
 
-                if (result == 0) {
-//                    logger.error("경매 참여 데이터 저장 실패, price: " + price);
+                if (result == 0 || updateResult ==0) {
                     return "경매 참여 실패";
                 }
 
                 return "경매 참여 성공";
             }
 
-            return "경매 참여 실패: 제시한 가격이 현재 최고 입찰가보다 낮습니다.";
+            return "경매 참여 실패: 제시한 가격이 현재 최고 입찰가보다 같거나 낮습니다.";
         } catch (Exception e) {
+            log.error("오류 발생 로그 에러", e);
 //            logger.error("경매 참여 중 오류 발생", e);
             return "경매 참여 실패: 시스템 오류";
         }

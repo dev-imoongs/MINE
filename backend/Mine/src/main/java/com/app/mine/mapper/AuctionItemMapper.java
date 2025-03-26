@@ -41,9 +41,10 @@ public interface AuctionItemMapper {
 
     public void insertAuctionItem(AuctionItemVO acAuctionItemVO);
 
-    public int selectAuctionJoin(); // 경매 아이템 결제 전 입찰최고금액 조회
+    public int selectAuctionJoin(Long auctionId); // 경매 아이템 결제 전 입찰최고금액 조회
 
-    public int insertAuctionJoin(int price); // 경매 참여
+    public int insertAuctionJoin(Long auctionId, Integer userId, Long price, Long status); // 경매 참여
 
+    public int updateAuctionItemPrice(Long auctionId, Long price);
 
 }
