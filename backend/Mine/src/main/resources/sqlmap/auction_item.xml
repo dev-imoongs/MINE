@@ -231,7 +231,7 @@
         <include refid="searchCondition" />
     </select>
 
-    <select id="selectMyAuctionItemList" parameterType="UserVo" resultType="auctionItemVO">
+    <select id="selectMyAuctionItemList" parameterType="UserVo" resultType="myAuctionItemDTO">
         select
             tai.auction_item_id,
             tai.user_id,
@@ -259,7 +259,7 @@
 --         AND tai.auction_item_status IN ('201', '202')
     </select>
 
-    <select id="selectMyAuctionJoinList" parameterType="UserVo" resultType="auctionItemVO">
+    <select id="selectMyAuctionJoinList" parameterType="UserVo" resultType="myAuctionItemDTO">
         select
             taj.auction_join_id,
             taj.user_id,
@@ -283,7 +283,7 @@
         where tai.user_id = #{userId}
     </select>
 
-    <select id="selectMyAuctionLike" parameterType="UserVo" resultType="auctionItemVO">
+    <select id="selectMyAuctionLike" parameterType="UserVo" resultType="myAuctionItemDTO">
         select
             tl.like_id,
             tl.user_id,

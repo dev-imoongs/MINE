@@ -1,10 +1,14 @@
 package com.app.mine.service;
 
+import com.app.mine.dto.MyAuctionItemDTO;
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
-import com.app.mine.mapper.FileMapper;
-import com.app.mine.vo.*;
 import com.app.mine.mapper.AuctionItemMapper;
+import com.app.mine.mapper.FileMapper;
+import com.app.mine.vo.AuctionItemVO;
+import com.app.mine.vo.Criteria;
+import com.app.mine.vo.FileVO;
+import com.app.mine.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -105,28 +109,28 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     @Override
     public List<Map<String, Object>> getMyAuctionItemList(UserVO userVO) {
         List<Map<String, Object>> result = new ArrayList<>();
-//        DTO로 수정해야됨
+
         // 내 경매 상품
-        List<AuctionItemVO> myAuctionItemList = auctionItemMapper.selectMyAuctionItemList(userVO);
+        List<MyAuctionItemDTO> myAuctionItemList = auctionItemMapper.selectMyAuctionItemList(userVO);
         Map<String, Object> myAuctionItemMap = new HashMap<>();
         myAuctionItemMap.put("type", "myAuctionItemList");
         myAuctionItemMap.put("data", myAuctionItemList);
 
-        // 내 경매 구매 상품 (쿼리문 수정 필요)
-//        List<AuctionItemVO> myAuctionJoinList = auctionItemMapper.selectMyAuctionJoinList(userVO);
-//        Map<String, Object> myAuctionJoinMap = new HashMap<>();
-//        myAuctionJoinMap.put("type", "myAuctionJoinList");
-//        myAuctionJoinMap.put("data", myAuctionJoinList);
+        // 내 경매 구매 상품
+        List<MyAuctionItemDTO> myAuctionJoinList = auctionItemMapper.selectMyAuctionJoinList(userVO);
+        Map<String, Object> myAuctionJoinMap = new HashMap<>();
+        myAuctionJoinMap.put("type", "myAuctionJoinList");
+        myAuctionJoinMap.put("data", myAuctionJoinList);
 
         // 내 중고 찜한 상품
-//        List<AuctionItemVO> myAuctionLikeList = auctionItemMapper.selectMyAuctionLike(userVO);
-//        Map<String, Object> myAuctionLikeLMap = new HashMap<>();
-//        myAuctionLikeLMap.put("type", "myUsedLikeList");
-//        myAuctionLikeLMap.put("data", myAuctionLikeList);
+        List<MyAuctionItemDTO> myAuctionLikeList = auctionItemMapper.selectMyAuctionLike(userVO);
+        Map<String, Object> myAuctionLikeLMap = new HashMap<>();
+        myAuctionLikeLMap.put("type", "myUsedLikeList");
+        myAuctionLikeLMap.put("data", myAuctionLikeList);
 
         result.add(myAuctionItemMap);
-//        result.add(myAuctionJoinMap);
-//        result.add(myAuctionLikeLMap);
+        result.add(myAuctionJoinMap);
+        result.add(myAuctionLikeLMap);
 
 
         return result;
