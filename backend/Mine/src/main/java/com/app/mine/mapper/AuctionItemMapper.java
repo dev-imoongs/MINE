@@ -1,9 +1,9 @@
 package com.app.mine.mapper;
 
+import com.app.mine.dto.MyAuctionItemDTO;
 import com.app.mine.dto.PageDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.vo.AuctionItemVO;
-import com.app.mine.vo.UsedItemVO;
 import com.app.mine.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,11 +33,11 @@ public interface AuctionItemMapper {
 
     public int getAuctionItemCount(@Param("page") SearchDTO searchDTO);
 
-    public List<AuctionItemVO> selectMyAuctionItemList(UserVO userVO);
+    public List<MyAuctionItemDTO> selectMyAuctionItemList(UserVO userVO);
 
-    public List<AuctionItemVO> selectMyAuctionJoinList(UserVO userVO);
+    public List<MyAuctionItemDTO> selectMyAuctionJoinList(UserVO userVO);
 
-    public List<AuctionItemVO> selectMyAuctionLike(UserVO userVO);
+    public List<MyAuctionItemDTO> selectMyAuctionLike(UserVO userVO);
 
     public void insertAuctionItem(AuctionItemVO acAuctionItemVO);
 
