@@ -1,5 +1,6 @@
 package com.app.mine.controller;
 
+import com.app.mine.dto.AuctionJoinDTO;
 import com.app.mine.dto.SearchDTO;
 import com.app.mine.service.AuctionItemService;
 import com.app.mine.service.FileService;
@@ -59,18 +60,19 @@ public class AuctionItemController {
     }
 
     @GetMapping("{auctionId}")
-    public ResponseEntity<Map<String, Object>> getAuctionItem(@PathVariable("auctionId") int id) {
+    public ResponseEntity<Map<String, Object>> getAuctionItemById(@PathVariable("auctionId") int id) {
         Map<String, Object> auctionItem = auctionItemService.getAuctionItemById(id);
         return ResponseEntity.ok(auctionItem);
     }
 
     @GetMapping
-    public ResponseEntity<List<AuctionItemVO>> getFilteredAuctionItems(
+    public ResponseEntity<List<AuctionItemVO>> getAuctionItemList(
             @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "minPrice", required = false) Long minPrice,
             @RequestParam(value = "maxPrice", required = false) Long maxPrice,
             @RequestParam(value = "searchQuery", required = false) List<String> searchQuery,
-            @RequestParam(value = "sort", defaultValue = "likes") String sort) {
+            @RequestParam(value = "sort", defaultValue = "likes") String sort,
+            HttpSession session) {
 
 //        Criteria criteria = Criteria.builder().page(page).amount(amount).build();
         SearchDTO searchDTO = new SearchDTO();
@@ -80,8 +82,12 @@ public class AuctionItemController {
         searchDTO.setMinPrice(minPrice);
         searchDTO.setMaxPrice(maxPrice);
 
+        Integer userId = null;
+        UserVO userInfo = (UserVO) session.getAttribute("userInfo");
+        if(userInfo != null) userInfo.getUserId();
+        log.info("userId : {}",userId);
 
-        List<AuctionItemVO> res = auctionItemService.getFilteredAuctionItems(searchDTO);
+        List<AuctionItemVO> res = auctionItemService.getAuctionItemList(searchDTO, userId);
 
         return ResponseEntity.ok(res);
     }
@@ -94,14 +100,19 @@ public class AuctionItemController {
 
     @PostMapping("auction-join")
     public ResponseEntity<String> JoinAuction(
-            @RequestParam(value = "auctionId", required = true) Long auctionId,
-            @RequestParam(value = "userId", required = true) Long userId,
-            @RequestParam(value = "amount", required = true) Long amount) {
+            @RequestBody AuctionJoinDTO auctionJoinDTO,
+            HttpSession session) {
         try {
+            Integer auctionId = auctionJoinDTO.getAuctionId();
+            Integer amount = auctionJoinDTO.getAmount();
+            String receiptId = auctionJoinDTO.getReceiptId();
             // 경매 참여 처리 로직
-            // auctionItemService.insertAuctionJoin();
+            UserVO userInfo = (UserVO) session.getAttribute("userInfo");
+//            Integer userId = 1;
+            Integer userId = userInfo.getUserId();
+            String res = auctionItemService.insertAuctionJoin(auctionId, userId, amount, receiptId);
 
-            return ResponseEntity.ok("경매 참여 성공");
+            return ResponseEntity.ok(res);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("경매 참여 실패: " + e.getMessage());
         }

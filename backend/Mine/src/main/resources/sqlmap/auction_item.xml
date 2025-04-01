@@ -110,13 +110,13 @@
     </select>
 
     <!-- 경매 아이템 전체 목록 조회 -->
-    <select id="findAuctionItems" resultType="AuctionItemVO">
+    <select id="findAuctionItems" parameterType="map" resultType="AuctionItemVO">
         SELECT
             AI.*,
             COALESCE(COUNT(DISTINCT(AJ.auction_join_id)),0) AS bid_count,
             COALESCE(COUNT(DISTINCT(tbl_like.user_id)),0) AS like_count,
             CASE
-                WHEN COUNT(CASE WHEN tbl_like.user_id = 1 THEN 1 END) > 0
+                WHEN COUNT(CASE WHEN tbl_like.user_id = #{userId} THEN 1 END) > 0
                 THEN TRUE ELSE FALSE
             END AS my_favorite_auction
         FROM tbl_auction_item AS AI
@@ -371,9 +371,18 @@
     </select>
 
     <!-- 경매 아이템 결제 전 최고 금액 확인 -->
-    <select id="selectAuctionJoin" parameterType="map">
-        SELECT * FROM tbl_auction_join A
-        WHERE A.auction_item_id = B.auction_item_id
+    <select id="selectAuctionHighPrice" parameterType="map" resultType="int">
+        SELECT MAX(auction_item_highest_price)
+        FROM tbl_auction_item
+        WHERE auction_item_id = #{auctionId}
+    </select>
+
+    <!-- 결제 취소할 영수증 ID 조회 -->
+    <select id="selectAuctionReceiptId" parameterType="Integer" resultType="String">
+        SELECT receipt_id
+        FROM tbl_auction_join
+        WHERE auction_join_status = '301'
+        AND auction_item_id = #{auctionId}
     </select>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: INSERT :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
@@ -387,8 +396,8 @@
 
     <!-- 경매 참여 등록 insertAuctionJoin -->
     <insert id="insertAuctionJoin" parameterType="map">
-        INSERT INTO auction_participant (user_id, auction_id, amount)
-        VALUES (#{userId}, #{auctionId}, #{amount})
+        INSERT INTO tbl_auction_join (user_id, auction_item_id, auction_join_price, auction_join_status, created_at, updated_at, receipt_id)
+        VALUES (#{userId}, #{auctionId}, #{amount}, #{status}, NOW(), NOW(), #{receiptId})
     </insert>
 
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UPDATE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
@@ -422,5 +431,18 @@
         where auction_item_id = #{auctionItemId}
     </update>
 
+    <!-- 경매 참여 등록시 가격 변경 insertAuctionJoin -->
+    <update id="updateAuctionItemPrice" parameterType="map">
+        UPDATE tbl_auction_item
+        SET auction_item_highest_price = #{amount}
+        WHERE auction_item_id = #{auctionId}
+    </update>
+
+    <!-- 경매 참여 등록시 이전 내역 스테이터스 변경 -->
+    <update id="updateAuctionJoinStatus" parameterType="map">
+        UPDATE tbl_auction_join
+        SET auction_join_status = '302'
+        WHERE auction_item_id = #{auctionId}
+    </update>
     <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: DELETE :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  -->
 </mapper>

@@ -9,9 +9,12 @@ import com.app.mine.vo.AuctionItemVO;
 import com.app.mine.vo.Criteria;
 import com.app.mine.vo.FileVO;
 import com.app.mine.vo.UserVO;
+import kr.co.bootpay.model.request.Cancel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +27,8 @@ import java.util.Map;
 @Slf4j
 public class AuctionItemServiceImpl implements AuctionItemService {
 
+
+    private final PayService payService;
     private final AuctionItemMapper auctionItemMapper;
     private final FileMapper fileMapper;
 
@@ -44,8 +49,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
     }
 
     @Override
-    public List<AuctionItemVO> getFilteredAuctionItems(SearchDTO searchDTO) {
-        Integer userId = 1;
+    public List<AuctionItemVO> getAuctionItemList(SearchDTO searchDTO, Integer userId) {
         return auctionItemMapper.findAuctionItems(searchDTO, userId);
     }
 
@@ -83,24 +87,35 @@ public class AuctionItemServiceImpl implements AuctionItemService {
 
     // 경매 참여
     @Override
-    public String insertAuctionJoin(int price) {
+    @Transactional
+    public String insertAuctionJoin(Integer auctionId, Integer userId, Integer amount, String receiptId) {
         try {
-            int currentHighPrice = auctionItemMapper.selectAuctionJoin();
+            int currentHighPrice = auctionItemMapper.selectAuctionHighPrice(auctionId);
+            String prevRecieptId = auctionItemMapper.selectAuctionReceiptId(auctionId);
+            log.info("currentHighPrice : {}" , currentHighPrice);
+            log.info("prevRecieptId: {}", prevRecieptId);
 
-            if (price > currentHighPrice) {
+            Cancel cancel = new Cancel();
+            cancel.receiptId = prevRecieptId;
+            if (amount > currentHighPrice) {
+                auctionItemMapper.updateAuctionJoinStatus(auctionId);
+                payService.cancelPayment(cancel);
                 // 경매 참여 데이터를 삽입하는 부분에 price 값도 함께 넣어야 할 수 있습니다.
-                int result = auctionItemMapper.insertAuctionJoin(price);  // 이 부분에서 price를 전달해야 할 수 있습니다.
+                int result = auctionItemMapper.insertAuctionJoin(auctionId, userId, amount, (long)301.0, receiptId);  // 이 부분에서 price를 전달해야 할 수 있습니다.
 
-                if (result == 0) {
-//                    logger.error("경매 참여 데이터 저장 실패, price: " + price);
+                int updateResult = auctionItemMapper.updateAuctionItemPrice(auctionId, amount);
+
+                if (result == 0 || updateResult ==0) {
                     return "경매 참여 실패";
                 }
+
 
                 return "경매 참여 성공";
             }
 
-            return "경매 참여 실패: 제시한 가격이 현재 최고 입찰가보다 낮습니다.";
+            return "경매 참여 실패: 제시한 가격이 현재 최고 입찰가보다 같거나 낮습니다.";
         } catch (Exception e) {
+            log.error("오류 발생 로그 에러", e);
 //            logger.error("경매 참여 중 오류 발생", e);
             return "경매 참여 실패: 시스템 오류";
         }
