@@ -5,10 +5,11 @@ import com.app.mine.service.AuctionItemService;
 import com.app.mine.service.FileService;
 import com.app.mine.vo.AuctionItemVO;
 import com.app.mine.vo.FileVO;
-import com.app.mine.vo.UsedItemVO;
 import com.app.mine.vo.Criteria;
 import com.app.mine.vo.UserVO;
 import jakarta.servlet.http.HttpSession;
+import kr.co.bootpay.Bootpay;
+import kr.co.bootpay.model.request.Cancel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,7 +115,6 @@ public class AuctionItemController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("경매 참여 실패: " + e.getMessage());
         }
     }
-
     
 
 }
