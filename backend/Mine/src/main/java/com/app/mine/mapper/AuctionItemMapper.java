@@ -41,9 +41,13 @@ public interface AuctionItemMapper {
 
     public void insertAuctionItem(AuctionItemVO acAuctionItemVO);
 
-    public int selectAuctionJoin(); // 경매 아이템 결제 전 입찰최고금액 조회
+    public int selectAuctionHighPrice(Integer auctionId); // 경매 아이템 결제 전 입찰최고금액 조회
 
-    public int insertAuctionJoin(int price); // 경매 참여
+    public String selectAuctionReceiptId(Integer auctionId);    //취소할 결제내역의 영수증 ID 조회
 
+    public int insertAuctionJoin(Integer auctionId, Integer userId, Integer amount, Long status, String receiptId); // 경매 참여
 
+    public int updateAuctionItemPrice(Integer auctionId, Integer amount); // 경매 참여 후 경매 입찰가 업데이트
+
+    public int updateAuctionJoinStatus(Integer auctionId);  // 경매 참여 후 낙찰 아이템 스테이터스 변경
 }
