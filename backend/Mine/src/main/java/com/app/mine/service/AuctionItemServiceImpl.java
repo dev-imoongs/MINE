@@ -122,10 +122,10 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         myAuctionJoinMap.put("type", "myAuctionJoinList");
         myAuctionJoinMap.put("data", myAuctionJoinList);
 
-        // 내 중고 찜한 상품
+        // 내 경매 찜한 상품
         List<MyAuctionItemDTO> myAuctionLikeList = auctionItemMapper.selectMyAuctionLike(userVO);
         Map<String, Object> myAuctionLikeLMap = new HashMap<>();
-        myAuctionLikeLMap.put("type", "myUsedLikeList");
+        myAuctionLikeLMap.put("type", "myAuctionLikeList");
         myAuctionLikeLMap.put("data", myAuctionLikeList);
 
         result.add(myAuctionItemMap);

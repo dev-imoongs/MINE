@@ -341,6 +341,7 @@
                 left join tbl_used_item tui on tl.used_item_id = tui.used_item_id
                 left join tbl_category tc on tc.category_detail = tui.category_id
                 left join tbl_category tc1 on tc1.category_detail = tui.used_item_sales_status
-        where tl.user_id = #{userId};
+        where tl.user_id = #{userId}
+          and tl.used_item_id != 0
     </select>
 </mapper>

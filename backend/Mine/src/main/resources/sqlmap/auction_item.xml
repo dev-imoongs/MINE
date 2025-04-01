@@ -280,7 +280,7 @@
                 left join tbl_auction_item tai on tai.auction_item_id = taj.auction_item_id
                 left join tbl_category tc1 ON tc1.category_detail = taj.auction_join_status
                 left join tbl_category tc2 ON tc2.category_detail = tai.category_id
-        where tai.user_id = #{userId}
+        where taj.user_id = #{userId}
     </select>
 
     <select id="selectMyAuctionLike" parameterType="UserVo" resultType="myAuctionItemDTO">
@@ -308,6 +308,7 @@
                 LEFT JOIN tbl_category tc1 ON tc1.category_detail = tai.category_id
                 LEFT JOIN tbl_category tc2 ON tc2.category_detail = tai.auction_item_status
         where tl.user_id = #{userId}
+          and tl.auction_item_id != 0
     </select>
 
     <!--페이징 처리 및 조건-->

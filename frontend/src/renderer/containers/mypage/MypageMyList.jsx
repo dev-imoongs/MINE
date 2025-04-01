@@ -6,6 +6,7 @@ import TrustRatingModal from '../../pages/modal/TrustRatingModal.jsx';
 import {Link, useNavigate, useNavigation} from 'react-router-dom';
 import tempProductImage from '../../../assets/temp_product.png'
 import {getTimeAgo, getTimeRemaining } from "../../../services/commonService";
+import useRemainTime from '../../../hooks/useRemainTime';
 
 import styled from "styled-components";
 import {useRecoilState, useRecoilValue} from "recoil";
@@ -16,6 +17,7 @@ import { myUsedItemSelector } from "../../../recoil/selectors/myConditionselecto
 const MypageMyList = ({isProduct}) => {
     const productCondition = ["판매내역", "판매완료", "구매내역", "찜한상품"];
     const [usedItemSeltorCon, setUsedItemSeltorCon] = useState('myUsedItemList');
+    const [auctionItemSeltorCon, setAuctionItemSeltorCon] = useState('myAuctionItemList');
     const auctionCondition = ["경매내역", "경매완료", "구매내역", "찜한 상품"];
     const filter = ["최신순", "낮은가격순", "높은가격순"];
     const [openMenuIndex, setOpenMenuIndex] = useState(null); // 현재 열린 메뉴의 인덱스를 저장
@@ -24,41 +26,51 @@ const MypageMyList = ({isProduct}) => {
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(null);
     const myUsedItem = useRecoilValue(myUsedItemSelector(usedItemSeltorCon));
-    const myAuctionItem = useRecoilValue(myProductListAtom);
+    const myAuctionItem = useRecoilValue(myUsedItemSelector(auctionItemSeltorCon));
     const [data, setData] = useState([]);
-    
-    // console.log("myAuctionItem>>>",myAuctionItem);
 
     useEffect(() => {
-        if (!myUsedItem || myUsedItem.length === 0) {
-            setData([]);
-            return;
-        }
+        if (myUsedItem || myAuctionItem) {
+            let filteredData = [];
 
-        let filteredData = [];
-        
-        if (isProduct) {
-            switch (activeIndex) {
-                case 0:
-                    filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
-                    break;
-                case 1:
-                    filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '402');
-                    break;
-                case 2:
-                case 3:
-                    filteredData = myUsedItem;
-                    break;
-                default:
-                    filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
-                    break;
+            if (isProduct) {
+                switch (activeIndex) {
+                    case 0:
+                        filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
+                        break;
+                    case 1:
+                        filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '402');
+                        break;
+                    case 2:
+                    case 3:
+                        filteredData = myUsedItem;
+                        break;
+                    default:
+                        filteredData = myUsedItem.filter(item => item.usedItemSalesStatus === '401');
+                        break;
+                }
+            } else {
+                switch (activeIndex) {
+                    case 0:
+                        filteredData = myAuctionItem.filter(item => item.auctionItemStatus === '201' || item.auctionItemStatus === '202');
+                        break;
+                    case 1:
+                        filteredData = myAuctionItem.filter(item => item.auctionItemStatus === '203' || item.auctionItemStatus === '204');
+                        break;
+                    case 2:
+                    case 3:
+                        filteredData = myAuctionItem;
+                        break;
+                    default:
+                        filteredData = myAuctionItem.filter(item => item.auctionItemStatus === '201' || item.auctionItemStatus === '202');
+                        break;
+                }
             }
-        } else {
-            // console.log("elsesleselsemyUsedItem>>>",myUsedItem);
+
+            setData(filteredData);
         }
 
-        setData(filteredData);
-    }, [myUsedItem, activeIndex]);
+    }, [myUsedItem, myAuctionItem, activeIndex]);
 
     const handleClick = (index) => {
         setActiveIndex(index);
@@ -66,18 +78,23 @@ const MypageMyList = ({isProduct}) => {
         switch (index) {
             case 0 : //productCondition[0] 판매내역
                 setUsedItemSeltorCon("myUsedItemList");
+                setAuctionItemSeltorCon("myAuctionItemList");
                 break;
             case 1 : //productCondition[1] 판매완료
                 setUsedItemSeltorCon("myUsedItemList");
+                setAuctionItemSeltorCon("myAuctionItemList");
                 break;
             case 2 : //productCondition[2] 구매내역
                 setUsedItemSeltorCon("myUsedPurchaseList");
+                setAuctionItemSeltorCon("myAuctionJoinList");
                 break;
             case 3 : //productCondition[3] 찜한상품
                 setUsedItemSeltorCon("myUsedLikeList");
+                setAuctionItemSeltorCon("myAuctionLikeList");
                 break;
             default:
                 setUsedItemSeltorCon("myUsedItemList");
+                setAuctionItemSeltorCon("myAuctionItemList");
         }
     };
 
@@ -114,7 +131,7 @@ const MypageMyList = ({isProduct}) => {
       <MyListCon>
           <MyListTitleWrap>
               <MyListTitle>
-                  {isProduct ? "거래상품" : "경매상품(개발중)"}
+                  {isProduct ? "거래상품" : "경매상품"}
               </MyListTitle>
               <MyListSubTitle>
                   <ul className="colors flex flex-nowrap justify-between lg:justify-start -me-3 border-b border-[#DADEE5]">
@@ -160,7 +177,7 @@ const MypageMyList = ({isProduct}) => {
                   </ul>
               </MyListFilter>
           </MyListTitleWrap>
-          {data ? (
+          {data && data.length > 0 ? (
               <MyListItemWrap>
                   {data.map((item, index) => (
                   isProduct ? (
@@ -299,6 +316,12 @@ const MypageMyList = ({isProduct}) => {
                                       {item.auctionItemStatus === '202' && (
                                           <div className="z-10 ongoing item-status">{item.auctionItemStatusVal}</div>
                                       )}
+                                      {item.auctionItemStatus === '203' && (
+                                          <div className="z-10 ended item-status">{item.auctionItemStatusVal}</div>
+                                      )}
+                                      {item.auctionItemStatus === '204' && (
+                                          <div className="z-10 pending item-status">{item.auctionItemStatusVal}</div>
+                                      )}
                                       {/*<div className="z-10 ended item-status">종료</div>*/}
                                   </div>
                                   <div
@@ -331,38 +354,10 @@ const MypageMyList = ({isProduct}) => {
                                               className="text-sm text-gray-400">{item.auctionItemStatus === '201' ? item.createdAt : item.auctionItemEndTime}</span>
                                       </div>
                                       {item.auctionItemStatus === '202' && (
-                                          <div className="item-info_wrap">
-                                              <div>
-                                                  <span>입찰 </span>
-                                                  <span>{item.auctionItemJoinCount}회</span>
-                                              </div>
-                                              <span className="bar"></span>
-                                              <div className="item-info time">
-                                                  <svg
-                                                      xmlns="http://www.w3.org/2000/svg"
-                                                      width="14"
-                                                      height="14"
-                                                      viewBox="0 0 14 14"
-                                                      fill="none"
-                                                  >
-                                                      <path
-                                                          d="M13.5443 3.2199C13.7953 2.9243 13.757 2.48076 13.4591 2.23252L11.311 0.442462C11.0169 0.19744 10.5804 0.235108 10.3327 0.526876C10.0817 0.822472 10.12 1.26601 10.4179 1.51425L12.566 3.30431C12.8601 3.54933 13.2966 3.51167 13.5443 3.2199ZM3.57846 1.5113C3.87485 1.26442 3.91379 0.823528 3.66526 0.528522C3.41887 0.23606 2.98262 0.197294 2.68853 0.441729L0.541829 2.22593C0.243509 2.47388 0.204934 2.91764 0.455997 3.21334C0.703548 3.50491 1.13978 3.54259 1.43367 3.2978L3.57846 1.5113ZM7.35 4.79312C7.35 4.50317 7.11495 4.26812 6.825 4.26812C6.53505 4.26812 6.3 4.50317 6.3 4.79312V7.87071C6.3 8.22307 6.48544 8.54942 6.78814 8.72978L9.20096 10.1674C9.43606 10.3075 9.74008 10.2326 9.88328 9.99943C10.0298 9.76086 9.95196 9.44852 9.71067 9.30655L7.84289 8.20758C7.5375 8.0279 7.35 7.70003 7.35 7.3457V4.79312ZM7 1.48759C3.521 1.48759 0.7 4.28898 0.7 7.74379C0.7 11.1986 3.514 14 7 14C10.479 14 13.3 11.1986 13.3 7.74379C13.3 4.28898 10.479 1.48759 7 1.48759ZM7 12.6097C4.291 12.6097 2.1 10.434 2.1 7.74379C2.1 5.05363 4.291 2.87786 7 2.87786C9.709 2.87786 11.9 5.05363 11.9 7.74379C11.9 10.434 9.709 12.6097 7 12.6097Z"
-                                                          fill="#626262"
-                                                      />
-                                                  </svg>
-                                                  <span className="pl-[8px]">{getTimeRemaining(item.auctionItemEndTime)} </span>
-                                              </div>
-                                              {/*<span className="text-sm text-gray-400">남은시간</span>*/}
-                                              {/*<span className="text-sm text-gray-400 mx-1">|</span>*/}
-                                              {/*<span*/}
-                                              {/*    className="text-sm text-gray-400">01D 01H*/}
-                                              {/*</span>*/}
-                                              {/*<span*/}
-                                              {/*    className="text-sm text-gray-400">*/}
-                                              {/*    <span className={"m-1"}>입찰수</span>*/}
-                                              {/*    <span>{item.AUCTION_JOIN_COUNT}회</span>*/}
-                                              {/*</span>*/}
-                                          </div>
+                                          <AuctionMetrics
+                                              auctionItemEndTime={item.auctionItemEndTime}
+                                              auctionItemJoinCount={item.auctionItemJoinCount}
+                                          />
                                       )}
                                   </div>
                               </Link>
@@ -442,6 +437,44 @@ const MypageMyList = ({isProduct}) => {
           )}
       </MyListCon>
   );
+};
+
+const AuctionMetrics = ({ auctionItemEndTime, auctionItemJoinCount}) => {
+    const RemainTime = useRemainTime(auctionItemEndTime);
+    return (
+        <div className="item-info_wrap">
+            <div>
+                <span>입찰 </span>
+                <span>{auctionItemJoinCount}회</span>
+            </div>
+            <span className="bar"></span>
+            <div className="item-info time" style={{paddingLeft:0}}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                >
+                    <path
+                        d="M13.5443 3.2199C13.7953 2.9243 13.757 2.48076 13.4591 2.23252L11.311 0.442462C11.0169 0.19744 10.5804 0.235108 10.3327 0.526876C10.0817 0.822472 10.12 1.26601 10.4179 1.51425L12.566 3.30431C12.8601 3.54933 13.2966 3.51167 13.5443 3.2199ZM3.57846 1.5113C3.87485 1.26442 3.91379 0.823528 3.66526 0.528522C3.41887 0.23606 2.98262 0.197294 2.68853 0.441729L0.541829 2.22593C0.243509 2.47388 0.204934 2.91764 0.455997 3.21334C0.703548 3.50491 1.13978 3.54259 1.43367 3.2978L3.57846 1.5113ZM7.35 4.79312C7.35 4.50317 7.11495 4.26812 6.825 4.26812C6.53505 4.26812 6.3 4.50317 6.3 4.79312V7.87071C6.3 8.22307 6.48544 8.54942 6.78814 8.72978L9.20096 10.1674C9.43606 10.3075 9.74008 10.2326 9.88328 9.99943C10.0298 9.76086 9.95196 9.44852 9.71067 9.30655L7.84289 8.20758C7.5375 8.0279 7.35 7.70003 7.35 7.3457V4.79312ZM7 1.48759C3.521 1.48759 0.7 4.28898 0.7 7.74379C0.7 11.1986 3.514 14 7 14C10.479 14 13.3 11.1986 13.3 7.74379C13.3 4.28898 10.479 1.48759 7 1.48759ZM7 12.6097C4.291 12.6097 2.1 10.434 2.1 7.74379C2.1 5.05363 4.291 2.87786 7 2.87786C9.709 2.87786 11.9 5.05363 11.9 7.74379C11.9 10.434 9.709 12.6097 7 12.6097Z"
+                        fill="#626262"
+                    />
+                </svg>
+                <span className="pl-[8px]">{RemainTime}</span>
+            </div>
+            {/*<span className="text-sm text-gray-400">남은시간</span>*/}
+            {/*<span className="text-sm text-gray-400 mx-1">|</span>*/}
+            {/*<span*/}
+            {/*    className="text-sm text-gray-400">01D 01H*/}
+            {/*</span>*/}
+            {/*<span*/}
+            {/*    className="text-sm text-gray-400">*/}
+            {/*    <span className={"m-1"}>입찰수</span>*/}
+            {/*    <span>{item.AUCTION_JOIN_COUNT}회</span>*/}
+            {/*</span>*/}
+        </div>
+    );
 };
 
 const MyListCon = styled.div`
