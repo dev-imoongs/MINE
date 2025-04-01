@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import '../../../styles/auction/modal_pay.css';
-import useFormattedPrice from '../../../hooks/useFormattedPrice';
-import PaymentButtonComponent from '../../components/Auction/PaymentButtonComponent';
+import React, { useState } from "react";
+import "../../../styles/auction/modal_pay.css";
+import useFormattedPrice from "../../../hooks/useFormattedPrice";
+import PaymentButtonComponent from "../../components/Auction/PaymentButtonComponent";
 
-const PayModal = ({ auctionDetailInfo, auctionId, setPayIsOpen }) => {
+const PayModal = ({ auctionDetailInfo, setPayIsOpen }) => {
     const [amount, setAmount] = useState('');
 
     const handleDigitClick = (value) => {
@@ -80,7 +80,6 @@ const PayModal = ({ auctionDetailInfo, auctionId, setPayIsOpen }) => {
                                     <div className="wrap-btns">
                                         <PaymentButtonComponent
                                             currentPrice={auctionDetailInfo.auction_item_highest_price}
-                                            auctionId={auctionId}
                                             setPayIsOpen={setPayIsOpen}
                                             amount={amount}
                                         />
